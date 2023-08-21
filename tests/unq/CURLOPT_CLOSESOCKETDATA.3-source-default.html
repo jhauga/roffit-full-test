@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_CLOSESOCKETDATA man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_CLOSESOCKETDATA - pointer passed to the socket close callback </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_CLOSESOCKETDATA,
+&nbsp;                         void *pointer);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a <span Class="emphasis">pointer</span> that will be untouched by libcurl and passed as the first argument in the closesocket callback set with <span Class="emphasis">CURLOPT_CLOSESOCKETFUNCTION(3)</span>. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">The default value of this parameter is NULL. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All except file: </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+static int closesocket(void *clientp, curl_socket_t item)
+{
+&nbsp; printf(&quot;libcurl wants to close %d now&bsol;n&quot;, (int)item);
+&nbsp; return 0;
+}
+&nbsp;
+/* call this function to close sockets */
+curl_easy_setopt(curl, CURLOPT_CLOSESOCKETFUNCTION, closesocket);
+curl_easy_setopt(curl, CURLOPT_CLOSESOCKETDATA, &amp;sockfd);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.21.7 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_CLOSESOCKETFUNCTION</span>(3), <span Class="bold">CURLOPT_OPENSOCKETFUNCTION</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

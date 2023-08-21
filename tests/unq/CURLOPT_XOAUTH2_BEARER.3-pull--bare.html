@@ -1,0 +1,26 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_XOAUTH2_BEARER - OAuth 2.0 access token </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_XOAUTH2_BEARER, char *token);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a char * as parameter, which should point to the null-terminated OAuth 2.0 Bearer Access Token for use with HTTP, IMAP, LDAP, POP3 and SMTP servers that support the OAuth 2.0 Authorization Framework. </p>
+<p class="level0">Note: For IMAP, LDAP, POP3 and SMTP, the user name used to generate the Bearer Token should be supplied via the <span Class="emphasis">CURLOPT_USERNAME(3)</span> option. </p>
+<p class="level0">The application does not have to keep the string around after setting this option. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP, IMAP, LDAP, POP3 and SMTP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;pop3://example.com/&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_XOAUTH2_BEARER, &quot;1ab9cb22ba269a7&quot;);
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.33.0. Support for OpenLDAP added in 7.82.0. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, CURLE_UNKNOWN_OPTION if not, or CURLE_OUT_OF_MEMORY if there was insufficient heap space. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_MAIL_AUTH</span>(3), <span Class="bold">CURLOPT_USERNAME</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

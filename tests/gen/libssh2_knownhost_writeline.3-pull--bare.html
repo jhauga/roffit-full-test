@@ -1,0 +1,24 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_knownhost_writeline - convert a known host to a line for storage </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&nbsp;
+int
+libssh2_knownhost_writeline(LIBSSH2_KNOWNHOSTS *hosts,
+&nbsp;                           struct libssh2_knownhost *known,
+&nbsp;                           char *buffer, size_t buflen,
+&nbsp;                           size_t *outlen,
+&nbsp;                           int type);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Converts a single known host to a single line of output for storage, using the &#39;type&#39; output format. </p>
+<p class="level0"><span Class="emphasis">known</span> identifies which particular known host </p>
+<p class="level0"><span Class="emphasis">buffer</span> points to an allocated buffer </p>
+<p class="level0"><span Class="emphasis">buflen</span> is the size of the <span Class="emphasis">buffer</span>. See RETURN VALUE about the size. </p>
+<p class="level0"><span Class="emphasis">outlen</span> must be a pointer to a size_t variable that will get the output length of the stored data chunk. The number does not included the trailing zero! </p>
+<p class="level0"><span Class="emphasis">type</span> specifies what file type it is, and <span Class="emphasis">LIBSSH2_KNOWNHOST_FILE_OPENSSH</span> is the only currently supported format. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns a regular libssh2 error code, where negative values are error codes and 0 indicates success. </p>
+<p class="level0">If the provided buffer is deemed too small to fit the data libssh2 wants to store in it, LIBSSH2_ERROR_BUFFER_TOO_SMALL will be returned. The application is then advised to call the function again with a larger buffer. The <span Class="emphasis">outlen</span> size will then hold the requested size. </p><a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in libssh2 1.2 </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">libssh2_knownhost_get(3)</span> <span Class="bold">libssh2_knownhost_readline(3)</span> <span Class="bold">libssh2_knownhost_writefile(3)</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

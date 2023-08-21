@@ -1,0 +1,32 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_BUFFERSIZE - receive buffer size </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_BUFFERSIZE, long size);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a long specifying your preferred <span Class="emphasis">size</span> (in bytes) for the receive buffer in libcurl.  The main point of this would be that the write callback gets called more often and with smaller chunks. Secondly, for some protocols, there&#39;s a benefit of having a larger buffer for performance. </p>
+<p class="level0">This is just treated as a request, not an order. You cannot be guaranteed to actually get the given size. </p>
+<p class="level0">This buffer size is by default <span Class="emphasis">CURL_MAX_WRITE_SIZE</span> (16kB). The maximum buffer size allowed to be set is <span Class="emphasis">CURL_MAX_READ_SIZE</span> (10MB). The minimum buffer size allowed to be set is 1024. </p>
+<p class="level0">DO NOT set this option on a handle that is currently used for an active transfer as that may lead to unintended consequences. </p>
+<p class="level0">The maximum size was 512kB until 7.88.0. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">CURL_MAX_WRITE_SIZE (16kB) </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;sftp://example.com/foo.bin&quot;);
+&nbsp;
+&nbsp; /* ask libcurl to allocate a larger receive buffer */
+&nbsp; curl_easy_setopt(curl, CURLOPT_BUFFERSIZE, 120000L);
+&nbsp;
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp;
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.10.  Growing the buffer was added in 7.53.0. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_MAX_RECV_SPEED_LARGE</span>(3), <span Class="bold">CURLOPT_WRITEFUNCTION</span>(3),  <span Class="bold">CURLOPT_UPLOAD_BUFFERSIZE</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

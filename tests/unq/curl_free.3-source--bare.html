@@ -1,0 +1,21 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_free - reclaim memory that has been obtained through a libcurl call </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+void curl_free(void *ptr);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">curl_free reclaims memory that has been obtained through a libcurl call. Use <span Class="emphasis">curl_free(3)</span> instead of free() to avoid anomalies that can result from differences in memory management between your application and libcurl. </p>
+<p class="level0">Passing in a NULL pointer in <span Class="emphasis">ptr</span> will make this function return immediately with no action. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&nbsp; char *width = curl_getenv(&quot;COLUMNS&quot;);
+&nbsp; if(width) {
+&nbsp;   /* it was set! */
+&nbsp;   curl_free(width);
+&nbsp; }
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Always </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">None </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_easy_unescape</span>(3), <span Class="bold">curl_easy_escape</span>(3)  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

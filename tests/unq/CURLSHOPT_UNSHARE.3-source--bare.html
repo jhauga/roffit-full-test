@@ -1,0 +1,31 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLSHOPT_UNSHARE - remove data to share </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLSHcode curl_share_setopt(CURLSH *share, CURLSHOPT_UNSHARE, long type);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">The <span Class="emphasis">type</span> parameter specifies what specific data that should no longer be shared and kept in the share object that was created with <span Class="emphasis">curl_share_init(3)</span>. In other words, stop sharing that data in this shared object. The given <span Class="emphasis">type</span> must be be one of the values described below. You can set <span Class="emphasis">CURLSHOPT_UNSHARE(3)</span> multiple times with different data arguments to remove multiple types from the shared object. Add data to share again with <span Class="emphasis">CURLSHOPT_SHARE(3)</span>. </p>
+<p class="level0"><a name="CURLLOCKDATACOOKIE"></a><span class="nroffip">CURL_LOCK_DATA_COOKIE</span> </p>
+<p class="level1">Cookie data will no longer be shared across the easy handles using this shared object. </p>
+<p class="level0"><a name="CURLLOCKDATADNS"></a><span class="nroffip">CURL_LOCK_DATA_DNS</span> </p>
+<p class="level1">Cached DNS hosts will be no longer be shared across the easy handles using this shared object. </p>
+<p class="level0"><a name="CURLLOCKDATASSLSESSION"></a><span class="nroffip">CURL_LOCK_DATA_SSL_SESSION</span> </p>
+<p class="level1">SSL session IDs will no longer be shared across the easy handles using this shared object. </p>
+<p class="level0"><a name="CURLLOCKDATACONNECT"></a><span class="nroffip">CURL_LOCK_DATA_CONNECT</span> </p>
+<p class="level1">The connection cache is no longer shared. </p>
+<p class="level0"><a name="CURLLOCKDATAPSL"></a><span class="nroffip">CURL_LOCK_DATA_PSL</span> </p>
+<p class="level1">The Public Suffix List is no longer shared. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&nbsp; CURLSHcode sh;
+&nbsp; share = curl_share_init();
+&nbsp; sh = curl_share_setopt(share, CURLSHOPT_UNSHARE, CURL_LOCK_DATA_COOKIE);
+&nbsp; if(sh)
+&nbsp;   printf(&quot;Error: %s&bsol;n&quot;, curl_share_strerror(sh));
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.10 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">CURLSHE_OK (zero) means that the option was set properly, non-zero means an error occurred. See <span Class="emphasis">libcurl-errors(3)</span> for the full list with descriptions. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLSHOPT_SHARE</span>(3),  <span Class="bold">curl_share_setopt</span>(3), <span Class="bold">curl_share_cleanup</span>(3), <span Class="bold">curl_share_init</span>(3) </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

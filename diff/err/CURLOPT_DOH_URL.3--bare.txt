@@ -1,0 +1,4 @@
+9c9
+< <p class="level0">Pass in a pointer to a <span Class="emphasis">URL</span> for the DoH server to use for name resolving. The parameter should be a char * to a null-terminated string which must be URL-encoded in the following format: &quot;<a href="https://host:port/path&quot;.">https://host:port/path&quot;.</a> It MUST specify an HTTPS URL. </p>
+---
+> <p class="level0">Pass in a pointer to a <span Class="emphasis">URL</span> for the DoH server to use for name resolving. The parameter should be a char * to a null-terminated string which must be URL-encoded in the following format: &quot;<a href="https://host:port/path">https://host:port/path</a>&quot;. It MUST specify an HTTPS URL. </p>

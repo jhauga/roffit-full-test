@@ -1,0 +1,29 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_HTTPGET - ask for an HTTP GET request </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_HTTPGET, long useget);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a long. If <span Class="emphasis">useget</span> is 1, this forces the HTTP request to get back to using GET. Usable if a POST, HEAD, PUT, etc has been used previously using the same curl <span Class="emphasis">handle</span>. </p>
+<p class="level0">When setting <span Class="emphasis">CURLOPT_HTTPGET(3)</span> to 1, it will automatically set <span Class="emphasis">CURLOPT_NOBODY(3)</span> to 0 and <span Class="emphasis">CURLOPT_UPLOAD(3)</span> to 0. </p>
+<p class="level0">Setting this option to zero has no effect. Applications need to explicitly select which HTTP request method to use, they cannot deselect a method. To reset a handle to default method, consider <span Class="emphasis">curl_easy_reset(3)</span>. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">0 </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP(S) </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp;
+&nbsp; /* use a GET to fetch this */
+&nbsp; curl_easy_setopt(curl, CURLOPT_HTTPGET, 1L);
+&nbsp;
+&nbsp; /* Perform the request */
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Along with HTTP </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if HTTP is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_NOBODY</span>(3), <span Class="bold">CURLOPT_UPLOAD</span>(3), <span Class="bold">CURLOPT_POST</span>(3),  <span Class="bold">curl_easy_reset</span>(3)  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

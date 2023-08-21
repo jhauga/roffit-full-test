@@ -1,0 +1,30 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_TLSAUTH_TYPE - TLS authentication methods </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_TLSAUTH_TYPE, char *type);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to a null-terminated string as parameter. The string should be the method of the TLS authentication. Supported method is &quot;SRP&quot;. </p>
+<p class="level0"><a name="SRP"></a><span class="nroffip">SRP</span> </p>
+<p class="level1">TLS-SRP authentication. Secure Remote Password authentication for TLS is defined in <a href="http://www.ietf.org/rfc/rfc5054.txt">RFC 5054</a> and provides mutual authentication if both sides have a shared secret. To use TLS-SRP, you must also set the <span Class="emphasis">CURLOPT_TLSAUTH_USERNAME(3)</span> and <span Class="emphasis">CURLOPT_TLSAUTH_PASSWORD(3)</span> options. </p>
+<p class="level1">The application does not have to keep the string around after setting this option. </p>
+<p class="level1">TLS SRP does not work with TLS 1.3. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">blank </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All TLS-based protocols </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com/&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_TLSAUTH_TYPE, &quot;SRP&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_TLSAUTH_USERNAME, &quot;user&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_TLSAUTH_PASSWORD, &quot;secret&quot;);
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">You need to build libcurl with GnuTLS or OpenSSL with TLS-SRP support for this to work. Added in 7.21.4 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_TLSAUTH_USERNAME</span>(3), <span Class="bold">CURLOPT_TLSAUTH_PASSWORD</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

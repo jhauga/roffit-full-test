@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>curl_multi_wakeup man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_multi_wakeup - wakes up a sleeping curl_multi_poll call </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLMcode curl_multi_wakeup(CURLM *multi_handle);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">This function can be called from any thread and it wakes up a sleeping <span Class="emphasis">curl_multi_poll(3)</span> call that is currently (or will be) waiting for activity or a timeout. </p>
+<p class="level0">If the function is called when there is no <span Class="emphasis">curl_multi_poll(3)</span> call, it will cause the next call to return immediately. </p>
+<p class="level0">Calling this function only guarantees to wake up the current (or the next if there is no current) <span Class="emphasis">curl_multi_poll(3)</span> call, which means it is possible that multiple calls to this function will wake up the same waiting operation. </p>
+<p class="level0">This function has no effect on <span Class="emphasis">curl_multi_wait(3)</span> calls. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *easy_handle;
+CURLM *multi_handle;
+&nbsp;
+/* add the individual easy handle */
+curl_multi_add_handle(multi_handle, easy_handle);
+&nbsp;
+/* this is thread 1 */
+do {
+&nbsp; CURLMcode mc;
+&nbsp; int numfds;
+&nbsp;
+&nbsp; mc = curl_multi_perform(multi_handle, &amp;still_running);
+&nbsp;
+&nbsp; if(mc == CURLM_OK) {
+&nbsp;   /* wait for activity, timeout or wakeup */
+&nbsp;   mc = curl_multi_poll(multi_handle, NULL, 0, 10000, &amp;numfds);
+&nbsp; }
+&nbsp;
+&nbsp; if(time_to_die())
+&nbsp;   exit(1);
+&nbsp;
+} while(still_running);
+&nbsp;
+curl_multi_remove_handle(multi_handle, easy_handle);
+&nbsp;
+/* this is thread 2 */
+&nbsp;
+if(something makes us decide to stop thread 1) {
+&nbsp;
+&nbsp; set_something_to_signal_thread_1_to_exit();
+&nbsp;
+&nbsp; curl_multi_wakeup(multi_handle);
+}
+&nbsp;
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.68.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">CURLMcode type, general libcurl multi interface error code. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_multi_poll</span>(3), <span Class="bold">curl_multi_wait</span>(3) </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

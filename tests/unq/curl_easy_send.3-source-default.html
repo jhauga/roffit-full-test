@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>curl_easy_send man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_easy_send - sends raw data over an &quot;easy&quot; connection </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/easy.h&gt;
+&nbsp;
+CURLcode curl_easy_send(CURL *curl, const void *buffer,
+&nbsp;                       size_t buflen, size_t *n);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">This function sends arbitrary data over the established connection. You may use it together with <span Class="emphasis">curl_easy_recv(3)</span> to implement custom protocols using libcurl. This functionality can be particularly useful if you use proxies and/or SSL encryption: libcurl will take care of proxy negotiation and connection setup. </p>
+<p class="level0"><span Class="bold">buffer</span> is a pointer to the data of length <span Class="bold">buflen</span> that you want sent. The variable <span Class="bold">n</span> points to will receive the number of sent bytes. </p>
+<p class="level0">To establish the connection, set <span Class="emphasis">CURLOPT_CONNECT_ONLY(3)</span> option before calling <span Class="emphasis">curl_easy_perform(3)</span> or <span Class="emphasis">curl_multi_perform(3)</span>. Note that <span Class="emphasis">curl_easy_send(3)</span> will not work on connections that were created without this option. </p>
+<p class="level0">The call will return <span Class="bold">CURLE_AGAIN</span> if it&#39;s not possible to send data right now - the socket is used in non-blocking mode internally. When <span Class="bold">CURLE_AGAIN</span> is returned, use your operating system facilities like <span Class="emphasis">select(2)</span> to wait until the socket is writable. The socket may be obtained using <span Class="emphasis">curl_easy_getinfo(3)</span> with <span Class="emphasis">CURLINFO_ACTIVESOCKET(3)</span>. </p>
+<p class="level0">Furthermore if you wait on the socket and it tells you it&#39;s writable, <span Class="emphasis">curl_easy_send(3)</span> may return <span Class="bold">CURLE_AGAIN</span> if the only data that was sent was for internal SSL processing, and no other data could be sent. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&nbsp;curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp;/* Do not do the transfer - only connect to host */
+&nbsp;curl_easy_setopt(curl, CURLOPT_CONNECT_ONLY, 1L);
+&nbsp;res = curl_easy_perform(curl);
+&nbsp;
+&nbsp;if(res == CURLE_OK) {
+&nbsp;  /* Extract the socket from the curl handle -
+&nbsp;     we will need it for waiting. */
+&nbsp;  res = curl_easy_getinfo(curl, CURLINFO_ACTIVESOCKET, &amp;sockfd);
+&nbsp;
+&nbsp;  /* send data */
+&nbsp;  res = curl_easy_send(curl, &quot;hello&quot;, 5, &amp;sent);
+&nbsp;}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.18.2. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">On success, returns <span Class="bold">CURLE_OK</span> and stores the number of bytes actually sent into <span Class="bold">*n</span>. Note that this may be less than the amount you wanted to send. </p>
+<p class="level0">On failure, returns the appropriate error code. </p>
+<p class="level0">This function may return <span Class="bold">CURLE_AGAIN</span>. In this case, use your operating system facilities to wait until the socket is writable, and retry. </p>
+<p class="level0">If there&#39;s no socket available to use from the previous transfer, this function returns <span Class="bold">CURLE_UNSUPPORTED_PROTOCOL</span>. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_easy_setopt</span>(3), <span Class="bold">curl_easy_perform</span>(3), <span Class="bold">curl_easy_getinfo</span>(3),  <span Class="bold">curl_easy_recv</span>(3)  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

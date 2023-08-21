@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_CHUNK_BGN_FUNCTION man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_CHUNK_BGN_FUNCTION - callback before a transfer with FTP wildcard match </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+struct curl_fileinfo {
+&nbsp; char *filename;
+&nbsp; curlfiletype filetype;
+&nbsp; time_t time;   /* always zero! */
+&nbsp; unsigned int perm;
+&nbsp; int uid;
+&nbsp; int gid;
+&nbsp; curl_off_t size;
+&nbsp; long int hardlinks;
+&nbsp;
+&nbsp; struct {
+&nbsp;   /* If some of these fields is not NULL, it is a pointer to b_data. */
+&nbsp;   char *time;
+&nbsp;   char *perm;
+&nbsp;   char *user;
+&nbsp;   char *group;
+&nbsp;   char *target; /* pointer to the target filename of a symlink */
+&nbsp; } strings;
+&nbsp;
+&nbsp; unsigned int flags;
+&nbsp;
+&nbsp; /* used internally */
+&nbsp; char *b_data;
+&nbsp; size_t b_size;
+&nbsp; size_t b_used;
+};
+&nbsp;
+long chunk_bgn_callback(const void *transfer_info, void *ptr,
+&nbsp;                       int remains);
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_CHUNK_BGN_FUNCTION,
+&nbsp;                         chunk_bgn_callback);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to your callback function, which should match the prototype shown above. </p>
+<p class="level0">This callback function gets called by libcurl before a part of the stream is going to be transferred (if the transfer supports chunks). </p>
+<p class="level0">The <span Class="emphasis">transfer_info</span> pointer will point to a <span Class="bold">curl_fileinfo</span> struct with details about the file that is about to get transferred. </p>
+<p class="level0">This callback makes sense only when using the <span Class="emphasis">CURLOPT_WILDCARDMATCH(3)</span> option for now. </p>
+<p class="level0">The target of transfer_info parameter is a &quot;feature depended&quot; structure. For the FTP wildcard download, the target is <span Class="bold">curl_fileinfo</span> structure (see <span Class="emphasis">curl/curl.h</span>).  The parameter <span Class="emphasis">ptr</span> is a pointer given by <span Class="emphasis">CURLOPT_CHUNK_DATA(3)</span>. The parameter remains contains number of chunks remaining per the transfer. If the feature is not available, the parameter has zero value. </p>
+<p class="level0">Return <span Class="emphasis">CURL_CHUNK_BGN_FUNC_OK</span> if everything is fine, <span Class="emphasis">CURL_CHUNK_BGN_FUNC_SKIP</span> if you want to skip the concrete chunk or <span Class="emphasis">CURL_CHUNK_BGN_FUNC_FAIL</span> to tell libcurl to stop if some error occurred. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">FTP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+static long file_is_coming(struct curl_fileinfo *finfo,
+&nbsp;                          struct callback_data *data,
+&nbsp;                          int remains)
+{
+&nbsp; printf(&quot;%3d %40s %10luB &quot;, remains, finfo-&gt;filename,
+&nbsp;        (unsigned long)finfo-&gt;size);
+&nbsp;
+&nbsp; switch(finfo-&gt;filetype) {
+&nbsp; case CURLFILETYPE_DIRECTORY:
+&nbsp;   printf(&quot; DIR&bsol;n&quot;);
+&nbsp;   break;
+&nbsp; case CURLFILETYPE_FILE:
+&nbsp;   printf(&quot;FILE &quot;);
+&nbsp;   break;
+&nbsp; default:
+&nbsp;   printf(&quot;OTHER&bsol;n&quot;);
+&nbsp;   break;
+&nbsp; }
+&nbsp;
+&nbsp; if(finfo-&gt;filetype == CURLFILETYPE_FILE) {
+&nbsp;   /* do not transfer files &gt;= 50B */
+&nbsp;   if(finfo-&gt;size &gt; 50) {
+&nbsp;     printf(&quot;SKIPPED&bsol;n&quot;);
+&nbsp;     return CURL_CHUNK_BGN_FUNC_SKIP;
+&nbsp;   }
+&nbsp;
+&nbsp;   data-&gt;output = fopen(finfo-&gt;filename, &quot;wb&quot;);
+&nbsp;   if(!data-&gt;output) {
+&nbsp;     return CURL_CHUNK_BGN_FUNC_FAIL;
+&nbsp;   }
+&nbsp; }
+&nbsp;
+&nbsp; return CURL_CHUNK_BGN_FUNC_OK;
+}
+&nbsp;
+int main()
+{
+&nbsp; /* data for callback */
+&nbsp; struct callback_data callback_info;
+&nbsp;
+&nbsp; /* callback is called before download of concrete file started */
+&nbsp; curl_easy_setopt(curl, CURLOPT_CHUNK_BGN_FUNCTION, file_is_coming);
+&nbsp; curl_easy_setopt(curl, CURLOPT_CHUNK_DATA, &amp;callback_info);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">This was added in 7.21.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_CHUNK_END_FUNCTION</span>(3), <span Class="bold">CURLOPT_WILDCARDMATCH</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

@@ -1,0 +1,18 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_session_last_error - get the most recent error </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&nbsp;
+int
+libssh2_session_last_error(LIBSSH2_SESSION *session,
+&nbsp;                          char **errmsg, int *errmsg_len, int want_buf);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="emphasis">session</span> - Session instance as returned by <span Class="bold">libssh2_session_init_ex(3)</span> </p>
+<p class="level0"><span Class="emphasis">errmsg</span> - If not NULL, is populated by reference with the human readable form of the most recent error message. </p>
+<p class="level0"><span Class="emphasis">errmsg_len</span> - If not NULL, is populated by reference with the length of errmsg. (The string is NUL-terminated, so the length is only useful as an optimization, to avoid calling strlen.) </p>
+<p class="level0"><span Class="emphasis">want_buf</span> - If set to a non-zero value, &quot;ownership&quot; of the errmsg buffer will be given to the calling scope. If necessary, the errmsg buffer will be duplicated. </p>
+<p class="level0">Determine the most recent error condition and its cause. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Numeric error code corresponding to the the Error Code constants. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">libssh2_session_last_errno(3)</span> <span Class="bold">libssh2_session_set_last_error(3)</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

@@ -1,0 +1,20 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_easy_option_by_id - find an easy setopt option by id </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+const struct curl_easyoption *curl_easy_option_by_id(CURLoption id);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Given a <span Class="emphasis">CURLoption</span> <span Class="bold">id</span>, this function returns a pointer to the <span Class="emphasis">curl_easyoption</span> struct, holding information about the <span Class="emphasis">curl_easy_setopt(3)</span> option using that id. The option id is the CURLOPT_ prefix ones provided in the standard curl/curl.h header file. This function will return the non-aliases version for the cases where there is an alias function as well. </p>
+<p class="level0">If libcurl has no option with the given id, this function returns NULL. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+const struct curl_easyoption *opt = curl_easy_option_by_id(CURLOPT_URL);
+if(opt) {
+&nbsp; printf(&quot;This option wants type %x&bsol;n&quot;, opt-&gt;type);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">This function was added in libcurl 7.73.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">A pointer to the <span Class="emphasis">curl_easyoption</span> struct for the option or NULL. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_easy_option_by_name</span>(3),<span Class="bold">curl_easy_option_next</span>(3), <span Class="bold">curl_easy_setopt</span>(3), </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

@@ -1,0 +1,15 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_session_get_read_timeout - get the timeout for packet read functions </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&nbsp;
+long
+libssh2_session_get_read_timeout(LIBSSH2_SESSION *session);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Returns the <span Class="bold">timeout</span> (in seconds) for how long the ssh2 packet receive function calls may wait until they consider the situation an error and return LIBSSH2_ERROR_TIMEOUT. </p>
+<p class="level0">By default the timeout is 60 seconds. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">The value of the timeout setting. </p><a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 1.10.1 </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">libssh2_session_set_read_timeout(3)</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

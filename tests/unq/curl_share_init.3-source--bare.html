@@ -1,0 +1,21 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_share_init - Create a shared object </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLSH *curl_share_init();
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">This function returns a pointer to a <span Class="emphasis">CURLSH</span> handle to be used as input to all the other share-functions, sometimes referred to as a share handle in some places in the documentation. This init call MUST have a corresponding call to <span Class="emphasis">curl_share_cleanup(3)</span> when all operations using the share are complete. </p>
+<p class="level0">This <span Class="emphasis">share handle</span> is what you pass to curl using the <span Class="emphasis">CURLOPT_SHARE(3)</span> option with <span Class="emphasis">curl_easy_setopt(3)</span>, to make that specific curl handle use the data in this share. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&nbsp; CURLSHcode sh;
+&nbsp; share = curl_share_init();
+&nbsp; sh = curl_share_setopt(share, CURLSHOPT_SHARE, CURL_LOCK_DATA_CONNECT);
+&nbsp; if(sh)
+&nbsp;   printf(&quot;Error: %s&bsol;n&quot;, curl_share_strerror(sh));
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.10 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">If this function returns NULL, something went wrong (out of memory, etc.) and therefore the share object was not created. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_share_cleanup</span>(3), <span Class="bold">curl_share_setopt</span>(3) </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

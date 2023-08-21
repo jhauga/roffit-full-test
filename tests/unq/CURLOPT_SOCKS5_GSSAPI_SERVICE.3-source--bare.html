@@ -1,0 +1,28 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_SOCKS5_GSSAPI_SERVICE - SOCKS5 proxy authentication service name </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_SOCKS5_GSSAPI_SERVICE,
+&nbsp;                         char *name);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Deprecated since 7.49.0. Use <span Class="emphasis">CURLOPT_PROXY_SERVICE_NAME(3)</span> instead. </p>
+<p class="level0">Pass a <span Class="bold">char *</span> as parameter to a string holding the <span Class="emphasis">name</span> of the service.  The default service name for a SOCKS5 server is <span Class="emphasis">&quot;rcmd&quot;</span>. This option allows you to change it. </p>
+<p class="level0">The application does not have to keep the string around after setting this option. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">See above </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All network protocols </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com/&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_PROXY, &quot;socks5://proxy&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_SOCKS5_GSSAPI_SERVICE, &quot;rcmd-special&quot;);
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.19.4, deprecated in 7.49.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, CURLE_UNKNOWN_OPTION if not, or CURLE_OUT_OF_MEMORY if there was insufficient heap space. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_PROXY</span>(3), <span Class="bold">CURLOPT_PROXYTYPE</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

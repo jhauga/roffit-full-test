@@ -1,0 +1,26 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_TCP_NODELAY - the TCP_NODELAY option </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_TCP_NODELAY, long nodelay);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a long specifying whether the <span Class="emphasis">TCP_NODELAY</span> option is to be set or cleared (1L = set, 0 = clear). The option is set by default. This will have no effect after the connection has been established. </p>
+<p class="level0">Setting this option to 1L will disable TCP&#39;s Nagle algorithm on this connection. The purpose of this algorithm is to try to minimize the number of small packets on the network (where &quot;small packets&quot; means TCP segments less than the Maximum Segment Size for the network). </p>
+<p class="level0">Maximizing the amount of data sent per TCP segment is good because it amortizes the overhead of the send. However, in some cases small segments may need to be sent without delay. This is less efficient than sending larger amounts of data at a time, and can contribute to congestion on the network if overdone. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">1 </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp; /* leave Nagle enabled */
+&nbsp; curl_easy_setopt(curl, CURLOPT_TCP_NODELAY, 0);
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Always. The default was changed to 1 from 0 in 7.50.2. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_SOCKOPTFUNCTION</span>(3), <span Class="bold">CURLOPT_TCP_KEEPALIVE</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

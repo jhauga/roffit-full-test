@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>curl_pushheader_bynum man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_pushheader_bynum - get a push header by index </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+char *curl_pushheader_bynum(struct curl_pushheaders *h, size_t num);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">This is a function that is only functional within a <span Class="emphasis">CURLMOPT_PUSHFUNCTION(3)</span> callback. It makes no sense to try to use it elsewhere and it has no function then. </p>
+<p class="level0">It returns the value for the header field at the given index <span Class="bold">num</span>, for the incoming server push request or NULL. The data pointed will be freed when this callback returns.  The returned pointer points to a &quot;name:value&quot; string that will be freed when this callback returns. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+/* output all the incoming push request headers */
+int curl_push_callback(CURL *parent,
+&nbsp;                      CURL *easy,
+&nbsp;                      size_t num_headers,
+&nbsp;                      struct curl_pushheaders *headers,
+&nbsp;                      void *clientp)
+{
+&nbsp; sizt_t i = 0;
+&nbsp; char *field;
+&nbsp; do {
+&nbsp;    field = curl_pushheader_bynum(headers, i);
+&nbsp;    if(field)
+&nbsp;      fprintf(stderr, &quot;Push header: %s&bsol;n&quot;, field);
+&nbsp;    i++;
+&nbsp; } while(field);
+&nbsp; return CURL_PUSH_OK; /* permission granted */
+}
+&nbsp;
+curl_multi_setopt(multi, CURLMOPT_PUSHFUNCTION, curl_push_callback);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.44.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns a pointer to the header field content or NULL. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLMOPT_PUSHFUNCTION</span>(3),<span Class="bold">curl_pushheader_byname</span>(3), </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

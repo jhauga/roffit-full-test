@@ -1,0 +1,30 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_NOBODY - do the download request without getting the body </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_NOBODY, long opt);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">A long parameter set to 1 tells libcurl to not include the body-part in the output when doing what would otherwise be a download. For HTTP(S), this makes libcurl do a HEAD request. For most other protocols it means just not asking to transfer the body data. </p>
+<p class="level0">For HTTP operations when <span Class="emphasis">CURLOPT_NOBODY(3)</span> has been set, disabling this option (with 0) will make it a GET again - only if the method is still set to be HEAD. The proper way to get back to a GET request is to set <span Class="emphasis">CURLOPT_HTTPGET(3)</span> and for other methods, use the POST or UPLOAD options. </p>
+<p class="level0">Enabling <span Class="emphasis">CURLOPT_NOBODY(3)</span> means asking for a download without a body. </p>
+<p class="level0">If you do a transfer with HTTP that involves a method other than HEAD, you will get a body (unless the resource and server sends a zero byte body for the specific URL you request). </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">0, the body is transferred </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">Most </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp;
+&nbsp; /* get us the resource without a body - use HEAD! */
+&nbsp; curl_easy_setopt(curl, CURLOPT_NOBODY, 1L);
+&nbsp;
+&nbsp; /* Perform the request */
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Always </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_HTTPGET</span>(3), <span Class="bold">CURLOPT_POSTFIELDS</span>(3), <span Class="bold">CURLOPT_UPLOAD</span>(3),  <span Class="bold">CURLOPT_REQUEST_TARGET</span>(3), <span Class="bold">CURLOPT_MIMEPOST</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

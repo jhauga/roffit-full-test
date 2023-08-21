@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>libssh2_userauth_publickey_sk man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_userauth_publickey_sk - authenticate a session with a FIDO2 authenticator </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&nbsp;
+int
+libssh2_userauth_publickey_sk(LIBSSH2_SESSION *session,
+&nbsp;                             const char *username,
+&nbsp;                             size_t username_len,
+&nbsp;                             const unsigned char *publickeydata,
+&nbsp;                             size_t publickeydata_len,
+&nbsp;                             const char *privatekeydata,
+&nbsp;                             size_t privatekeydata_len,
+&nbsp;                             const char *passphrase,
+&nbsp;                             LIBSSH2_USERAUTH_SK_SIGN_FUNC((*sign_callback)),
+&nbsp;                             void **abstract);
+</pre>
+<a name="CALLBACK"></a><h2 class="nroffsh">Callback</h2><pre class="level0">
+&#35;define LIBSSH2_SK_PRESENCE_REQUIRED     0x01
+&#35;define LIBSSH2_SK_VERIFICATION_REQUIRED 0x04
+&nbsp;
+typedef struct _LIBSSH2_SK_SIG_INFO {
+&nbsp;   uint8_t flags;
+&nbsp;   uint32_t counter;
+&nbsp;   unsigned char *sig_r;
+&nbsp;   size_t sig_r_len;
+&nbsp;   unsigned char *sig_s;
+&nbsp;   size_t sig_s_len;
+} LIBSSH2_SK_SIG_INFO;
+&nbsp;
+int name(LIBSSH2_SESSION *session, LIBSSH2_SK_SIG_INFO *sig_info,
+&nbsp;        const unsigned char *data, size_t data_len, int algorithm,
+&nbsp;        uint8_t flags, const char *application,
+&nbsp;        const unsigned char *key_handle, size_t handle_len,
+&nbsp;        void **abstract);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="emphasis">session</span> - Session instance as returned by <span Class="bold">libssh2_session_init_ex(3)</span> </p>
+<p class="level0"><span Class="emphasis">username</span> - Name of user to attempt authentication for. </p>
+<p class="level0"><span Class="emphasis">username_len</span> - Length of username parameter. </p>
+<p class="level0"><span Class="emphasis">publickeydata</span> - Buffer containing the contents of a public key file. If NULL, the public key will be extracted from the privatekeydata. When using certificate authentication, this buffer should contain the public certificate data. </p>
+<p class="level0"><span Class="emphasis">publickeydata_len</span> - Length of public key data. </p>
+<p class="level0"><span Class="emphasis">privatekeydata</span> - Buffer containing the contents of a private key file. </p>
+<p class="level0"><span Class="emphasis">privatekeydata_len</span> - Length of private key data. </p>
+<p class="level0"><span Class="emphasis">passphrase</span> - Passphrase to use when decoding private key file. </p>
+<p class="level0"><span Class="emphasis">sign_callback</span> - Callback to communicate with FIDO2 authenticator. </p>
+<p class="level0"><span Class="emphasis">abstract</span> - User-provided data to pass to callback. </p>
+<p class="level0">Attempt FIDO2 authentication. using either the sk-ssh-ed25519@openssh.com or sk-ecdsa-sha2-nistp256@openssh.com key exchange algorithms. </p>
+<p class="level0">This function is only supported when libssh2 is backed by OpenSSL. </p><a name="CALLBACK"></a><h2 class="nroffsh">Callback description</h2>
+<p class="level0"><span Class="emphasis">session</span> - Session instance as returned by <span Class="bold">libssh2_session_init_ex(3)</span> </p>
+<p class="level0"><span Class="emphasis">sig_info</span> - Filled in by the callback with the signature and accompanying information from the authenticator. </p>
+<p class="level0"><span Class="emphasis">data</span> - The data to sign. </p>
+<p class="level0"><span Class="emphasis">data_len</span> - The length of the data parameter. </p>
+<p class="level0"><span Class="emphasis">algorithm</span> - The signing algorithm to use. Possible values are LIBSSH2_HOSTKEY_TYPE_ED25519 and LIBSSH2_HOSTKEY_TYPE_ECDSA_256. </p>
+<p class="level0"><span Class="emphasis">flags</span> - A bitmask specifying options for the authenticator. When LIBSSH2_SK_PRESENCE_REQUIRED is set, the authenticator requires a touch. When LIBSSH2_SK_VERIFICATION_REQUIRED is set, the authenticator requires a PIN. Many servers and authenticators do not work properly when LIBSSH2_SK_PRESENCE_REQUIRED is not set. </p>
+<p class="level0"><span Class="emphasis">application</span> - A user-defined string to use as the RP name for the authenticator. Usually &quot;ssh:&quot;. </p>
+<p class="level0"><span Class="emphasis">key_handle</span> - The key handle to use for the authenticator&#39;s allow list. </p>
+<p class="level0"><span Class="emphasis">handle_len</span> - The length of the key_handle parameter. </p>
+<p class="level0"><span Class="emphasis">abstract</span> - User-defined data. When a PIN is required, use this to pass in the PIN, or a function pointer to retrieve the PIN. </p>
+<p class="level0">The <span Class="emphasis">sign_callback</span> is responsible for communicating with the hardware authenticator to generate a signature. On success, the signature information must be placed in the `<span Class="emphasis">sig_info</span> sig_info parameter and the callback must return 0. On failure, it should return a negative number. </p>
+<p class="level0">The fields of the LIBSSH2_SK_SIG_INFO are as follows. </p>
+<p class="level0"><span Class="emphasis">flags</span> - A bitmask specifying options for the authenticator. This should be read from the authenticator and not merely copied from the flags parameter to the callback. </p>
+<p class="level0"><span Class="emphasis">counter</span> - A value returned from the authenticator. </p>
+<p class="level0"><span Class="emphasis">sig_r</span> - For Ed25519 signatures, this contains the entire signature, as returned directly from the authenticator. For ECDSA signatures, this contains the r component of the signature in a big-endian binary representation. For both algorithms, use LIBSSH2_ALLOC to allocate memory. It will be freed by the caller. </p>
+<p class="level0"><span Class="emphasis">sig_r_len</span> - The length of the sig_r parameter. </p>
+<p class="level0"><span Class="emphasis">sig_s</span> - For ECDSA signatures, this contains the s component of the signature in a big-endian binary representation. Use LIBSSH2_ALLOC to allocate memory. It will be freed by the caller. For Ed25519 signatures, set this to NULL. </p>
+<p class="level0"><span Class="emphasis">sig_s_len</span> - The length of the sig_s parameter. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Return 0 on success or negative on failure. It returns LIBSSH2_ERROR_EAGAIN when it would otherwise block. While LIBSSH2_ERROR_EAGAIN is a negative number, it is not really a failure per se. </p><a name="ERRORS"></a><h2 class="nroffsh">Errors</h2>
+<p class="level0">Some of the errors this function may return include: </p>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_ALLOC</span> - An internal memory allocation call failed. </p>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_SOCKET_SEND</span> - Unable to send data on socket. </p>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_AUTHENTICATION_FAILED</span> - failed, invalid username/key. </p><a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in libssh2 1.10.0 </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">libssh2_session_init_ex(3)</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

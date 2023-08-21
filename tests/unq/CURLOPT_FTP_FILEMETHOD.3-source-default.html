@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_FTP_FILEMETHOD man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_FTP_FILEMETHOD - select directory traversing method for FTP </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_FTP_FILEMETHOD,
+&nbsp;                         long method);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a long telling libcurl which <span Class="emphasis">method</span> to use to reach a file on a FTP(S) server. </p>
+<p class="level0">This option exists because some server implementations are not compliant to what the standards say should work. </p>
+<p class="level0">The argument should be one of the following alternatives: </p>
+<p class="level0"><a name="CURLFTPMETHODMULTICWD"></a><span class="nroffip">CURLFTPMETHOD_MULTICWD</span> </p>
+<p class="level1">libcurl does a single CWD operation for each path part in the given URL. For deep hierarchies this means many commands. This is how <a href="http://www.ietf.org/rfc/rfc1738.txt">RFC 1738</a> says it should be done. This is the default but the slowest behavior. </p>
+<p class="level0"><a name="CURLFTPMETHODNOCWD"></a><span class="nroffip">CURLFTPMETHOD_NOCWD</span> </p>
+<p class="level1">libcurl does no CWD at all. libcurl will do SIZE, RETR, STOR etc and give a full path to the server for all these commands. This is the fastest behavior. </p>
+<p class="level0"><a name="CURLFTPMETHODSINGLECWD"></a><span class="nroffip">CURLFTPMETHOD_SINGLECWD</span> </p>
+<p class="level1">libcurl does one CWD with the full target directory and then operates on the file &quot;normally&quot; (like in the multicwd case). This is somewhat more standards compliant than &#39;nocwd&#39; but without the full penalty of &#39;multicwd&#39;. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">CURLFTPMETHOD_MULTICWD </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">FTP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;ftp://example.com/1/2/3/4/new.txt&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_FTP_FILEMETHOD,
+&nbsp;                  (long)CURLFTPMETHOD_SINGLECWD);
+&nbsp;
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp;
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.15.1 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_DIRLISTONLY</span>(3), <span Class="bold">CURLOPT_FTP_SKIP_PASV_IP</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

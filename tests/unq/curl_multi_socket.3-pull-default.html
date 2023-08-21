@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>curl_multi_socket man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_multi_socket - reads/writes available data </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+CURLMcode curl_multi_socket(CURLM *multi_handle, curl_socket_t sockfd,
+&nbsp;                           int *running_handles);
+&nbsp;
+CURLMcode curl_multi_socket_all(CURLM *multi_handle,
+&nbsp;                               int *running_handles);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">These functions are deprecated. Do not use. See <span Class="emphasis">curl_multi_socket_action(3)</span> instead. </p>
+<p class="level0">At return, the integer <span Class="bold">running_handles</span> points to will contain the number of still running easy handles within the multi handle. When this number reaches zero, all transfers are complete/done. Note that when you call <span Class="emphasis">curl_multi_socket_action(3)</span> on a specific socket and the counter decreases by one, it DOES NOT necessarily mean that this exact socket/transfer is the one that completed. Use <span Class="emphasis">curl_multi_info_read(3)</span> to figure out which easy handle that completed. </p>
+<p class="level0">The <span Class="emphasis">curl_multi_socket_action(3)</span> functions inform the application about updates in the socket (file descriptor) status by doing none, one, or multiple calls to the socket callback function set with the <span Class="emphasis">CURLMOPT_SOCKETFUNCTION(3)</span> option to <span Class="emphasis">curl_multi_setopt(3)</span>. They update the status with changes since the previous time the callback was called. </p>
+<p class="level0">Get the timeout time by setting the <span Class="emphasis">CURLMOPT_TIMERFUNCTION(3)</span> option with <span Class="emphasis">curl_multi_setopt(3)</span>. Your application will then get called with information on how long to wait for socket actions at most before doing the timeout action: call the <span Class="emphasis">curl_multi_socket_action(3)</span> function with the <span Class="bold">sockfd</span> argument set to CURL_SOCKET_TIMEOUT. You can also use the <span Class="emphasis">curl_multi_timeout(3)</span> function to poll the value at any given time, but for an event-based system using the callback is far better than relying on polling the timeout value. </p>
+<p class="level0">Usage of <span Class="emphasis">curl_multi_socket(3)</span> is deprecated, whereas the function is equivalent to <span Class="emphasis">curl_multi_socket_action(3)</span> with <span Class="bold">ev_bitmask</span> set to 0. </p>
+<p class="level0">Force libcurl to (re-)check all its internal sockets and transfers instead of just a single one by calling <span Class="emphasis">curl_multi_socket_all(3)</span>. Note that there should not be any reason to use this function. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+/* the event-library gets told when there activity on the socket &#39;fd&#39;,
+&nbsp;  which we translate to a call to curl_multi_socket_action() */
+int running;
+rc = curl_multi_socket(multi_handle, fd, &amp;running);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">This function was added in libcurl 7.15.4, and is deemed stable since 7.16.0. </p>
+<p class="level0"><span Class="emphasis">curl_multi_socket(3)</span> is deprecated, use <span Class="emphasis">curl_multi_socket_action(3)</span> instead! </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">CURLMcode type, general libcurl multi interface error code. </p>
+<p class="level0">The return code is for the whole multi stack. Problems still might have occurred on individual transfers even when one of these functions return OK. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_multi_cleanup</span>(3), <span Class="bold">curl_multi_init</span>(3),  <span Class="bold">curl_multi_fdset</span>(3), <span Class="bold">curl_multi_info_read</span>(3),  <span Class="bold">the hiperfifo.c example</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

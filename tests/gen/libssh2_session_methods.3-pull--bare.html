@@ -1,0 +1,17 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_session_methods - return the currently active algorithms </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&nbsp;
+const char *
+libssh2_session_methods(LIBSSH2_SESSION *session, int method_type);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="emphasis">session</span> - Session instance as returned by <span Class="bold">libssh2_session_init_ex(3)</span> </p>
+<p class="level0"><span Class="emphasis">method_type</span> - one of the method type constants: LIBSSH2_METHOD_KEX, LIBSSH2_METHOD_HOSTKEY, LIBSSH2_METHOD_CRYPT_CS, LIBSSH2_METHOD_CRYPT_SC, LIBSSH2_METHOD_MAC_CS, LIBSSH2_METHOD_MAC_SC, LIBSSH2_METHOD_COMP_CS, LIBSSH2_METHOD_COMP_SC, LIBSSH2_METHOD_LANG_CS, LIBSSH2_METHOD_LANG_SC, LIBSSH2_METHOD_SIGN_ALGO. </p>
+<p class="level0">Returns the actual method negotiated for a particular transport parameter. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Negotiated method or NULL if the session has not yet been started. </p><a name="ERRORS"></a><h2 class="nroffsh">Errors</h2>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_INVAL</span> - The requested method type was invalid. </p>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_METHOD_NONE</span> - no method has been set </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">libssh2_session_init_ex(3)</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

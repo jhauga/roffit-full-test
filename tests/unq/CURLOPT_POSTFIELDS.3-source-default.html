@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_POSTFIELDS man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_POSTFIELDS - data to POST to server </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_POSTFIELDS, char *postdata);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a char * as parameter, pointing to the full data to send in an HTTP POST operation. You must make sure that the data is formatted the way you want the server to receive it. libcurl will not convert or encode it for you in any way. For example, the web server may assume that this data is URL encoded. </p>
+<p class="level0">The data pointed to is NOT copied by the library: as a consequence, it must be preserved by the calling application until the associated transfer finishes. This behavior can be changed (so libcurl does copy the data) by setting the <span Class="emphasis">CURLOPT_COPYPOSTFIELDS(3)</span> option. </p>
+<p class="level0">This POST is a normal <span Class="bold">application/x-www-form-urlencoded</span> kind (and libcurl will set that Content-Type by default when this option is used), which is commonly used by HTML forms. Change Content-Type with <span Class="emphasis">CURLOPT_HTTPHEADER(3)</span>. </p>
+<p class="level0">You can use <span Class="emphasis">curl_easy_escape(3)</span> to URL encode your data, if necessary. It returns a pointer to an encoded string that can be passed as <span Class="emphasis">postdata</span>. </p>
+<p class="level0">Using <span Class="emphasis">CURLOPT_POSTFIELDS(3)</span> implies setting <span Class="emphasis">CURLOPT_POST(3)</span> to 1. </p>
+<p class="level0">If <span Class="emphasis">CURLOPT_POSTFIELDS(3)</span> is explicitly set to NULL then libcurl will get the POST data from the read callback. If you want to send a zero-byte POST set <span Class="emphasis">CURLOPT_POSTFIELDS(3)</span> to an empty string, or set <span Class="emphasis">CURLOPT_POST(3)</span> to 1 and <span Class="emphasis">CURLOPT_POSTFIELDSIZE(3)</span> to 0. </p>
+<p class="level0">libcurl will use assume this option points to a null-terminated string unless you also set <span Class="emphasis">CURLOPT_POSTFIELDSIZE(3)</span> to specify the length of the provided data, which then is strictly required if you want to send off null bytes included in the data. </p>
+<p class="level0">Using POST with HTTP 1.1 implies the use of a &quot;Expect: 100-continue&quot; header, and libcurl will add that header automatically if the POST is either known to be larger than 1MB or if the expected size is unknown. You can disable this header with <span Class="emphasis">CURLOPT_HTTPHEADER(3)</span> as usual. </p>
+<p class="level0">To make <span Class="bold">multipart/formdata</span> posts, check out the <span Class="emphasis">CURLOPT_MIMEPOST(3)</span> option combined with <span Class="emphasis">curl_mime_init(3)</span>. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; const char *data = &quot;data to send&quot;;
+&nbsp;
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp;
+&nbsp; /* size of the POST data */
+&nbsp; curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, 12L);
+&nbsp;
+&nbsp; /* pass in a pointer to the data - libcurl will not copy */
+&nbsp; curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data);
+&nbsp;
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Always </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_POSTFIELDSIZE</span>(3), <span Class="bold">CURLOPT_READFUNCTION</span>(3),  <span Class="bold">CURLOPT_MIMEPOST</span>(3), <span Class="bold">CURLOPT_UPLOAD</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

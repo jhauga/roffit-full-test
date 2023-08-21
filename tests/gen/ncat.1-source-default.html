@@ -1,0 +1,313 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>"NCAT" man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">ncat - Concatenate and redirect sockets </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2>
+<p class="level0"><span Class="bold">ncat</span> [<a class="emphasis" href="#OPTIONS">OPTIONS</a>...] [<span Class="emphasis">hostname</span>] [<span Class="emphasis">port</span>] </p><a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Ncat is a feature-packed networking utility which reads and writes data across networks from the command line. Ncat was written for the Nmap Project and is the culmination of the currently splintered family of Netcat incarnations. It is designed to be a reliable back-end tool to instantly provide network connectivity to other applications and users. Ncat will not only work with IPv4 and IPv6 but provides the user with a virtually limitless number of potential uses. </p>
+<p class="level0">Among Ncat*(Aqs vast number of features there is the ability to chain Ncats together; redirection of TCP, UDP, and SCTP ports to other sites; SSL support; and proxy connections via SOCKS4, SOCKS5 or HTTP proxies (with optional proxy authentication as well). Some general principles apply to most applications and thus give you the capability of instantly adding networking support to software that would normally never support it. </p><a name="OPTIONS"></a><h2 class="nroffsh">Options summary</h2><pre class="level1">
+Ncat 7.94 ( https://nmap.org/ncat )
+Usage: ncat [options] [hostname] [port]
+&nbsp;
+Options taking a time assume seconds. Append *(Aqms*(Aq for milliseconds,
+*(Aqs*(Aq for seconds, *(Aqm*(Aq for minutes, or *(Aqh*(Aq for hours (e.g. 500ms).
+&nbsp; -4                         Use IPv4 only
+&nbsp; -6                         Use IPv6 only
+&nbsp; -U, --unixsock             Use Unix domain sockets only
+&nbsp;     --vsock                Use vsock sockets only
+&nbsp; -C, --crlf                 Use CRLF for EOL sequence
+&nbsp; -c, --sh-exec &lt;command&gt;    Executes the given command via /bin/sh
+&nbsp; -e, --exec &lt;command&gt;       Executes the given command
+&nbsp;     --lua-exec &lt;filename&gt;  Executes the given Lua script
+&nbsp; -g hop1[,hop2,...]         Loose source routing hop points (8 max)
+&nbsp; -G &lt;n&gt;                     Loose source routing hop pointer (4, 8, 12, ...)
+&nbsp; -m, --max-conns &lt;n&gt;        Maximum &lt;n&gt; simultaneous connections
+&nbsp; -h, --help                 Display this help screen
+&nbsp; -d, --delay &lt;time&gt;         Wait between read/writes
+&nbsp; -o, --output &lt;filename&gt;    Dump session data to a file
+&nbsp; -x, --hex-dump &lt;filename&gt;  Dump session data as hex to a file
+&nbsp; -i, --idle-timeout &lt;time&gt;  Idle read/write timeout
+&nbsp; -p, --source-port port     Specify source port to use
+&nbsp; -s, --source addr          Specify source address to use (doesn*(Aqt affect -l)
+&nbsp; -l, --listen               Bind and listen for incoming connections
+&nbsp; -k, --keep-open            Accept multiple connections in listen mode
+&nbsp; -n, --nodns                Do not resolve hostnames via DNS
+&nbsp; -t, --telnet               Answer Telnet negotiations
+&nbsp; -u, --udp                  Use UDP instead of default TCP
+&nbsp;     --sctp                 Use SCTP instead of default TCP
+&nbsp; -v, --verbose              Set verbosity level (can be used several times)
+&nbsp; -w, --wait &lt;time&gt;          Connect timeout
+&nbsp; -z                         Zero-I/O mode, report connection status only
+&nbsp;     --append-output        Append rather than clobber specified output files
+&nbsp;     --send-only            Only send data, ignoring received; quit on EOF
+&nbsp;     --recv-only            Only receive data, never send anything
+&nbsp;     --no-shutdown          Continue half-duplex when receiving EOF on stdin
+&nbsp;     --allow                Allow only given hosts to connect to Ncat
+&nbsp;     --allowfile            A file of hosts allowed to connect to Ncat
+&nbsp;     --deny                 Deny given hosts from connecting to Ncat
+&nbsp;     --denyfile             A file of hosts denied from connecting to Ncat
+&nbsp;     --broker               Enable Ncat*(Aqs connection brokering mode
+&nbsp;     --chat                 Start a simple Ncat chat server
+&nbsp;     --proxy &lt;addr[:port]&gt;  Specify address of host to proxy through
+&nbsp;     --proxy-type &lt;type&gt;    Specify proxy type (&quot;http&quot;, &quot;socks4&quot;, &quot;socks5&quot;)
+&nbsp;     --proxy-auth &lt;auth&gt;    Authenticate with HTTP or SOCKS proxy server
+&nbsp;     --proxy-dns &lt;type&gt;     Specify where to resolve proxy destination
+&nbsp;     --ssl                  Connect or listen with SSL
+&nbsp;     --ssl-cert             Specify SSL certificate file (PEM) for listening
+&nbsp;     --ssl-key              Specify SSL private key (PEM) for listening
+&nbsp;     --ssl-verify           Verify trust and domain name of certificates
+&nbsp;     --ssl-trustfile        PEM file containing trusted SSL certificates
+&nbsp;     --ssl-ciphers          Cipherlist containing SSL ciphers to use
+&nbsp;     --ssl-servername       Request distinct server name (SNI)
+&nbsp;     --ssl-alpn             ALPN protocol list to use
+&nbsp;     --version              Display Ncat*(Aqs version information and exit
+&nbsp;
+See the ncat(1) manpage for full options, descriptions and usage examples
+</pre>
+<a name="CONNECT"></a><h2 class="nroffsh">Connect mode and listen mode</h2>
+<p class="level0">Ncat operates in one of two primary modes: connect mode and listen mode. Other modes, such as the HTTP proxy server, act as special cases of these two. In connect mode, Ncat works as a client. In listen mode it is a server. </p>
+<p class="level0">In connect mode, the <span class="bold"><span Class="emphasis">hostname</span></span> and <span class="bold"><span Class="emphasis">port</span></span> arguments tell what to connect to. <span class="bold"><span Class="emphasis">hostname</span></span> is required, and may be a hostname or IP address. If <span class="bold"><span Class="emphasis">port</span></span> is supplied, it must be a decimal port number. If omitted, it defaults to 31337. </p>
+<p class="level0">In listen mode, <span class="bold"><span Class="emphasis">hostname</span></span> and <span class="bold"><span Class="emphasis">port</span></span> control the address the server will bind to. Both arguments are optional in listen mode. If <span class="bold"><span Class="emphasis">hostname</span></span> is omitted, it defaults to listening on all available addresses over IPv4 and IPv6. If <span class="bold"><span Class="emphasis">port</span></span> is omitted, it defaults to 31337. </p><a name="PROTOCOL"></a><h2 class="nroffsh">Protocol options</h2>
+<p class="level0"><span Class="bold">-4</span> (IPv4 only) </p>
+<p class="level1">Force the use of IPv4 only. </p>
+<p class="level0"><span Class="bold">-6</span> (IPv6 only) </p>
+<p class="level1">Force the use of IPv6 only. </p>
+<p class="level0"><span Class="bold">-U</span>, <span Class="bold">--unixsock</span> (Use Unix domain sockets) </p>
+<p class="level1">Use Unix domain sockets rather than network sockets. This option may be used on its own for stream sockets, or combined with <span Class="bold">--udp</span> for datagram sockets. A description of <span Class="bold">-U</span> mode is in the section called (lqUNIX DOMAIN SOCKETS(rq. </p>
+<p class="level0"><span Class="bold">-u</span>, <span Class="bold">--udp</span> (Use UDP) </p>
+<p class="level1">Use UDP for the connection (the default is TCP). </p>
+<p class="level0"><span Class="bold">--sctp</span> (Use SCTP) </p>
+<p class="level1">Use SCTP for the connection (the default is TCP). SCTP support is implemented in TCP-compatible mode. </p>
+<p class="level0"><span Class="bold">--vsock</span> (Use AF_VSOCK sockets) </p>
+<p class="level1">Use AF_VSOCK sockets rather than the default TCP sockets (Linux only). This option may be used on its own for stream sockets or combined with <span Class="bold">--udp</span> for datagram sockets. A description of <span Class="bold">--vsock</span> mode is in the section called (lqAF_VSOCK SOCKETS(rq. </p><a name="CONNECT"></a><h2 class="nroffsh">Connect mode options</h2>
+<p class="level0"><span Class="bold">-g </span><span class="bold"><span Class="emphasis">hop1</span></span><span class="bold">[,<span Class="emphasis">hop2</span>,...]</span> (Loose source routing) </p>
+<p class="level1">Sets hops for IPv4 loose source routing. You can use <span Class="bold">-g</span> once with a comma-separated list of hops, use <span Class="bold">-g</span> multiple times with single hops to build the list, or combine the two. Hops can be given as IP addresses or hostnames. </p>
+<p class="level0"><span Class="bold">-G </span><span class="bold"><span Class="emphasis">ptr</span></span> (Set source routing pointer) </p>
+<p class="level1">Sets the IPv4 source route (lqpointer(rq for use with <span Class="bold">-g</span>. The argument must be a multiple of 4 and no more than 28. Not all operating systems support setting this pointer to anything other than four. </p>
+<p class="level0"><span Class="bold">-p </span><span class="bold"><span Class="emphasis">port</span></span>, <span Class="bold">--source-port </span><span class="bold"><span Class="emphasis">port</span></span> (Specify source port) </p>
+<p class="level1">Set the port number for Ncat to bind to. </p>
+<p class="level0"><span Class="bold">-s </span><span class="bold"><span Class="emphasis">host</span></span>, <span Class="bold">--source </span><span class="bold"><span Class="emphasis">host</span></span> (Specify source address) </p>
+<p class="level1">Set the address for Ncat to bind to. </p><a name="LISTEN"></a><h2 class="nroffsh">Listen mode options</h2>
+<p class="level0">See the section called (lqACCESS CONTROL OPTIONS(rq for information on limiting the hosts that may connect to the listening Ncat process. </p>
+<p class="level0"><span Class="bold">-l</span>, <span Class="bold">--listen</span> (Listen for connections) </p>
+<p class="level1">Listen for connections rather than connecting to a remote machine </p>
+<p class="level0"><span Class="bold">-m </span><span class="bold"><span Class="emphasis">numconns</span></span>, <span Class="bold">--max-conns </span><span class="bold"><span Class="emphasis">numconns</span></span> (Specify maximum number of connections) </p>
+<p class="level1">The maximum number of simultaneous connections accepted by an Ncat instance. 100 is the default (60 on Windows). </p>
+<p class="level0"><span Class="bold">-k</span>, <span Class="bold">--keep-open</span> (Accept multiple connections) </p>
+<p class="level1">Normally a listening server accepts only one connection and then quits when the connection is closed. This option makes it accept multiple simultaneous connections and wait for more connections after they have all been closed. It must be combined with <span Class="bold">--listen</span>. In this mode there is no way for Ncat to know when its network input is finished, so it will keep running until interrupted. This also means that it will never close its output stream, so any program reading from Ncat and looking for end-of-file will also hang. </p>
+<p class="level0"><span Class="bold">--broker</span> (Connection brokering) </p>
+<p class="level1">Allow multiple parties to connect to a centralised Ncat server and communicate with each other. Ncat can broker communication between systems that are behind a NAT or otherwise unable to directly connect. This option is used in conjunction with <span Class="bold">--listen</span>, which causes the <span Class="bold">--listen</span> port to have broker mode enabled. </p>
+<p class="level0"><span Class="bold">--chat</span> (Ad-hoc (lqchat server(rq) </p>
+<p class="level1">The <span Class="bold">--chat</span> option enables chat mode, intended for the exchange of text between several users. In chat mode, connection brokering is turned on. Ncat prefixes each message received with an ID before relaying it to the other connections. The ID is unique for each connected client. This helps distinguish who sent what. Additionally, non-printing characters such as control characters are escaped to keep them from doing damage to a terminal. </p><a name="SSL"></a><h2 class="nroffsh">Ssl options</h2>
+<p class="level0"><span Class="bold">--ssl</span> (Use SSL) </p>
+<p class="level1">In connect mode, this option transparently negotiates an SSL session with an SSL server to securely encrypt the connection. This is particularly handy for talking to SSL enabled HTTP servers, etc. </p>
+<p class="level1">In server mode, this option listens for incoming SSL connections, rather than plain untunneled traffic. </p>
+<p class="level1">In UDP mode, this option enables Datagram TLS (DTLS). </p>
+<p class="level0"><span Class="bold">--ssl-verify</span> (Verify server certificates) </p>
+<p class="level1">In client mode, <span Class="bold">--ssl-verify</span> is like <span Class="bold">--ssl</span> except that it also requires verification of the server certificate. Ncat comes with a default set of trusted certificates in the file ca-bundle.crt. Some operating systems provide a default list of trusted certificates; these will also be used if available. Use <span Class="bold">--ssl-trustfile</span> to give a custom list. Use <span Class="bold">-v</span> one or more times to get details about verification failures. Ncat does not check for revoked certificates. </p>
+<p class="level1">This option has no effect in server mode. </p>
+<p class="level0"><span Class="bold">--ssl-cert </span><span class="bold"><span Class="emphasis">certfile.pem</span></span> (Specify SSL certificate) </p>
+<p class="level1">This option gives the location of a PEM-encoded certificate files used to authenticate the server (in listen mode) or the client (in connect mode). Use it in combination with <span Class="bold">--ssl-key</span>. </p>
+<p class="level0"><span Class="bold">--ssl-key </span><span class="bold"><span Class="emphasis">keyfile.pem</span></span> (Specify SSL private key) </p>
+<p class="level1">This option gives the location of the PEM-encoded private key file that goes with the certificate named with <span Class="bold">--ssl-cert</span>. </p>
+<p class="level0"><span Class="bold">--ssl-trustfile </span><span class="bold"><span Class="emphasis">cert.pem</span></span> (List trusted certificates) </p>
+<p class="level1">This option sets a list of certificates that are trusted for purposes of certificate verification. It has no effect unless combined with <span Class="bold">--ssl-verify</span>. The argument to this option is the name of a PEM file containing trusted certificates. Typically, the file will contain certificates of certification authorities, though it may also contain server certificates directly. When this option is used, Ncat does not use its default certificates. </p>
+<p class="level0"><span Class="bold">--ssl-ciphers </span><span class="bold"><span Class="emphasis">cipherlist</span></span> (Specify SSL ciphersuites) </p>
+<p class="level1">This option sets the list of ciphersuites that Ncat will use when connecting to servers or when accepting SSL connections from clients. The syntax is described in the OpenSSL ciphers(1) man page, and defaults to ALL:!aNULL:!eNULL:!LOW:!EXP:!RC4:!MD5:@STRENGTH </p>
+<p class="level0"><span Class="bold">--ssl-servername </span><span class="bold"><span Class="emphasis">name</span></span> (Request distinct server name) </p>
+<p class="level1">In client mode, this option sets the TLS SNI (Server Name Indication) extension, which tells the server the name of the logical server Ncat is contacting. This is important when the target server hosts multiple virtual servers at a single underlying network address. If the option is not provided, the TLS SNI extension will be populated with the target server hostname. </p>
+<p class="level0"><span Class="bold">--ssl-alpn </span><span class="bold"><span Class="emphasis">ALPN list</span></span> (Specify ALPN protocol list) </p>
+<p class="level1">This option allows you to specify a comma-separated list of protocols to send via the Application-Layer Protocol Negotiation (ALPN) TLS extension. Not supported by all versions of OpenSSL. </p><a name="PROXY"></a><h2 class="nroffsh">Proxy options</h2>
+<p class="level0"><span Class="bold">--proxy </span><span class="bold"><span Class="emphasis">host</span></span><span class="bold">[:<span Class="emphasis">port</span>]</span> (Specify proxy address) </p>
+<p class="level1">Requests proxying through <span Class="emphasis">host</span>:<span Class="emphasis">port</span>, using the protocol specified by <span Class="bold">--proxy-type</span>. </p>
+<p class="level1">If no port is specified, the proxy protocol*(Aqs well-known port is used (1080 for SOCKS and 3128 for HTTP). When specifying an IPv6 HTTP proxy server using the IP address rather than the hostname, the square-bracket notation (for example [2001:db8::1]:8080) MUST be used to separate the port from the IPv6 address. If the proxy requires authentication, use <span Class="bold">--proxy-auth</span>. </p>
+<p class="level0"><span Class="bold">--proxy-type </span><span class="bold"><span Class="emphasis">proto</span></span> (Specify proxy protocol) </p>
+<p class="level1">In connect mode, this option requests the protocol <span Class="emphasis">proto</span> to connect through the proxy host specified by <span Class="bold">--proxy</span>. In listen mode, this option has Ncat act as a proxy server using the specified protocol. </p>
+<p class="level1">The currently available protocols in connect mode are http (CONNECT), socks4 (SOCKSv4), and socks5 (SOCKSv5). The only server currently supported is http. If this option is not used, the default protocol is http. </p>
+<p class="level0"><span Class="bold">--proxy-auth </span><span class="bold"><span Class="emphasis">user</span></span><span class="bold">[:<span Class="emphasis">pass</span>]</span> (Specify proxy credentials) </p>
+<p class="level1">In connect mode, gives the credentials that will be used to connect to the proxy server. In listen mode, gives the credentials that will be required of connecting clients. For use with <span Class="bold">--proxy-type http</span> or <span Class="bold">--proxy-type socks5</span>, the form should be username:password. For <span Class="bold">--proxy-type socks4</span>, it should be a username only. </p>
+<p class="level1">These credentials can be alternatively passed onto Ncat by setting environment variable <span Class="bold">NCAT_PROXY_AUTH</span>, which reduces the risk of the credentials being captured in process logs. (Option <span Class="bold">--proxy-auth</span> takes precedence.) </p>
+<p class="level0"><span Class="bold">--proxy-dns </span><span class="bold"><span Class="emphasis">type</span></span> (Specify where to resolve proxy destination) </p>
+<p class="level1">In connect mode, it provides control over whether proxy destination hostnames are resolved by the remote proxy server or locally, by Ncat itself. Possible values for <span Class="emphasis">type</span> are: </p>
+<p class="level1">local - Hostnames are resolved locally on the Ncat host. Ncat exits with error if the hostname cannot be resolved. </p>
+<p class="level1">remote - Hostnames are passed directly onto the remote proxy server. This is the default behavior. </p>
+<p class="level1">both - Hostname resolution is first attempted on the Ncat host. Unresolvable hostnames are passed onto the remote proxy server. </p>
+<p class="level1">none - Hostname resolution is completely disabled. Only a literal IPv4 or IPv6 address can be used as the proxy destination. </p>
+<p class="level1">Local hostname resolution generally respects IP version specified with options <span Class="bold">-4</span> or <span Class="bold">-6</span>, except for SOCKS4, which is incompatible with IPv6. </p><a name="COMMAND"></a><h2 class="nroffsh">Command execution options</h2>
+<p class="level0"><span Class="bold">-e </span><span class="bold"><span Class="emphasis">command</span></span>, <span Class="bold">--exec </span><span class="bold"><span Class="emphasis">command</span></span> (Execute command) </p>
+<p class="level1">Execute the specified command after a connection has been established. The command must be specified as a full pathname. All input from the remote client will be sent to the application and responses sent back to the remote client over the socket, thus making your command-line application interactive over a socket. Combined with <span Class="bold">--keep-open</span>, Ncat will handle multiple simultaneous connections to your specified port/application like inetd. Ncat will only accept a maximum, definable, number of simultaneous connections controlled by the <span Class="bold">-m</span> option. By default this is set to 100 (60 on Windows). </p>
+<p class="level0"><span Class="bold">-c </span><span class="bold"><span Class="emphasis">command</span></span>, <span Class="bold">--sh-exec </span><span class="bold"><span Class="emphasis">command</span></span> (Execute command via sh) </p>
+<p class="level1">Same as <span Class="bold">-e</span>, except it tries to execute the command via /bin/sh. This means you don*(Aqt have to specify the full path for the command, and shell facilities like environment variables are available. </p>
+<p class="level0"><span Class="bold">--lua-exec </span><span class="bold"><span Class="emphasis">file</span></span> (Execute a .lua script) </p>
+<p class="level1">Runs the specified file as a Lua script after a connection has been established, using a built-in interpreter. Both the script*(Aqs standard input and the standard output are redirected to the connection data streams. </p>
+<p class="level0">All exec options add the following variables to the child*(Aqs environment: </p>
+<p class="level0"><span Class="bold">NCAT_REMOTE_ADDR</span>, <span Class="bold">NCAT_REMOTE_PORT</span> </p>
+<p class="level1">The IP address and port number of the remote host. In connect mode, it*(Aqs the target*(Aqs address; in listen mode, it*(Aqs the client*(Aqs address. </p>
+<p class="level0"><span Class="bold">NCAT_LOCAL_ADDR</span>, <span Class="bold">NCAT_LOCAL_PORT</span> </p>
+<p class="level1">The IP address and port number of the local end of the connection. </p>
+<p class="level0"><span Class="bold">NCAT_PROTO</span> </p>
+<p class="level1">The protocol in use: one of TCP, UDP, and SCTP. </p><a name="ACCESS"></a><h2 class="nroffsh">Access control options</h2>
+<p class="level0"><span Class="bold">--allow </span><span class="bold"><span Class="emphasis">host</span></span><span class="bold">[,<span Class="emphasis">host</span>,...]</span> (Allow connections) </p>
+<p class="level1">The list of hosts specified will be the only hosts allowed to connect to the Ncat process. All other connection attempts will be disconnected. In case of a conflict between <span Class="bold">--allow</span> and <span Class="bold">--deny</span>, <span Class="bold">--allow</span> takes precedence. Host specifications follow the same syntax used by Nmap. </p>
+<p class="level0"><span Class="bold">--allowfile </span><span class="bold"><span Class="emphasis">file</span></span> (Allow connections from file) </p>
+<p class="level1">This has the same functionality as <span Class="bold">--allow</span>, except that the allowed hosts are provided in a new-line delimited allow file, rather than directly on the command line. </p>
+<p class="level0"><span Class="bold">--deny </span><span class="bold"><span Class="emphasis">host</span></span><span class="bold">[,<span Class="emphasis">host</span>,...]</span> (Deny connections) </p>
+<p class="level1">Issue Ncat with a list of hosts that will not be allowed to connect to the listening Ncat process. Specified hosts will have their session silently terminated if they try to connect. In case of a conflict between <span Class="bold">--allow</span> and <span Class="bold">--deny</span>, <span Class="bold">--allow</span> takes precedence. Host specifications follow the same syntax used by Nmap. </p>
+<p class="level0"><span Class="bold">--denyfile </span><span class="bold"><span Class="emphasis">file</span></span> (Deny connections from file) </p>
+<p class="level1">This is the same functionality as <span Class="bold">--deny</span>, except that excluded hosts are provided in a new-line delimited deny file, rather than directly on the command line. </p><a name="TIMING"></a><h2 class="nroffsh">Timing options</h2>
+<p class="level0">These options accept a time parameter. This is specified in seconds by default, though you can append ms, s, m, or h to the value to specify milliseconds, seconds, minutes, or hours. </p>
+<p class="level0"><span Class="bold">-d </span><span class="bold"><span Class="emphasis">time</span></span>, <span Class="bold">--delay </span><span class="bold"><span Class="emphasis">time</span></span> (Specify line delay) </p>
+<p class="level1">Set the delay interval for lines sent. This effectively limits the number of lines that Ncat will send in the specified period. This may be useful for low-bandwidth sites, or have other uses such as coping with annoying <span Class="bold">iptables --limit</span> options. </p>
+<p class="level0"><span Class="bold">-i </span><span class="bold"><span Class="emphasis">time</span></span>, <span Class="bold">--idle-timeout </span><span class="bold"><span Class="emphasis">time</span></span> (Specify idle timeout) </p>
+<p class="level1">Set a fixed timeout for idle connections. If the idle timeout is reached, the connection is terminated. </p>
+<p class="level0"><span Class="bold">-w </span><span class="bold"><span Class="emphasis">time</span></span>, <span Class="bold">--wait </span><span class="bold"><span Class="emphasis">time</span></span> (Specify connect timeout) </p>
+<p class="level1">Set a fixed timeout for connection attempts. </p><a name="OUTPUT"></a><h2 class="nroffsh">Output options</h2>
+<p class="level0"><span Class="bold">-o </span><span class="bold"><span Class="emphasis">file</span></span>, <span Class="bold">--output </span><span class="bold"><span Class="emphasis">file</span></span> (Save session data) </p>
+<p class="level1">Dump session data to a file </p>
+<p class="level0"><span Class="bold">-x </span><span class="bold"><span Class="emphasis">file</span></span>, <span Class="bold">--hex-dump </span><span class="bold"><span Class="emphasis">file</span></span> (Save session data in hex) </p>
+<p class="level1">Dump session data in hex to a file. </p>
+<p class="level0"><span Class="bold">--append-output</span> (Append output) </p>
+<p class="level1">Issue Ncat with <span Class="bold">--append-ouput</span> along with <span Class="bold">-o</span> and/or <span Class="bold">-x</span> and it will append the resulted output rather than truncating the specified output files. </p>
+<p class="level0"><span Class="bold">-v</span>, <span Class="bold">--verbose</span> (Be verbose) </p>
+<p class="level1">Issue Ncat with <span Class="bold">-v</span> and it will be verbose and display all kinds of useful connection based information. Use more than once (<span Class="bold">-vv</span>, <span Class="bold">-vvv</span>...) for greater verbosity. </p><a name="MISC"></a><h2 class="nroffsh">Misc options</h2>
+<p class="level0"><span Class="bold">-C</span>, <span Class="bold">--crlf</span> (Use CRLF as EOL) </p>
+<p class="level1">This option tells Ncat to convert LF line endings to CRLF when taking input from standard input. This is useful for talking to some stringent servers directly from a terminal in one of the many common plain-text protocols that use CRLF for end-of-line. </p>
+<p class="level0"><span Class="bold">-h</span>, <span Class="bold">--help</span> (Help screen) </p>
+<p class="level1">Displays a short help screen with common options and parameters, and then exits. </p>
+<p class="level0"><span Class="bold">--recv-only</span> (Only receive data) </p>
+<p class="level1">If this option is passed, Ncat will only receive data and will not try to send anything. </p>
+<p class="level0"><span Class="bold">--send-only</span> (Only send data) </p>
+<p class="level1">If this option is passed, then Ncat will only send data and will ignore anything received. This option also causes Ncat to close the network connection and terminate after EOF is received on standard input. </p>
+<p class="level0"><span Class="bold">--no-shutdown</span> (Do not shutdown into half-duplex mode) </p>
+<p class="level1">If this option is passed, Ncat will not invoke shutdown on a socket after seeing EOF on stdin. This is provided for backward-compatibility with OpenBSD netcat, which exhibits this behavior when executed with its *(Aq-d*(Aq option. </p>
+<p class="level0"><span Class="bold">-n</span>, <span Class="bold">--nodns</span> (Do not resolve hostnames) </p>
+<p class="level1">Completely disable hostname resolution across all Ncat options, such as the destination, source address, source routing hops, and the proxy. All addresses must be specified numerically. (Note that resolution of proxy destinations is controlled separately via option <span Class="bold">--proxy-dns</span>.) </p>
+<p class="level0"><span Class="bold">-t</span>, <span Class="bold">--telnet</span> (Answer Telnet negotiations) </p>
+<p class="level1">Handle DO/DONT WILL/WONT Telnet negotiations. This makes it possible to script Telnet sessions with Ncat. </p>
+<p class="level0"><span Class="bold">--version</span> (Display version) </p>
+<p class="level1">Displays the Ncat version number and exits. </p><a name="UNIX"></a><h2 class="nroffsh">Unix domain sockets</h2>
+<p class="level0">The <span Class="bold">-U</span> option (same as <span Class="bold">--unixsock</span>) causes Ncat to use Unix domain sockets rather than network sockets. Unix domain sockets exist as an entry in the filesystem. You must give the name of a socket to connect to or to listen on. For example, to make a connection, </p>
+<p class="level0"><span Class="bold">ncat -U ~/unixsock</span> </p>
+<p class="level0">To listen on a socket: </p>
+<p class="level0"><span Class="bold">ncat -l -U ~/unixsock</span> </p>
+<p class="level0">Listen mode will create the socket if it doesn*(Aqt exist. The socket will continue to exist after the program ends. </p>
+<p class="level0">Both stream and datagram domain sockets are supported. Use <span Class="bold">-U</span> on its own for stream sockets, or combine it with <span Class="bold">--udp</span> for datagram sockets. Datagram sockets require a source socket to connect from. By default, a source socket with a random filename will be created as needed, and deleted when the program ends. Use the <span Class="bold">--source</span> with a path to use a source socket with a specific name. </p><a name="AFVSOCK"></a><h2 class="nroffsh">Af_vsock sockets</h2>
+<p class="level0">The <span Class="bold">--vsock</span> option causes Ncat to use AF_VSOCK sockets rather than network sockets. A CID must be given instead of a hostname or IP address. For example, to make a connection to the host, </p>
+<p class="level0"><span Class="bold">ncat --vsock 2 1234</span> </p>
+<p class="level0">To listen on a socket: </p>
+<p class="level0"><span Class="bold">ncat -l --vsock 1234</span> </p>
+<p class="level0">Both stream and datagram domain sockets are supported, but socket type availability depends on the hypervisor. Use <span Class="bold">--vsock</span> on its own for stream sockets, or combine it with <span Class="bold">--udp</span> for datagram sockets. </p><a name="EXAMPLES"></a><h2 class="nroffsh">Examples</h2>
+<p class="level0">Connect to example.org on TCP port 8080. </p>
+<p class="level1"><span Class="bold">ncat example.org 8080</span> </p>
+<p class="level0">Listen for connections on TCP port 8080. </p>
+<p class="level1"><span Class="bold">ncat -l 8080</span> </p>
+<p class="level0">Redirect TCP port 8080 on the local machine to host on port 80. </p>
+<p class="level1"><span Class="bold">ncat --sh-exec &quot;ncat example.org 80&quot; -l 8080 --keep-open</span> </p>
+<p class="level0">Bind to TCP port 8081 and attach /bin/bash for the world to access freely. </p>
+<p class="level1"><span Class="bold">ncat --exec &quot;/bin/bash&quot; -l 8081 --keep-open</span> </p>
+<p class="level0">Bind a shell to TCP port 8081, limit access to hosts on a local network, and limit the maximum number of simultaneous connections to 3. </p>
+<p class="level1"><span Class="bold">ncat --exec &quot;/bin/bash&quot; --max-conns 3 --allow 192.168.0.0/24 -l 8081 --keep-open</span> </p>
+<p class="level0">Connect to smtphost:25 through a SOCKS4 server on port 1080. </p>
+<p class="level1"><span Class="bold">ncat --proxy socks4host --proxy-type socks4 --proxy-auth joe smtphost 25</span> </p>
+<p class="level0">Connect to smtphost:25 through a SOCKS5 server on port 1080. </p>
+<p class="level1"><span Class="bold">ncat --proxy socks5host --proxy-type socks5 --proxy-auth joe:secret smtphost 25</span> </p>
+<p class="level0">Create an HTTP proxy server on localhost port 8888. </p>
+<p class="level1"><span Class="bold">ncat -l --proxy-type http localhost 8888</span> </p>
+<p class="level0">Send a file over TCP port 9899 from host2 (client) to host1 (server). </p>
+<p class="level1">HOST1$ <span Class="bold">ncat -l 9899 &gt; outputfile</span> </p>
+<p class="level1">HOST2$ <span Class="bold">ncat HOST1 9899 &lt; inputfile</span> </p>
+<p class="level0">Transfer in the other direction, turning Ncat into a (lqone file(rq server. </p>
+<p class="level1">HOST1$ <span Class="bold">ncat -l 9899 &lt; inputfile</span> </p>
+<p class="level1">HOST2$ <span Class="bold">ncat HOST1 9899 &gt; outputfile</span> </p><a name="EXIT"></a><h2 class="nroffsh">Exit code</h2>
+<p class="level0">The exit code reflects whether a connection was made and completed successfully. 0 means there was no error. 1 means there was a network error of some kind, for example (lqConnection refused(rq or (lqConnection reset(rq. 2 is reserved for all other errors, like an invalid option or a nonexistent file. </p><a name="BUGS"></a><h2 class="nroffsh">Bugs</h2>
+<p class="level0">Like its authors, Ncat isn*(Aqt perfect. But you can help make it better by sending bug reports or even writing patches. If Ncat doesn*(Aqt behave the way you expect, first upgrade to the latest version available from m[blue]<span Class="bold">%<a href="https://nmap.org">https://nmap.org</a></span>m[]. If the problem persists, do some research to determine whether it has already been discovered and addressed. Try Googling the error message or browsing the nmap-dev archives at m[blue]<span Class="bold">%<a href="https://seclists.org/">https://seclists.org/</a></span>m[]. </p>
+<p class="level0">Read this full manual page as well. If nothing comes of this, mail a bug report to &lt;dev@nmap.org&gt;. Please include everything you have learned about the problem, as well as what version of Ncat you are running and what operating system version it is running on. Problem reports and Ncat usage questions sent to dev@nmap.org are far more likely to be answered than those sent to Fyodor directly. </p>
+<p class="level0">Code patches to fix bugs are even better than bug reports. Basic instructions for creating patch files with your changes are available at m[blue]<span Class="bold">%<a href="https://svn.nmap.org/nmap/HACKING">https://svn.nmap.org/nmap/HACKING</a></span>m[]. Patches may be sent to nmap-dev (recommended) or to Fyodor directly. </p><a name="AUTHORS"></a><h2 class="nroffsh">Authors</h2>
+<p class="level1">h&#39;-04&#39;(buh&#39;+03&#39;c </p>
+<p class="level0"><a name="bu"></a><span class="nroffip">\(bu 2.3</span> </p>
+<p class="level1">Chris Gibson &lt;chris@linuxops.net&gt; </p>
+<p class="level1">h&#39;-04&#39;(buh&#39;+03&#39;c </p>
+<p class="level0"><a name="bu"></a><span class="nroffip">\(bu 2.3</span> </p>
+<p class="level1">Gordon Lyon (Fyodor)&lt;fyodor@nmap.org&gt; (m[blue]<span Class="bold">%<a href="http://insecure.org">http://insecure.org</a></span>m[]) </p>
+<p class="level1">h&#39;-04&#39;(buh&#39;+03&#39;c </p>
+<p class="level0"><a name="bu"></a><span class="nroffip">\(bu 2.3</span> </p>
+<p class="level1">Kris Katterjohn &lt;katterjohn@gmail.com&gt; </p>
+<p class="level1">h&#39;-04&#39;(buh&#39;+03&#39;c </p>
+<p class="level0"><a name="bu"></a><span class="nroffip">\(bu 2.3</span> </p>
+<p class="level1">Mixter &lt;mixter@gmail.com&gt; </p>
+<p class="level0">The original Netcat was written by *Hobbit* &lt;hobbit@avian.org&gt;. While Ncat isn*(Aqt built on any code from the (lqtraditional(rq Netcat (or any other implementation), Ncat is most definitely based on Netcat in spirit and functionality. </p><a name="LEGAL"></a><h2 class="nroffsh">Legal notices</h2><a name="Ncat"></a><h2 class="nroffsh">Ncat copyright and licensing</h2>
+<p class="level0">Ncat is (C) 2005(en2022 Nmap Software LLC. It is distributed as free and open source software under the same license terms as our Nmap software. Precise terms and further details are available from m[blue]<span Class="bold">%<a href="https://nmap.org/man/man-legal.html">https://nmap.org/man/man-legal.html</a></span>m[]. </p><a name="Creative"></a><h2 class="nroffsh">Creative commons license for this ncat guide</h2>
+<p class="level0">This Ncat Reference Guide is (C) 2005(en2022 Nmap Software LLC. It is hereby placed under version 3.0 of the m[blue]<a class="bold" href="#Creative">Creative Commons Attribution License</a>m[]s-2u[1]ds+2. This allows you redistribute and modify the work as you desire, as long as you credit the original source. Alternatively, you may choose to treat this document as falling under the same license as Ncat itself (discussed previously). </p><a name="Source"></a><h2 class="nroffsh">Source code availability and community contributions</h2>
+<p class="level0">Source is provided to this software because we believe users have a right to know exactly what a program is going to do before they run it. This also allows you to audit the software for security holes (none have been found so far). </p>
+<p class="level0">Source code also allows you to port Nmap (which includes Ncat) to new platforms, fix bugs, and add new features. You are highly encouraged to send your changes to &lt;dev@nmap.org&gt; for possible incorporation into the main distribution. By sending these changes to Fyodor or one of the Insecure.Org development mailing lists, it is assumed that you are offering the Nmap Project (Nmap Software LLC) the unlimited, non-exclusive right to reuse, modify, and relicense the code. Nmap will always be available open source, but this is important because the inability to relicense code has caused devastating problems for other Free Software projects (such as KDE and NASM). We also occasionally relicense the code to third parties as discussed in the Nmap man page. If you wish to specify special license conditions of your contributions, just say so when you send them. </p><a name="No"></a><h2 class="nroffsh">No warranty</h2>
+<p class="level0">This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Nmap Public Source License for more details at m[blue]<span Class="bold">%<a href="https://nmap.org/npsl/">https://nmap.org/npsl/</a></span>m[], or in the LICENSE file included with Nmap. </p><a name="Inappropriate"></a><h2 class="nroffsh">Inappropriate usage</h2>
+<p class="level0">Ncat should never be installed with special privileges (e.g. suid root). That would open up a major security vulnerability as other users on the system (or attackers) could use it for privilege escalation. </p><a name="Third-Party"></a><h2 class="nroffsh">Third-party software</h2>
+<p class="level0">This product includes software developed by the m[blue]<span Class="bold">Apache Software Foundation</span>m[]s-2u[2]ds+2. A modified version of the m[blue]<span Class="bold">Libpcap portable packet capture library</span>m[]s-2u[3]ds+2 is distributed along with Ncat. The Windows version of Ncat utilized the Libpcap-derived m[blue]<span Class="bold">Npcap library</span>m[]s-2u[4]ds+2 instead. Certain raw networking functions use the m[blue]<span Class="bold">Libdnet</span>m[]s-2u[5]ds+2 networking library, which was written by Dug Song. A modified version is distributed with Ncat. Ncat can optionally link with the m[blue]<span Class="bold">OpenSSL cryptography toolkit</span>m[]s-2u[6]ds+2 for SSL version detection support. All of the third-party software described in this paragraph is freely redistributable under BSD-style software licenses. </p><a name="NOTES"></a><h2 class="nroffsh">Notes</h2>
+<p class="level0"><a name=""></a><span class="nroffip"> 1. 4</span> </p>
+<p class="level1">Creative Commons Attribution License </p>
+<p class="level2">%<a href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</a> </p>
+<p class="level0"><a name=""></a><span class="nroffip"> 2. 4</span> </p>
+<p class="level1">Apache Software Foundation </p>
+<p class="level2">%<a href="http://www.apache.org">http://www.apache.org</a> </p>
+<p class="level0"><a name=""></a><span class="nroffip"> 3. 4</span> </p>
+<p class="level1">Libpcap portable packet capture library </p>
+<p class="level2">%<a href="http://www.tcpdump.org">http://www.tcpdump.org</a> </p>
+<p class="level0"><a name=""></a><span class="nroffip"> 4. 4</span> </p>
+<p class="level1">Npcap library </p>
+<p class="level2">%<a href="https://npcap.com">https://npcap.com</a> </p>
+<p class="level0"><a name=""></a><span class="nroffip"> 5. 4</span> </p>
+<p class="level1">Libdnet </p>
+<p class="level2">%<a href="http://libdnet.sourceforge.net">http://libdnet.sourceforge.net</a> </p>
+<p class="level0"><a name=""></a><span class="nroffip"> 6. 4</span> </p>
+<p class="level1">OpenSSL cryptography toolkit </p>
+<p class="level2">%<a href="http://www.openssl.org">http://www.openssl.org</a> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

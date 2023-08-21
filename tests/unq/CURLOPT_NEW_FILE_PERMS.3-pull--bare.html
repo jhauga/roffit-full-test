@@ -1,0 +1,25 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_NEW_FILE_PERMS - permissions for remotely created files </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_NEW_FILE_PERMS,
+&nbsp;                         long mode);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a long as a parameter, containing the value of the permissions that will be assigned to newly created files on the remote server.  The default value is <span Class="emphasis">0644</span>, but any valid value can be used.  The only protocols that can use this are <span Class="emphasis">sftp://</span>, <span Class="emphasis">scp://</span>, and <span Class="emphasis">file://</span>. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">0644 </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">SFTP, SCP and FILE </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; CURLcode ret;
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;sftp://upload.example.com/file.txt&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_NEW_FILE_PERMS, 0664L);
+&nbsp; ret = curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.16.4 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_NEW_DIRECTORY_PERMS</span>(3), <span Class="bold">CURLOPT_UPLOAD</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

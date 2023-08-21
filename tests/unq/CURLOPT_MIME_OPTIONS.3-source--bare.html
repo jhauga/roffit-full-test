@@ -1,0 +1,48 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_MIME_OPTIONS - set MIME option flags </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_MIME_OPTIONS, long options);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a long that holds a bitmask of CURLMIMEOPT_* defines. Each bit is a Boolean flag used while encoding a MIME tree or multipart form data. </p>
+<p class="level0">Available bits are: </p>
+<p class="level0"><a name="CURLMIMEOPTFORMESCAPE"></a><span class="nroffip">CURLMIMEOPT_FORMESCAPE</span> </p>
+<p class="level1">Tells libcurl to escape multipart form field and file names using the backslash-escaping algorithm rather than percent-encoding (HTTP only). </p>
+<p class="level1">Backslash-escaping consists in preceding backslashes and double quotes with a backslash. Percent encoding maps all occurrences of double quote, carriage return and line feed to %22, %0D and %0A respectively. </p>
+<p class="level1">Before version 7.81.0, percent-encoding was never applied. </p>
+<p class="level1">HTTP browsers used to do backslash-escaping in the past but have over time transitioned to use percent-encoding. This option allows one to address server-side applications that have not yet have been converted. </p>
+<p class="level1">As an example, consider field or file name <span Class="emphasis">strange&bsol;name&quot;kind</span>. When the containing multipart form is sent, this is normally transmitted as <span Class="emphasis">strange&bsol;name%22kind</span>. When this option is set, it is sent as <span Class="emphasis">strange&bsol;&bsol;name&bsol;&quot;kind</span>. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">0, meaning disabled. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP, IMAP, SMTP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+curl_mime *form = NULL;
+&nbsp;
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_MIME_OPTIONS, CURLMIMEOPT_FORMESCAPE);
+&nbsp;
+&nbsp; form = curl_mime_init(curl);
+&nbsp; if(form) {
+&nbsp;   curl_mimepart *part = curl_mime_addpart(form);
+&nbsp;
+&nbsp;   if(part) {
+&nbsp;     curl_mime_filedata(part, &quot;strange&bsol;&bsol;file&bsol;&bsol;name&quot;);
+&nbsp;     curl_mime_name(part, &quot;strange&bsol;&quot;field&bsol;&quot;name&quot;);
+&nbsp;     curl_easy_setopt(curl, CURLOPT_MIMEPOST, form);
+&nbsp;
+&nbsp;     /* Perform the request */
+&nbsp;     curl_easy_perform(curl);
+&nbsp;   }
+&nbsp; }
+&nbsp;
+&nbsp; curl_easy_cleanup(curl);
+&nbsp; curl_mime_free(mime);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Option added in 7.81.0. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_MIMEPOST</span>(3), <span Class="bold">CURLOPT_HTTPPOST</span>(3) </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

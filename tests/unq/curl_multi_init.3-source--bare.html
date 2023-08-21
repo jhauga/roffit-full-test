@@ -1,0 +1,21 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_multi_init - create a multi handle </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLM *curl_multi_init();
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">This function returns a pointer to a <span Class="emphasis">CURLM</span> handle to be used as input to all the other multi-functions, sometimes referred to as a multi handle in some places in the documentation. This init call MUST have a corresponding call to <span Class="emphasis">curl_multi_cleanup(3)</span> when the operation is complete. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+/* init a multi stack */
+multi_handle = curl_multi_init();
+&nbsp;
+/* add individual transfers */
+curl_multi_add_handle(multi_handle, http_handle);
+curl_multi_add_handle(multi_handle, http_handle2);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.9.6 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">If this function returns NULL, something went wrong and you cannot use the other curl functions. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_multi_cleanup</span>(3),<span Class="bold">curl_global_init</span>(3),<span Class="bold">curl_easy_init</span>(3) </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

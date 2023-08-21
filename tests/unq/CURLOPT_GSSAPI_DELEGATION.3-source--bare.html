@@ -1,0 +1,26 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_GSSAPI_DELEGATION - allowed GSS-API delegation </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_GSSAPI_DELEGATION, long level);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Set the long parameter <span Class="emphasis">level</span> to <span Class="bold">CURLGSSAPI_DELEGATION_FLAG</span> to allow unconditional GSSAPI credential delegation. The delegation is disabled by default since 7.21.7.  Set the parameter to <span Class="bold">CURLGSSAPI_DELEGATION_POLICY_FLAG</span> to delegate only if the OK-AS-DELEGATE flag is set in the service ticket in case this feature is supported by the GSS-API implementation and the definition of <span Class="emphasis">GSS_C_DELEG_POLICY_FLAG</span> was available at compile-time. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">CURLGSSAPI_DELEGATION_NONE </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; CURLcode ret;
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com/&quot;);
+&nbsp; /* delegate if okayed by policy */
+&nbsp; curl_easy_setopt(curl, CURLOPT_GSSAPI_DELEGATION,
+&nbsp;                  (long)CURLGSSAPI_DELEGATION_POLICY_FLAG);
+&nbsp; ret = curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.22.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_HTTPAUTH</span>(3), <span Class="bold">CURLOPT_PROXYAUTH</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

@@ -1,0 +1,29 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_HSTSWRITEDATA - pointer passed to the HSTS write callback </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_HSTSWRITEDATA, void *pointer);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Data <span Class="emphasis">pointer</span> to pass to the HSTS write function. If you use the <span Class="emphasis">CURLOPT_HSTSWRITEFUNCTION(3)</span> option, this is the pointer you will get as input in the fourth argument to the callback. </p>
+<p class="level0">This option does not enable HSTS, you need to use <span Class="emphasis">CURLOPT_HSTS_CTRL(3)</span> to do that. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">This feature is only used for HTTP(S) transfer. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+struct MyData this;
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;http://example.com&quot;);
+&nbsp;
+&nbsp; /* pass pointer that gets passed in to the
+&nbsp;    CURLOPT_HSTSWRITEFUNCTION callback */
+&nbsp; curl_easy_setopt(curl, CURLOPT_HSTSWRITEDATA, &amp;this);
+&nbsp;
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.74.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">This will return CURLE_OK. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_HSTSWRITEFUNCTION</span>(3), <span Class="bold">CURLOPT_HSTSREADDATA</span>(3),  <span Class="bold">CURLOPT_HSTSREADFUNCTION</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

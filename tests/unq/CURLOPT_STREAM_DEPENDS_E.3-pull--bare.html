@@ -1,0 +1,33 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_STREAM_DEPENDS_E - stream this transfer depends on exclusively </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_STREAM_DEPENDS_E,
+&nbsp;                         CURL *dephandle);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a CURL * pointer in <span Class="emphasis">dephandle</span> to identify the stream within the same connection that this stream is depending upon exclusively. That means it depends on it and sets the Exclusive bit. </p>
+<p class="level0">The spec says &quot;Including a dependency expresses a preference to allocate resources to the identified stream rather than to the dependent stream.&quot; </p>
+<p class="level0">Setting a dependency with the exclusive flag for a reprioritized stream causes all the dependencies of the new parent stream to become dependent on the reprioritized stream. </p>
+<p class="level0">This option can be set during transfer. </p>
+<p class="level0"><span Class="emphasis">dephandle</span> must not be the same as <span Class="emphasis">handle</span>, that will cause this function to return an error. It must be another easy handle, and it also needs to be a handle of a transfer that will be sent over the same HTTP/2 connection for this option to have an actual effect. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP/2 </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+CURL *curl2 = curl_easy_init(); /* a second handle */
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com/one&quot;);
+&nbsp;
+&nbsp; /* the second depends on the first */
+&nbsp; curl_easy_setopt(curl2, CURLOPT_URL, &quot;https://example.com/two&quot;);
+&nbsp; curl_easy_setopt(curl2, CURLOPT_STREAM_DEPENDS_E, curl);
+&nbsp;
+&nbsp; /* then add both to a multi handle and transfer them! */
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.46.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_STREAM_WEIGHT</span>(3), <span Class="bold">CURLOPT_STREAM_DEPENDS</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

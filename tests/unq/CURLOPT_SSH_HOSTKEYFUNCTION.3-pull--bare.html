@@ -1,0 +1,47 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_SSH_HOSTKEYFUNCTION - callback to check host key </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+int keycallback(void *clientp,
+&nbsp;               int keytype,
+&nbsp;               const char *key,
+&nbsp;               size_t keylen);
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_SSH_HOSTKEYFUNCTION,
+&nbsp;                         keycallback);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to your callback function, which should match the prototype shown above. It overrides <span Class="emphasis">CURLOPT_SSH_KNOWNHOSTS(3)</span>. </p>
+<p class="level0">This callback gets called when the verification of the SSH host key is needed. </p>
+<p class="level0"><span Class="bold">key</span> is <span Class="bold">keylen</span> bytes long and is the key to check. <span Class="bold">keytype</span> says what type it is, from the <span Class="bold">CURLKHTYPE_*</span> series in the <span Class="bold">curl_khtype</span> enum. </p>
+<p class="level0"><span Class="bold">clientp</span> is a custom pointer set with <span Class="emphasis">CURLOPT_SSH_HOSTKEYDATA(3)</span>. </p>
+<p class="level0">The callback MUST return one of the following return codes to tell libcurl how to act: </p>
+<p class="level0"><a name="CURLKHMATCHOK"></a><span class="nroffip">CURLKHMATCH_OK</span> </p>
+<p class="level1">The host key is accepted, the connection should continue. </p>
+<p class="level0"><a name="CURLKHMATCHMISMATCH"></a><span class="nroffip">CURLKHMATCH_MISMATCH</span> </p>
+<p class="level1">the host key is rejected, the connection is canceled. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">SCP and SFTP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+int hostkeycb(void *clientp,    /* passed with CURLOPT_SSH_HOSTKEYDATA */
+&nbsp;             int keytype,      /* CURLKHTYPE */
+&nbsp;             const char * key, /* host key to check */
+&nbsp;             size_t keylen);   /* length of the key */
+{
+&nbsp; /* &#39;clientp&#39; points to the callback_data struct */
+&nbsp; /* investigate the situation and return the correct value */
+&nbsp; return CURLKHMATCH_OK;
+}
+{
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;sftp://example.com/thisfile.txt&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_SSH_HOSTKEYFUNCTION, hostkeycb);
+&nbsp; curl_easy_setopt(curl, CURLOPT_SSH_HOSTKEYDATA, &amp;callback_data);
+&nbsp;
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.84.0 , work only with libssh2 backend. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_SSH_HOSTKEYDATA</span>(3),  <span Class="bold">CURLOPT_SSH_KNOWNHOSTS</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

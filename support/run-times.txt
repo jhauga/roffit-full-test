@@ -1,0 +1,12 @@
+<p>The individual run times are the individual build times for each fie. Each 
+item in the array is added up so that total can be compared with sum. The 
+average build time is also included along with a comparison of the average 
+build for source and pull command.</p>
+<p><strong>Summed Source Builds</strong> - 15.840894500</p>
+<p><strong>Summed Pull Builds</strong> - 17.813348200</p>
+<p><h3 style="display:inline">Sum Difference</h3> - pull was <strong>1.972453700 seconds</strong> slower than source to build 2820 files.</p>
+<hr>
+<p><strong>Average Source Build</strong> - .011234</p>
+<p><strong>Average Pull Builds</strong> - .012633</p>
+<p><h3 style="display:inline">Average Difference</h3> - pull was <strong>.001399 seconds</strong> slower than source to build 1 file on average.</p>
+<hr>

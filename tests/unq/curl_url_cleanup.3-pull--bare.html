@@ -1,0 +1,19 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_url_cleanup - free the URL handle </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+void curl_url_cleanup(CURLU *handle);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Frees all the resources associated with the given <span Class="emphasis">CURLU</span> handle! </p>
+<p class="level0">Passing in a NULL pointer in <span Class="emphasis">handle</span> will make this function return immediately with no action. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&nbsp; CURLU *url = curl_url();
+&nbsp; curl_url_set(url, CURLUPART_URL, &quot;https://example.com&quot;, 0);
+&nbsp; curl_url_cleanup(url);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.62.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">none </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_url_dup</span>(3), <span Class="bold">curl_url</span>(3), <span Class="bold">curl_url_set</span>(3),  <span Class="bold">curl_url_get</span>(3), <span Class="bold">CURLOPT_CURLU</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

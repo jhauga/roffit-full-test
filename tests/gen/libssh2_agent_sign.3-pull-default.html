@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>libssh2_agent_sign man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_agent_sign - sign data, with the help of ssh-agent </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&nbsp;
+int
+libssh2_agent_sign(LIBSSH2_AGENT *agent,
+&nbsp;                  struct libssh2_agent_publickey *identity,
+&nbsp;                  unsigned char **sig,
+&nbsp;                  size_t *s_len,
+&nbsp;                  const unsigned char *data,
+&nbsp;                  size_t d_len,
+&nbsp;                  const char *method,
+&nbsp;                  unsigned int method_len);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="emphasis">agent</span> - ssh-agent handle as returned by <span Class="bold">libssh2_agent_init(3)</span> </p>
+<p class="level0"><span Class="emphasis">identity</span> - Public key to authenticate with, as returned by <span Class="bold">libssh2_agent_get_identity(3)</span> </p>
+<p class="level0"><span Class="emphasis">sig</span> - A pointer to a buffer in which to place the signature. The caller is responsible for freeing the signature with LIBSSH2_FREE. </p>
+<p class="level0"><span Class="emphasis">s_len</span> - A pointer to the length of the sig parameter. </p>
+<p class="level0"><span Class="emphasis">data</span> - The data to sign. </p>
+<p class="level0"><span Class="emphasis">d_len</span> - The length of the data parameter. </p>
+<p class="level0"><span Class="emphasis">method</span> - A buffer indicating the signing method. This should match the string at the start of identity-&gt;blob. </p>
+<p class="level0"><span Class="emphasis">method_len</span> - The length of the method parameter. </p>
+<p class="level0">Sign data using an ssh-agent. This function can be used in a callback registered with libssh2_session_callback_set(3) using LIBSSH2_CALLBACK_AUTHAGENT_SIGN to sign an authentication challenge from a server. However, the client is responsible for implementing the code that calls this callback in response to a SSH2_AGENTC_SIGN_REQUEST message. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns 0 if succeeded, or a negative value for error. </p><a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in libssh2 1.11.0 </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">libssh2_agent_init(3)</span> <span Class="bold">libssh2_agent_get_identity(3)</span> <span Class="bold">libssh2_agent_userauth(3)</span> <span Class="bold">libssh2_session_callback_set(3)</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

@@ -1,0 +1,71 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_COOKIELIST - add to or manipulate cookies held in memory </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_COOKIELIST,
+&nbsp;                         char *cookie);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a char * to a <span Class="emphasis">cookie</span> string. </p>
+<p class="level0">Such a cookie can be either a single line in Netscape / Mozilla format or just regular HTTP-style header (Set-Cookie: ...) format. This will also enable the cookie engine. This adds that single cookie to the internal cookie store. </p>
+<p class="level0">Exercise caution if you are using this option and multiple transfers may occur. If you use the Set-Cookie format and do not specify a domain then the cookie is sent for any domain (even after redirects are followed) and cannot be modified by a server-set cookie. If a server sets a cookie of the same name (or maybe you have imported one) then both will be sent on a future transfer to that server, likely not what you intended. To address these issues set a domain in Set-Cookie (doing that will include sub-domains) or use the Netscape format as shown in EXAMPLE. </p>
+<p class="level0">Additionally, there are commands available that perform actions if you pass in these exact strings: </p>
+<p class="level0"><a name="ALL"></a><span class="nroffip">ALL</span> </p>
+<p class="level1">erases all cookies held in memory </p>
+<p class="level0"><a name="SESS"></a><span class="nroffip">SESS</span> </p>
+<p class="level1">erases all session cookies held in memory </p>
+<p class="level0"><a name="FLUSH"></a><span class="nroffip">FLUSH</span> </p>
+<p class="level1">writes all known cookies to the file specified by <span Class="emphasis">CURLOPT_COOKIEJAR(3)</span> </p>
+<p class="level0"><a name="RELOAD"></a><span class="nroffip">RELOAD</span> </p>
+<p class="level1">loads all cookies from the files specified by <span Class="emphasis">CURLOPT_COOKIEFILE(3)</span> </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+/* This example shows an inline import of a cookie in Netscape format.
+You can set the cookie as HttpOnly to prevent XSS attacks by prepending
+&#35;HttpOnly_ to the hostname. That may be useful if the cookie will later
+be imported by a browser.
+*/
+&nbsp;
+&#35;define SEP  &quot;&bsol;t&quot;  /* Tab separates the fields */
+&nbsp;
+char *my_cookie =
+&nbsp; &quot;example.com&quot;    /* Hostname */
+&nbsp; SEP &quot;FALSE&quot;      /* Include subdomains */
+&nbsp; SEP &quot;/&quot;          /* Path */
+&nbsp; SEP &quot;FALSE&quot;      /* Secure */
+&nbsp; SEP &quot;0&quot;          /* Expiry in epoch time format. 0 == Session */
+&nbsp; SEP &quot;foo&quot;        /* Name */
+&nbsp; SEP &quot;bar&quot;;       /* Value */
+&nbsp;
+/* my_cookie is imported immediately via CURLOPT_COOKIELIST.
+*/
+curl_easy_setopt(curl, CURLOPT_COOKIELIST, my_cookie);
+&nbsp;
+/* The list of cookies in cookies.txt will not be imported until right
+before a transfer is performed. Cookies in the list that have the same
+hostname, path and name as in my_cookie are skipped. That is because
+libcurl has already imported my_cookie and it&#39;s considered a &quot;live&quot;
+cookie. A live cookie will not be replaced by one read from a file.
+*/
+curl_easy_setopt(curl, CURLOPT_COOKIEFILE, &quot;cookies.txt&quot;);  /* import */
+&nbsp;
+/* Cookies are exported after curl_easy_cleanup is called. The server
+may have added, deleted or modified cookies by then. The cookies that
+were skipped on import are not exported.
+*/
+curl_easy_setopt(curl, CURLOPT_COOKIEJAR, &quot;cookies.txt&quot;);  /* export */
+&nbsp;
+curl_easy_perform(curl);  /* cookies imported from cookies.txt */
+&nbsp;
+curl_easy_cleanup(curl);  /* cookies exported to cookies.txt */
+</pre>
+<a name="Cookie"></a><h2 class="nroffsh">Cookie file format</h2>
+<p class="level0">The cookie file format and general cookie concepts in curl are described online here: <a href="https://curl.se/docs/http-cookies.html">https://curl.se/docs/http-cookies.html</a> </p><a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0"><a class="bold" href="#ALL">ALL</a> was added in 7.14.1 </p>
+<p class="level0"><a class="bold" href="#SESS">SESS</a> was added in 7.15.4 </p>
+<p class="level0"><a class="bold" href="#FLUSH">FLUSH</a> was added in 7.17.1 </p>
+<p class="level0"><a class="bold" href="#RELOAD">RELOAD</a> was added in 7.39.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, CURLE_UNKNOWN_OPTION if not, or CURLE_OUT_OF_MEMORY if there was insufficient heap space. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_COOKIEFILE</span>(3), <span Class="bold">CURLOPT_COOKIEJAR</span>(3), <span Class="bold">CURLOPT_COOKIE</span>(3),  <span Class="bold">CURLINFO_COOKIELIST</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

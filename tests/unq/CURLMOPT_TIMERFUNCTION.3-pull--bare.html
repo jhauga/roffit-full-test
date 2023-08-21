@@ -1,0 +1,62 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLMOPT_TIMERFUNCTION - callback to receive timeout values </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+int timer_callback(CURLM *multi,    /* multi handle */
+&nbsp;                  long timeout_ms, /* timeout in number of ms */
+&nbsp;                  void *clientp);    /* private callback pointer */
+&nbsp;
+CURLMcode curl_multi_setopt(CURLM *handle, CURLMOPT_TIMERFUNCTION, timer_callback);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to your callback function, which should match the prototype shown above. </p>
+<p class="level0">Certain features, such as timeouts and retries, require you to call libcurl even when there is no activity on the file descriptors. </p>
+<p class="level0">Your callback function <span Class="bold">timer_callback</span> should install a non-repeating timer with an expire time of <span Class="bold">timeout_ms</span> milliseconds. When that timer fires, call either <span Class="emphasis">curl_multi_socket_action(3)</span> or <span Class="emphasis">curl_multi_perform(3)</span>, depending on which interface you use. </p>
+<p class="level0">A <span Class="bold">timeout_ms</span> value of -1 passed to this callback means you should delete the timer. All other values are valid expire times in number of milliseconds. </p>
+<p class="level0">The <span Class="bold">timer_callback</span> will only be called when the timeout expire time is changed. </p>
+<p class="level0">The <span Class="bold">clientp</span> pointer is set with <span Class="emphasis">CURLMOPT_TIMERDATA(3)</span>. </p>
+<p class="level0">The timer callback should return 0 on success, and -1 on error. If this callback returns error, <span Class="bold">all</span> transfers currently in progress in this multi handle will be aborted and fail. </p>
+<p class="level0">This callback can be used instead of, or in addition to, <span Class="emphasis">curl_multi_timeout(3)</span>. </p>
+<p class="level0"><span Class="bold">WARNING:</span> do not call libcurl directly from within the callback itself when the <span Class="bold">timeout_ms</span> value is zero, since it risks triggering an unpleasant recursive behavior that immediately calls another call to the callback with a zero timeout... </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+static gboolean timeout_cb(gpointer user_data)
+{
+&nbsp; int running;
+&nbsp; if(user_data) {
+&nbsp;   g_free(user_data);
+&nbsp;   curl_multi_setopt(curl_handle, CURLMOPT_TIMERDATA, NULL);
+&nbsp; }
+&nbsp; curl_multi_socket_action(multi, CURL_SOCKET_TIMEOUT, 0, &amp;running);
+&nbsp; return G_SOURCE_REMOVE;
+}
+&nbsp;
+static int timerfunc(CURLM *multi, long timeout_ms, void *clientp)
+{
+&nbsp; guint *id = clientp;
+&nbsp;
+&nbsp; if(id)
+&nbsp;   g_source_remove(*id);
+&nbsp;
+&nbsp; /* -1 means we should just delete our timer. */
+&nbsp; if(timeout_ms == -1) {
+&nbsp;   g_free(id);
+&nbsp;   id = NULL;
+&nbsp; }
+&nbsp; else {
+&nbsp;   if(!id)
+&nbsp;     id = g_new(guint, 1);
+&nbsp;   *id = g_timeout_add(timeout_ms, timeout_cb, id);
+&nbsp; }
+&nbsp; current_timer = id;
+&nbsp; return 0;
+}
+&nbsp;
+curl_multi_setopt(multi, CURLMOPT_TIMERFUNCTION, timerfunc);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.16.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLM_OK if the option is supported, and CURLM_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLMOPT_TIMERDATA</span>(3), <span Class="bold">CURLMOPT_SOCKETFUNCTION</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

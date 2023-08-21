@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_URL man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_URL - URL for this transfer </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_URL, char *URL);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass in a pointer to the <span Class="emphasis">URL</span> to work with. The parameter should be a char * to a null-terminated string which must be URL-encoded in the following format: </p>
+<p class="level0">scheme://host:port/path </p>
+<p class="level0">For a greater explanation of the format please see <a href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>. </p>
+<p class="level0">libcurl does not validate the syntax or use this variable until the transfer is issued. Even if you set a crazy value here, <span Class="emphasis">curl_easy_setopt(3)</span> will still return <span Class="emphasis">CURLE_OK</span>. </p>
+<p class="level0">If the given URL is missing a scheme name (such as &quot;<a href="http://&quot;">http://&quot;</a> or &quot;<a href="ftp://&quot;">ftp://&quot;</a> etc) then libcurl will make a guess based on the host. If the outermost sub-domain name matches DICT, FTP, IMAP, LDAP, POP3 or SMTP then that protocol will be used, otherwise HTTP will be used. Since 7.45.0 guessing can be disabled by setting a default protocol, see <span Class="emphasis">CURLOPT_DEFAULT_PROTOCOL(3)</span> for details. </p>
+<p class="level0">Should the protocol, either that specified by the scheme or deduced by libcurl from the host name, not be supported by libcurl then <span Class="emphasis">CURLE_UNSUPPORTED_PROTOCOL</span> will be returned from either the <span Class="emphasis">curl_easy_perform(3)</span> or <span Class="emphasis">curl_multi_perform(3)</span> functions when you call them. Use <span Class="emphasis">curl_version_info(3)</span> for detailed information of which protocols are supported by the build of libcurl you are using. </p>
+<p class="level0"><span Class="emphasis">CURLOPT_PROTOCOLS(3)</span> can be used to limit what protocols libcurl will use for this transfer, independent of what libcurl has been compiled to support. That may be useful if you accept the URL from an external source and want to limit the accessibility. </p>
+<p class="level0">The <span Class="emphasis">CURLOPT_URL(3)</span> string will be ignored if <span Class="emphasis">CURLOPT_CURLU(3)</span> is set. </p>
+<p class="level0"><span Class="emphasis">CURLOPT_URL(3)</span> or <span Class="emphasis">CURLOPT_CURLU(3)</span> <span Class="bold">must</span> be set before a transfer is started. </p>
+<p class="level0">The application does not have to keep the string around after setting this option. </p><a name="ENCODING"></a><h2 class="nroffsh">Encoding</h2>
+<p class="level0">The string pointed to in the <span Class="emphasis">CURLOPT_URL(3)</span> argument is generally expected to be a sequence of characters using an ASCII compatible encoding. </p>
+<p class="level0">If libcurl is built with IDN support, the server name part of the URL can use an &quot;international name&quot; by using the current encoding (according to locale) or UTF-8 (when winidn is used; or a Windows Unicode build using libidn2). </p>
+<p class="level0">If libcurl is built without IDN support, the server name is used exactly as specified when passed to the name resolver functions. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">There is no default URL. If this option is not set, no transfer can be performed. </p><a name="SECURITY"></a><h2 class="nroffsh">Security concerns</h2>
+<p class="level0">Applications may at times find it convenient to allow users to specify URLs for various purposes and that string would then end up fed to this option. </p>
+<p class="level0">Getting a URL from an external untrusted party will bring reasons for several security concerns: </p>
+<p class="level0">If you have an application that runs as or in a server application, getting an unfiltered URL can easily trick your application to access a local resource instead of a remote. Protecting yourself against localhost accesses is hard when accepting user provided URLs. </p>
+<p class="level0">Such custom URLs can also access other ports than you planned as port numbers are part of the regular URL format. The combination of a local host and a custom port number can allow external users to play tricks with your local services. </p>
+<p class="level0">Accepting external URLs may also use other protocols than http:// or other common ones. Restrict what accept with <span Class="emphasis">CURLOPT_PROTOCOLS(3)</span>. </p>
+<p class="level0">User provided URLs can also be made to point to sites that redirect further on (possibly to other protocols too). Consider your <span Class="emphasis">CURLOPT_FOLLOWLOCATION(3)</span> and <span Class="emphasis">CURLOPT_REDIR_PROTOCOLS(3)</span> settings. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp;
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">POP3 and SMTP were added in 7.31.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK on success or CURLE_OUT_OF_MEMORY if there was insufficient heap space. </p>
+<p class="level0">Note that <span Class="emphasis">curl_easy_setopt(3)</span> will not actually parse the given string so given a bad URL, it will not be detected until <span Class="emphasis">curl_easy_perform(3)</span> or similar is called. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_VERBOSE</span>(3), <span Class="bold">CURLOPT_PROTOCOLS</span>(3),  <span Class="bold">CURLOPT_FORBID_REUSE</span>(3), <span Class="bold">CURLOPT_FRESH_CONNECT</span>(3),  <span Class="bold">curl_easy_perform</span>(3),  <span Class="bold">CURLINFO_REDIRECT_URL</span>(3), <span Class="bold">CURLOPT_PATH_AS_IS</span>(3), <span Class="bold">CURLOPT_CURLU</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

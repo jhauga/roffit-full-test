@@ -1,0 +1,29 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_SERVER_RESPONSE_TIMEOUT - time allowed to wait for server response </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_SERVER_RESPONSE_TIMEOUT,
+&nbsp;                         long timeout);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a long.  Causes libcurl to set a <span Class="emphasis">timeout</span> period (in seconds) on the amount of time that the server is allowed to take in order to send a response message for a command before the session is considered dead.  While libcurl is waiting for a response, this value overrides <span Class="emphasis">CURLOPT_TIMEOUT(3)</span>. It is recommended that if used in conjunction with <span Class="emphasis">CURLOPT_TIMEOUT(3)</span>, you set <span Class="emphasis">CURLOPT_SERVER_RESPONSE_TIMEOUT(3)</span> to a value smaller than <span Class="emphasis">CURLOPT_TIMEOUT(3)</span>. </p>
+<p class="level0">This option was formerly known as <span Class="bold">CURLOPT_FTP_RESPONSE_TIMEOUT</span>. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">None </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">FTP, IMAP, POP3, SMTP, and SSH </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;ftp://example.com/slow.txt&quot;);
+&nbsp; /* wait no more than 23 seconds */
+&nbsp; curl_easy_setopt(curl, CURLOPT_SERVER_RESPONSE_TIMEOUT, 23L);
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp;
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.10.8. Used under this name since 7.20.0 </p>
+<p class="level0">Support for SSH is predicated on a new enough (1.11.0) version of libssh2 being available when compiling libcurl. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if supported, and CURLE_UNKNOWN_OPTION if not. Returns CURLE_BAD_FUNCTION_ARGUMENT if set to a negative value or a value that when converted to milliseconds is too large. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_TIMEOUT</span>(3), <span Class="bold">CURLOPT_CONNECTTIMEOUT</span>(3),  <span Class="bold">CURLOPT_LOW_SPEED_LIMIT</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

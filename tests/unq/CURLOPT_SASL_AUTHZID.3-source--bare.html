@@ -1,0 +1,28 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_SASL_AUTHZID - authorization identity (identity to act as) </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_SASL_AUTHZID, char *authzid);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a char * as parameter, which should be pointing to the null-terminated authorization identity (<span Class="emphasis">authzid</span>) for the transfer. Only applicable to the PLAIN SASL authentication mechanism where it is optional. </p>
+<p class="level0">When not specified only the authentication identity (<span Class="emphasis">authcid</span>) as specified by the username will be sent to the server, along with the password. The server will derive a <span Class="emphasis">authzid</span> from the <span Class="emphasis">authcid</span> when not provided, which it will then uses internally. </p>
+<p class="level0">When the <span Class="emphasis">authzid</span> is specified, the use of which is server dependent, it can be used to access another user&#39;s inbox, that the user has been granted access to, or a shared mailbox for example. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">blank </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">IMAP, LDAP, POP3 and SMTP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;imap://example.com/&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_USERNAME, &quot;Kurt&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_PASSWORD, &quot;xipj3plmq&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_SASL_AUTHZID, &quot;Ursel&quot;);
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.66.0. Support for OpenLDAP added in 7.82.0. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_USERNAME</span>(3), <span Class="bold">CURLOPT_PASSWORD</span>(3), <span Class="bold">.BR</span>CURLOPT_USERPWD<span Class="bold">(3)</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

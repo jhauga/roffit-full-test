@@ -1,0 +1,27 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_PORT - remote port number to connect to </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_PORT, long number);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">We discourage using this option since its scope is not obvious and hard to predict. Set the preferred port number in the URL instead. </p>
+<p class="level0">This option sets <span Class="emphasis">number</span> to be the remote port number to connect to, instead of the one specified in the URL or the default port for the used protocol. </p>
+<p class="level0">Usually, you just let the URL decide which port to use but this allows the application to override that. </p>
+<p class="level0">While this option accepts a &#39;long&#39;, a port number is an unsigned 16 bit number and therefore using a port number lower than zero or over 65535 will cause a <span Class="bold">CURLE_BAD_FUNCTION_ARGUMENT</span> error. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">By default this is 0 which makes it not used. This also makes port number zero impossible to set with this API. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">Used for all protocols that speak to a port number. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com/foo.bin&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_PORT, 8080L);
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Always </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_STDERR</span>(3), <span Class="bold">CURLOPT_DEBUGFUNCTION</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

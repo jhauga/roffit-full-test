@@ -1,0 +1,37 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_USE_SSL - request using SSL / TLS for the transfer </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_USE_SSL, long level);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a long using one of the values from below, to make libcurl use your desired <span Class="emphasis">level</span> of SSL for the transfer. </p>
+<p class="level0">These are all protocols that start out plain text and get &quot;upgraded&quot; to SSL using the STARTTLS command. </p>
+<p class="level0">This is for enabling SSL/TLS when you use FTP, SMTP, POP3, IMAP etc. </p>
+<p class="level0"><a name="CURLUSESSLNONE"></a><span class="nroffip">CURLUSESSL_NONE</span> </p>
+<p class="level1">do not attempt to use SSL. </p>
+<p class="level0"><a name="CURLUSESSLTRY"></a><span class="nroffip">CURLUSESSL_TRY</span> </p>
+<p class="level1">Try using SSL, proceed as normal otherwise. Note that server may close the connection if the negotiation does not succeed. </p>
+<p class="level0"><a name="CURLUSESSLCONTROL"></a><span class="nroffip">CURLUSESSL_CONTROL</span> </p>
+<p class="level1">Require SSL for the control connection or fail with <span Class="emphasis">CURLE_USE_SSL_FAILED</span>. </p>
+<p class="level0"><a name="CURLUSESSLALL"></a><span class="nroffip">CURLUSESSL_ALL</span> </p>
+<p class="level1">Require SSL for all communication or fail with <span Class="emphasis">CURLE_USE_SSL_FAILED</span>. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">CURLUSESSL_NONE </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">FTP, SMTP, POP3, IMAP, LDAP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;ftp://example.com/dir/file.ext&quot;);
+&nbsp;
+&nbsp; /* require use of SSL for this, or fail */
+&nbsp; curl_easy_setopt(curl, CURLOPT_USE_SSL, (long)CURLUSESSL_ALL);
+&nbsp;
+&nbsp; /* Perform the request */
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.11.0. This option was known as CURLOPT_FTP_SSL up to 7.16.4, and the constants were known as CURLFTPSSL_* Handled by LDAP since 7.81.0. Fully supported by the OpenLDAP backend only. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_SSLVERSION</span>(3), <span Class="bold">CURLOPT_PROXY_SSLVERSION</span>(3),  <span Class="bold">CURLOPT_SSL_OPTIONS</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

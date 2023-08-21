@@ -1,0 +1,30 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_HSTS_CTRL - control HSTS behavior </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+&#35;define CURLHSTS_ENABLE       (1&lt;&lt;0)
+&#35;define CURLHSTS_READONLYFILE (1&lt;&lt;1)
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_HSTS_CTRL, long bitmask);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">HSTS (HTTP Strict Transport Security) means that an HTTPS server can instruct the client to not contact it again over clear-text HTTP for a certain period into the future. libcurl will then automatically redirect HTTP attempts to such hosts to instead use HTTPS. This is done by libcurl retaining this knowledge in an in-memory cache. </p>
+<p class="level0">Populate the long <span Class="emphasis">bitmask</span> with the correct set of features to instruct libcurl how to handle HSTS for the transfers using this handle. </p><a name="BITS"></a><h2 class="nroffsh">Bits</h2>
+<p class="level0"><a name="CURLHSTSENABLE"></a><span class="nroffip">CURLHSTS_ENABLE</span> </p>
+<p class="level1">Enable the in-memory HSTS cache for this handle. </p>
+<p class="level0"><a name="CURLHSTSREADONLYFILE"></a><span class="nroffip">CURLHSTS_READONLYFILE</span> </p>
+<p class="level1">Make the HSTS file (if specified) read-only - makes libcurl not save the cache to the file when closing the handle. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">0. HSTS is disabled by default. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTPS and HTTP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_HSTS_CTRL, (long)CURLHSTS_ENABLE);
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.74.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_HSTS</span>(3), <span Class="bold">CURLOPT_CONNECT_TO</span>(3), <span Class="bold">CURLOPT_RESOLVE</span>(3),  <span Class="bold">CURLOPT_ALTSVC</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

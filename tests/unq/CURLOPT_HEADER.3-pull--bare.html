@@ -1,0 +1,29 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_HEADER - pass headers to the data stream </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_HEADER, long onoff);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass the long value <span Class="emphasis">onoff</span> set to 1 to ask libcurl to include the headers in the write callback (<span Class="emphasis">CURLOPT_WRITEFUNCTION(3)</span>). This option is relevant for protocols that actually have headers or other meta-data (like HTTP and FTP). </p>
+<p class="level0">When asking to get the headers passed to the same callback as the body, it is not possible to accurately separate them again without detailed knowledge about the protocol in use. </p>
+<p class="level0">Further: the <span Class="emphasis">CURLOPT_WRITEFUNCTION(3)</span> callback is limited to only ever get a maximum of <span Class="emphasis">CURL_MAX_WRITE_SIZE</span> bytes passed to it (16KB), while a header can be longer and the <span Class="emphasis">CURLOPT_HEADERFUNCTION(3)</span> supports getting called with headers up to <span Class="emphasis">CURL_MAX_HTTP_HEADER</span> bytes big (100KB). </p>
+<p class="level0">It is often better to use <span Class="emphasis">CURLOPT_HEADERFUNCTION(3)</span> to get the header data separately. </p>
+<p class="level0">While named confusingly similar, <span Class="emphasis">CURLOPT_HTTPHEADER(3)</span> is used to set custom HTTP headers! </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">0 </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">Most </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp;
+&nbsp; curl_easy_setopt(curl, CURLOPT_HEADER, 1L);
+&nbsp;
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Provided in all libcurl versions. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_HEADERFUNCTION</span>(3),  <span Class="bold">CURLOPT_HTTPHEADER</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

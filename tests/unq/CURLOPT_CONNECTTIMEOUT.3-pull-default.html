@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_CONNECTTIMEOUT man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_CONNECTTIMEOUT - timeout for the connect phase </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_CONNECTTIMEOUT, long timeout);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a long. It should contain the maximum time in seconds that you allow the connection phase to the server to take. This timeout only limits the connection phase, it has no impact once it has connected. Set to zero to switch to the default built-in connection timeout - 300 seconds. See also the <span Class="emphasis">CURLOPT_TIMEOUT(3)</span> option. </p>
+<p class="level0"><span Class="emphasis">CURLOPT_CONNECTTIMEOUT_MS(3)</span> is the same function but set in milliseconds. </p>
+<p class="level0">If both <span Class="emphasis">CURLOPT_CONNECTTIMEOUT(3)</span> and <span Class="emphasis">CURLOPT_CONNECTTIMEOUT_MS(3)</span> are set, the value set last will be used. </p>
+<p class="level0">The &quot;connection phase&quot; is considered complete when the requested TCP, TLS or QUIC handshakes are done. </p>
+<p class="level0">The connection timeout set with <span Class="emphasis">CURLOPT_CONNECTTIMEOUT(3)</span> is included in the general all-covering <span Class="emphasis">CURLOPT_TIMEOUT(3)</span>. </p>
+<p class="level0">With <span Class="emphasis">CURLOPT_CONNECTTIMEOUT(3)</span> set to 3 and <span Class="emphasis">CURLOPT_TIMEOUT(3)</span> set to 5, the operation can never last longer than 5 seconds, and the connection phase cannot last longer than 3 seconds. </p>
+<p class="level0">With <span Class="emphasis">CURLOPT_CONNECTTIMEOUT(3)</span> set to 4 and <span Class="emphasis">CURLOPT_TIMEOUT(3)</span> set to 2, the operation can never last longer than 2 seconds. Including the connection phase. </p>
+<p class="level0">This option may cause libcurl to use the SIGALRM signal to timeout system calls on builds not using asynch DNS. In unix-like systems, this might cause signals to be used unless <span Class="emphasis">CURLOPT_NOSIGNAL(3)</span> is set. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">300 </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp;
+&nbsp; /* complete connection within 10 seconds */
+&nbsp; curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);
+&nbsp;
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Always </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK. Returns CURLE_BAD_FUNCTION_ARGUMENT if set to a negative value or a value that when converted to milliseconds is too large. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_CONNECTTIMEOUT_MS</span>(3),  <span Class="bold">CURLOPT_TIMEOUT</span>(3), <span Class="bold">CURLOPT_LOW_SPEED_LIMIT</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

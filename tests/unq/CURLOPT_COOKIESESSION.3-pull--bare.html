@@ -1,0 +1,32 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_COOKIESESSION - start a new cookie session </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_COOKIESESSION, long init);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a long set to 1 to mark this as a new cookie &quot;session&quot;. It will force libcurl to ignore all cookies it is about to load that are &quot;session cookies&quot; from the previous session. By default, libcurl always stores and loads all cookies, independent if they are session cookies or not. Session cookies are cookies without expiry date and they are meant to be alive and existing for this &quot;session&quot; only. </p>
+<p class="level0">A &quot;session&quot; is usually defined in browser land for as long as you have your browser up, more or less. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">0 </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com/foo.bin&quot;);
+&nbsp;
+&nbsp; /* new &quot;session&quot;, do not load session cookies */
+&nbsp; curl_easy_setopt(curl, CURLOPT_COOKIESESSION, 1L);
+&nbsp;
+&nbsp; /* get the (non session) cookies from this file */
+&nbsp; curl_easy_setopt(curl, CURLOPT_COOKIEFILE, &quot;/tmp/cookies.txt&quot;);
+&nbsp;
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp;
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Along with HTTP </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_COOKIEFILE</span>(3), <span Class="bold">CURLOPT_COOKIE</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

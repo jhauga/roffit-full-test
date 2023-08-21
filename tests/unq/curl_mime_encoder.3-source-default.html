@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>curl_mime_encoder man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_mime_encoder - set a mime part&#39;s encoder and content transfer encoding </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_mime_encoder(curl_mimepart *part, const char *encoding);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">curl_mime_encoder() requests a mime part&#39;s content to be encoded before being transmitted. </p>
+<p class="level0"><span Class="emphasis">part</span> is the part&#39;s handle to assign an encoder. <span Class="emphasis">encoding</span> is a pointer to a null-terminated encoding scheme. It may be set to NULL to disable an encoder previously attached to the part. The encoding scheme storage may safely be reused after this function returns. </p>
+<p class="level0">Setting a part&#39;s encoder multiple times is valid: only the value set by the last call is retained. </p>
+<p class="level0">Upon multipart rendering, the part&#39;s content is encoded according to the pertaining scheme and a corresponding <span Class="emphasis">&quot;Content-Transfer-Encoding&quot;</span> header is added to the part. </p>
+<p class="level0">Supported encoding schemes are: <br>&quot;<span Class="emphasis">binary</span>&quot;: the data is left unchanged, the header is added. <br>&quot;<span Class="emphasis">8bit</span>&quot;: header added, no data change. <br>&quot;<span Class="emphasis">7bit</span>&quot;: the data is unchanged, but is each byte is checked to be a 7-bit value; if not, a read error occurs. <br>&quot;<span Class="emphasis">base64</span>&quot;: Data is converted to base64 encoding, then split in CRLF-terminated lines of at most 76 characters. <br>&quot;<span Class="emphasis">quoted-printable</span>&quot;: data is encoded in quoted printable lines of at most 76 characters. Since the resulting size of the final data cannot be determined prior to reading the original data, it is left as unknown, causing chunked transfer in HTTP. For the same reason, this encoder may not be used with IMAP. This encoder targets text data that is mostly ASCII and should not be used with other types of data. </p>
+<p class="level0">If the original data is already encoded in such a scheme, a custom <span Class="emphasis">Content-Transfer-Encoding</span> header should be added with <span Class="emphasis">curl_mime_headers</span>() instead of setting a part encoder. </p>
+<p class="level0">Encoding should not be applied to multiparts, thus the use of this function on a part with content set with <span Class="emphasis">curl_mime_subparts</span>() is strongly discouraged. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&nbsp;curl_mime *mime;
+&nbsp;curl_mimepart *part;
+&nbsp;
+&nbsp;/* create a mime handle */
+&nbsp;mime = curl_mime_init(easy);
+&nbsp;
+&nbsp;/* add a part */
+&nbsp;part = curl_mime_addpart(mime);
+&nbsp;
+&nbsp;/* send a file */
+&nbsp;curl_mime_filedata(part, &quot;image.png&quot;);
+&nbsp;
+&nbsp;/* encode file data in base64 for transfer */
+&nbsp;curl_mime_encoder(part, &quot;base64&quot;);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">As long as at least one of HTTP, SMTP or IMAP is enabled. Added in 7.56.0. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">CURLE_OK or a CURL error code upon failure. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_mime_addpart</span>(3), <span Class="bold">curl_mime_headers</span>(3), <span Class="bold">curl_mime_subparts</span>(3) </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

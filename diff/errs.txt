@@ -1,0 +1,112 @@
+<h3>CURLOPT_DOH_URL.3--bare.txt</h3>
+9c9
+< <p class="level0">Pass in a pointer to a <span Class="emphasis">URL</span> for the DoH server to use for name resolving. The parameter should be a char * to a null-terminated string which must be URL-encoded in the following format: &quot;<a href="https://host:port/path&quot;.">https://host:port/path&quot;.</a> It MUST specify an HTTPS URL. </p>
+---
+> <p class="level0">Pass in a pointer to a <span Class="emphasis">URL</span> for the DoH server to use for name resolving. The parameter should be a char * to a null-terminated string which must be URL-encoded in the following format: &quot;<a href="https://host:port/path">https://host:port/path</a>&quot;. It MUST specify an HTTPS URL. </p>
+<br><hr><br>
+<h3>CURLOPT_DOH_URL.3-default.txt</h3>
+59c59
+< <p class="level0">Pass in a pointer to a <span Class="emphasis">URL</span> for the DoH server to use for name resolving. The parameter should be a char * to a null-terminated string which must be URL-encoded in the following format: &quot;<a href="https://host:port/path&quot;.">https://host:port/path&quot;.</a> It MUST specify an HTTPS URL. </p>
+---
+> <p class="level0">Pass in a pointer to a <span Class="emphasis">URL</span> for the DoH server to use for name resolving. The parameter should be a char * to a null-terminated string which must be URL-encoded in the following format: &quot;<a href="https://host:port/path">https://host:port/path</a>&quot;. It MUST specify an HTTPS URL. </p>
+<br><hr><br>
+<h3>CURLOPT_PROXY.3--bare.txt</h3>
+28c28
+< <p class="level0">A proxy host string can also include protocol scheme (<a href="http://)">http://)</a> and embedded user + password. </p>
+---
+> <p class="level0">A proxy host string can also include protocol scheme (<a>http://</a>) and embedded user + password. </p>
+32c32
+< <p class="level0">libcurl respects the proxy environment variables named <span Class="bold">http_proxy</span>, <span Class="bold">ftp_proxy</span>, <span Class="bold">sftp_proxy</span> etc. If set, libcurl will use the specified proxy for that URL scheme. So for a &quot;<a href="FTP://&quot;">FTP://&quot;</a> URL, the <span Class="bold">ftp_proxy</span> is considered. <span Class="bold">all_proxy</span> is used if no protocol specific proxy was set. </p>
+---
+> <p class="level0">libcurl respects the proxy environment variables named <span Class="bold">http_proxy</span>, <span Class="bold">ftp_proxy</span>, <span Class="bold">sftp_proxy</span> etc. If set, libcurl will use the specified proxy for that URL scheme. So for a &quot;FTP://&quot; URL, the <span Class="bold">ftp_proxy</span> is considered. <span Class="bold">all_proxy</span> is used if no protocol specific proxy was set. </p>
+<br><hr><br>
+<h3>CURLOPT_PROXY.3-default.txt</h3>
+78c78
+< <p class="level0">A proxy host string can also include protocol scheme (<a href="http://)">http://)</a> and embedded user + password. </p>
+---
+> <p class="level0">A proxy host string can also include protocol scheme (<a>http://</a>) and embedded user + password. </p>
+82c82
+< <p class="level0">libcurl respects the proxy environment variables named <span Class="bold">http_proxy</span>, <span Class="bold">ftp_proxy</span>, <span Class="bold">sftp_proxy</span> etc. If set, libcurl will use the specified proxy for that URL scheme. So for a &quot;<a href="FTP://&quot;">FTP://&quot;</a> URL, the <span Class="bold">ftp_proxy</span> is considered. <span Class="bold">all_proxy</span> is used if no protocol specific proxy was set. </p>
+---
+> <p class="level0">libcurl respects the proxy environment variables named <span Class="bold">http_proxy</span>, <span Class="bold">ftp_proxy</span>, <span Class="bold">sftp_proxy</span> etc. If set, libcurl will use the specified proxy for that URL scheme. So for a &quot;FTP://&quot; URL, the <span Class="bold">ftp_proxy</span> is considered. <span Class="bold">all_proxy</span> is used if no protocol specific proxy was set. </p>
+<br><hr><br>
+<h3>CURLOPT_TRAILERFUNCTION.3--bare.txt</h3>
+24c24
+< <p class="level0">CURL *curl = curl_easy_init(); if(curl) { &nbsp; /* Set the URL of the request */ &nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;<a href="https://example.com/&quot;);">https://example.com/&quot;);</a> &nbsp; /* Now set it as a put */ &nbsp; curl_easy_setopt(curl, CURLOPT_PUT, 1L); </p>
+---
+> <p class="level0">CURL *curl = curl_easy_init(); if(curl) { &nbsp; /* Set the URL of the request */ &nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;<a href="https://example.com/">https://example.com/</a>&quot;); &nbsp; /* Now set it as a put */ &nbsp; curl_easy_setopt(curl, CURLOPT_PUT, 1L); </p>
+<br><hr><br>
+<h3>CURLOPT_TRAILERFUNCTION.3-default.txt</h3>
+74c74
+< <p class="level0">CURL *curl = curl_easy_init(); if(curl) { &nbsp; /* Set the URL of the request */ &nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;<a href="https://example.com/&quot;);">https://example.com/&quot;);</a> &nbsp; /* Now set it as a put */ &nbsp; curl_easy_setopt(curl, CURLOPT_PUT, 1L); </p>
+---
+> <p class="level0">CURL *curl = curl_easy_init(); if(curl) { &nbsp; /* Set the URL of the request */ &nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;<a href="https://example.com/">https://example.com/</a>&quot;); &nbsp; /* Now set it as a put */ &nbsp; curl_easy_setopt(curl, CURLOPT_PUT, 1L); </p>
+<br><hr><br>
+<h3>CURLOPT_URL.3--bare.txt</h3>
+13c13
+< <p class="level0">If the given URL is missing a scheme name (such as &quot;<a href="http://&quot;">http://&quot;</a> or &quot;<a href="ftp://&quot;">ftp://&quot;</a> etc) then libcurl will make a guess based on the host. If the outermost sub-domain name matches DICT, FTP, IMAP, LDAP, POP3 or SMTP then that protocol will be used, otherwise HTTP will be used. Since 7.45.0 guessing can be disabled by setting a default protocol, see <span Class="emphasis">CURLOPT_DEFAULT_PROTOCOL(3)</span> for details. </p>
+---
+> <p class="level0">If the given URL is missing a scheme name (such as &quot;<a>http://</a>&quot; or &quot;<a>ftp://</a>&quot; etc) then libcurl will make a guess based on the host. If the outermost sub-domain name matches DICT, FTP, IMAP, LDAP, POP3 or SMTP then that protocol will be used, otherwise HTTP will be used. Since 7.45.0 guessing can be disabled by setting a default protocol, see <span Class="emphasis">CURLOPT_DEFAULT_PROTOCOL(3)</span> for details. </p>
+<br><hr><br>
+<h3>CURLOPT_URL.3-default.txt</h3>
+63c63
+< <p class="level0">If the given URL is missing a scheme name (such as &quot;<a href="http://&quot;">http://&quot;</a> or &quot;<a href="ftp://&quot;">ftp://&quot;</a> etc) then libcurl will make a guess based on the host. If the outermost sub-domain name matches DICT, FTP, IMAP, LDAP, POP3 or SMTP then that protocol will be used, otherwise HTTP will be used. Since 7.45.0 guessing can be disabled by setting a default protocol, see <span Class="emphasis">CURLOPT_DEFAULT_PROTOCOL(3)</span> for details. </p>
+---
+> <p class="level0">If the given URL is missing a scheme name (such as &quot;<a>http://</a>&quot; or &quot;<a>ftp://</a>&quot; etc) then libcurl will make a guess based on the host. If the outermost sub-domain name matches DICT, FTP, IMAP, LDAP, POP3 or SMTP then that protocol will be used, otherwise HTTP will be used. Since 7.45.0 guessing can be disabled by setting a default protocol, see <span Class="emphasis">CURLOPT_DEFAULT_PROTOCOL(3)</span> for details. </p>
+<br><hr><br>
+<h3>libcurl-env.3--bare.txt</h3>
+6c6
+< <p class="level1">When libcurl is given a URL to use in a transfer, it first extracts the &quot;scheme&quot; part from the URL and checks if there is a given proxy set for that in its corresponding environment variable. A URL like &quot;<a href="https://example.com&quot;">https://example.com&quot;</a> will hence use the &quot;http_proxy&quot; variable, while a URL like &quot;<a href="ftp://example.com&quot;">ftp://example.com&quot;</a> will use the &quot;ftp_proxy&quot; variable. </p>
+---
+> <p class="level1">When libcurl is given a URL to use in a transfer, it first extracts the &quot;scheme&quot; part from the URL and checks if there is a given proxy set for that in its corresponding environment variable. A URL like &quot;<a href="https://example.com">https://example.com</a>&quot; will hence use the &quot;http_proxy&quot; variable, while a URL like &quot;<a href="ftp://example.com">ftp://example.com</a>&quot; will use the &quot;ftp_proxy&quot; variable. </p>
+<br><hr><br>
+<h3>libcurl-env.3-default.txt</h3>
+56c56
+< <p class="level1">When libcurl is given a URL to use in a transfer, it first extracts the &quot;scheme&quot; part from the URL and checks if there is a given proxy set for that in its corresponding environment variable. A URL like &quot;<a href="https://example.com&quot;">https://example.com&quot;</a> will hence use the &quot;http_proxy&quot; variable, while a URL like &quot;<a href="ftp://example.com&quot;">ftp://example.com&quot;</a> will use the &quot;ftp_proxy&quot; variable. </p>
+---
+> <p class="level1">When libcurl is given a URL to use in a transfer, it first extracts the &quot;scheme&quot; part from the URL and checks if there is a given proxy set for that in its corresponding environment variable. A URL like &quot;<a href="https://example.com">https://example.com</a>&quot; will hence use the &quot;http_proxy&quot; variable, while a URL like &quot;<a href="ftp://example.com">ftp://example.com</a>&quot; will use the &quot;ftp_proxy&quot; variable. </p>
+<br><hr><br>
+<h3>libcurl-security.3--bare.txt</h3>
+56c56
+< <p class="level0">If the user can set the URL, the user can also specify the scheme part to other protocols that you did not intend for users to use and perhaps did not consider. curl supports over 20 different URL schemes. &quot;<a href="http://&quot;">http://&quot;</a> might be what you thought, &quot;<a href="ftp://&quot;">ftp://&quot;</a> or &quot;imap://&quot; might be what the user gives your application. Also, cross-protocol operations might be done by using a particular scheme in the URL but point to a server doing a different protocol on a non-standard port. </p>
+---
+> <p class="level0">If the user can set the URL, the user can also specify the scheme part to other protocols that you did not intend for users to use and perhaps did not consider. curl supports over 20 different URL schemes. &quot;<a>http://</a>&quot; might be what you thought, &quot;<a>ftp://</a>&quot; or &quot;imap://&quot; might be what the user gives your application. Also, cross-protocol operations might be done by using a particular scheme in the URL but point to a server doing a different protocol on a non-standard port. </p>
+<br><hr><br>
+<h3>libcurl-security.3-default.txt</h3>
+106c106
+< <p class="level0">If the user can set the URL, the user can also specify the scheme part to other protocols that you did not intend for users to use and perhaps did not consider. curl supports over 20 different URL schemes. &quot;<a href="http://&quot;">http://&quot;</a> might be what you thought, &quot;<a href="ftp://&quot;">ftp://&quot;</a> or &quot;imap://&quot; might be what the user gives your application. Also, cross-protocol operations might be done by using a particular scheme in the URL but point to a server doing a different protocol on a non-standard port. </p>
+---
+> <p class="level0">If the user can set the URL, the user can also specify the scheme part to other protocols that you did not intend for users to use and perhaps did not consider. curl supports over 20 different URL schemes. &quot;<a>http://</a>&quot; might be what you thought, &quot;<a>ftp://</a>&quot; or &quot;imap://&quot; might be what the user gives your application. Also, cross-protocol operations might be done by using a particular scheme in the URL but point to a server doing a different protocol on a non-standard port. </p>
+<br><hr><br>
+<h3>libcurl-url.3--bare.txt</h3>
+64c64
+< <p class="level0">Imagine a handle that holds the URL &quot;<a href="https://example.com/?shoes=2&quot;.">https://example.com/?shoes=2&quot;.</a> An application can then add the string &quot;hat=1&quot; to the query part like this: </p><pre class="level0">
+---
+> <p class="level0">Imagine a handle that holds the URL &quot;<a href="https://example.com/?shoes=2">https://example.com/?shoes=2</a>&quot;. An application can then add the string &quot;hat=1&quot; to the query part like this: </p><pre class="level0">
+68c68
+< <p class="level0">It will even notice the lack of an ampersand (&amp;) separator so it will inject one too, and the handle&#39;s full URL will then equal &quot;<a href="https://example.com/?shoes=2&amp;hat=1&quot;.">https://example.com/?shoes=2&amp;hat=1&quot;.</a> </p>
+---
+> <p class="level0">It will even notice the lack of an ampersand (&amp;) separator so it will inject one too, and the handle&#39;s full URL will then equal &quot;<a href="https://example.com/?shoes=2&amp;hat=1">https://example.com/?shoes=2&amp;hat=1</a>&quot;. </p>
+<br><hr><br>
+<h3>libcurl-url.3-default.txt</h3>
+114c114
+< <p class="level0">Imagine a handle that holds the URL &quot;<a href="https://example.com/?shoes=2&quot;.">https://example.com/?shoes=2&quot;.</a> An application can then add the string &quot;hat=1&quot; to the query part like this: </p><pre class="level0">
+---
+> <p class="level0">Imagine a handle that holds the URL &quot;<a href="https://example.com/?shoes=2">https://example.com/?shoes=2</a>&quot;. An application can then add the string &quot;hat=1&quot; to the query part like this: </p><pre class="level0">
+118c118
+< <p class="level0">It will even notice the lack of an ampersand (&amp;) separator so it will inject one too, and the handle&#39;s full URL will then equal &quot;<a href="https://example.com/?shoes=2&amp;hat=1&quot;.">https://example.com/?shoes=2&amp;hat=1&quot;.</a> </p>
+---
+> <p class="level0">It will even notice the lack of an ampersand (&amp;) separator so it will inject one too, and the handle&#39;s full URL will then equal &quot;<a href="https://example.com/?shoes=2&amp;hat=1">https://example.com/?shoes=2&amp;hat=1</a>&quot;. </p>
+<br><hr><br>
+<h3>nmap-fr.1--bare.txt</h3>
+494c494
+< <p class="level1">Cette option est seulement un alias pour --stylesheet <a href="https://nmap.org/data/nmap.xsl.">https://nmap.org/data/nmap.xsl.</a> </p>
+---
+> <p class="level1">Cette option est seulement un alias pour --stylesheet <a href="https://nmap.org/data/nmap.xsl">https://nmap.org/data/nmap.xsl</a>. </p>
+<br><hr><br>
+<h3>nmap-fr.1-default.txt</h3>
+544c544
+< <p class="level1">Cette option est seulement un alias pour --stylesheet <a href="https://nmap.org/data/nmap.xsl.">https://nmap.org/data/nmap.xsl.</a> </p>
+---
+> <p class="level1">Cette option est seulement un alias pour --stylesheet <a href="https://nmap.org/data/nmap.xsl">https://nmap.org/data/nmap.xsl</a>. </p>
+<br><hr><br>

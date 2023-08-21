@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>curl_mime_name man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_mime_name - set a mime part&#39;s name </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_mime_name(curl_mimepart *part, const char *name);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="emphasis">curl_mime_name(3)</span> sets a mime part&#39;s name. This is the way HTTP form fields are named. </p>
+<p class="level0"><span Class="emphasis">part</span> is the part&#39;s handle to assign a name to. </p>
+<p class="level0"><span Class="emphasis">name</span> points to the null-terminated name string. </p>
+<p class="level0">The name string is copied into the part, thus the associated storage may safely be released or reused after call. Setting a part&#39;s name multiple times is valid: only the value set by the last call is retained. It is possible to reset the name of a part by setting <span Class="emphasis">name</span> to NULL. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&nbsp;curl_mime *mime;
+&nbsp;curl_mimepart *part;
+&nbsp;
+&nbsp;/* create a mime handle */
+&nbsp;mime = curl_mime_init(easy);
+&nbsp;
+&nbsp;/* add a part */
+&nbsp;part = curl_mime_addpart(mime);
+&nbsp;
+&nbsp;/* give the part a name */
+&nbsp;curl_mime_name(part, &quot;shoe_size&quot;);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">As long as at least one of HTTP, SMTP or IMAP is enabled. Added in 7.56.0. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">CURLE_OK or a CURL error code upon failure. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_mime_addpart</span>(3), <span Class="bold">curl_mime_data</span>(3), <span Class="bold">curl_mime_type</span>(3) </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

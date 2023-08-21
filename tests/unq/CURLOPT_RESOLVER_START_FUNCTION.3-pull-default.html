@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_RESOLVER_START_FUNCTION man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_RESOLVER_START_FUNCTION - callback called before a new name resolve is started </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+int resolver_start_cb(void *resolver_state, void *reserved, void *userdata);
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle,
+&nbsp;                         CURLOPT_RESOLVER_START_FUNCTION,
+&nbsp;                         resolver_start_cb);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to your callback function, which should match the prototype shown above. </p>
+<p class="level0">This callback function gets called by libcurl every time before a new resolve request is started. </p>
+<p class="level0"><span Class="emphasis">resolver_state</span> points to a backend-specific resolver state. Currently only the ares resolver backend has a resolver state. It can be used to set up any desired option on the ares channel before it&#39;s used, for example setting up socket callback options. </p>
+<p class="level0"><span Class="emphasis">reserved</span> is reserved. </p>
+<p class="level0"><span Class="emphasis">userdata</span> is the user pointer set with the <span Class="emphasis">CURLOPT_RESOLVER_START_DATA(3)</span> option. </p>
+<p class="level0">The callback must return 0 on success. Returning a non-zero value will cause the resolve to fail. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL (No callback) </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+static int resolver_start_cb(void *resolver_state, void *reserved,
+&nbsp;                            void *userdata)
+{
+&nbsp; (void)reserved;
+&nbsp; printf(&quot;Received resolver_state=%p userdata=%p&bsol;n&quot;,
+&nbsp;        resolver_state, userdata);
+&nbsp; return 0;
+}
+&nbsp;
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_RESOLVER_START_FUNCTION, resolver_start_cb);
+&nbsp; curl_easy_setopt(curl, CURLOPT_RESOLVER_START_DATA, curl);
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp; curl_easy_perform(curl);
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.59.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_RESOLVER_START_DATA</span>(3)  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

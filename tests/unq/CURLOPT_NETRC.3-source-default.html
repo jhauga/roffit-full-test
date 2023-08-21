@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_NETRC man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_NETRC - enable use of .netrc </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_NETRC, long level);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">This parameter controls the preference <span Class="emphasis">level</span> of libcurl between using user names and passwords from your <span Class="emphasis">~/.netrc</span> file, relative to user names and passwords in the URL supplied with <span Class="emphasis">CURLOPT_URL(3)</span>. </p>
+<p class="level0">On Windows, libcurl will use the file as <span Class="emphasis">%HOME%/_netrc</span>. If <span Class="emphasis">%HOME%</span> is not set on Windows, libcurl falls back to <span Class="emphasis">%USERPROFILE%</span>. </p>
+<p class="level0">You can also tell libcurl a different file name to use with <span Class="emphasis">CURLOPT_NETRC_FILE(3)</span>. </p>
+<p class="level0">libcurl uses a user name (and supplied or prompted password) supplied with <span Class="emphasis">CURLOPT_USERPWD(3)</span> or <span Class="emphasis">CURLOPT_USERNAME(3)</span> in preference to any of the options controlled by this parameter. </p>
+<p class="level0">Only machine name, user name and password are taken into account (init macros and similar things are not supported). </p>
+<p class="level0">libcurl does not verify that the file has the correct properties set (as the standard Unix ftp client does). It should only be readable by user. </p>
+<p class="level0"><span Class="emphasis">level</span> is a long that should be set to one of the values described below. </p>
+<p class="level0"><a name="CURLNETRCIGNORED"></a><span class="nroffip">CURL_NETRC_IGNORED (0)</span> </p>
+<p class="level1">The library will ignore the <span Class="emphasis">.netrc</span> file. This is the default. </p>
+<p class="level0"><a name="CURLNETRCOPTIONAL"></a><span class="nroffip">CURL_NETRC_OPTIONAL (1)</span> </p>
+<p class="level1">The use of the <span Class="emphasis">.netrc</span> file is optional, and information in the URL is to be preferred.  The file will be scanned for the host and user name (to find the password only) or for the host only, to find the first user name and password after that <a class="emphasis" href="#machine">machine</a>, which ever information is not specified. </p>
+<p class="level0"><a name="CURLNETRCREQUIRED"></a><span class="nroffip">CURL_NETRC_REQUIRED (2)</span> </p>
+<p class="level1">The use of the <span Class="emphasis">.netrc</span> file is required, and any credential information present in the URL is ignored.  The file will be scanned for the host and user name (to find the password only) or for the host only, to find the first user name and password after that <a class="emphasis" href="#machine">machine</a>, which ever information is not specified. </p><a name="FILE"></a><h2 class="nroffsh">File format</h2>
+<p class="level0">The <span Class="bold">.netrc</span> file format is simple: you specify lines with a machine name and follow the login and password that are associated with that machine. </p>
+<p class="level0">Each field is provided as a sequence of letters that ends with a space or newline. Starting in 7.84.0, libcurl also supports quoted strings. They start and end with double quotes and support the escaped special letters &bsol;&quot;, &bsol;n, &bsol;r, and &bsol;t. Quoted strings are the only way a space character can be used in a user name or password. </p>
+<p class="level0"><a name="machine"></a><span class="nroffip">machine &lt;name&gt;</span> </p>
+<p class="level1">Provides credentials for a host called <span Class="bold">name</span>. libcurl searches the .netrc file for a machine token that matches the host name specified in the URL. Once a match is made, the subsequent tokens are processed, stopping when the end of file is reached or another &quot;machine&quot; is encountered. </p>
+<p class="level0"><a name="default"></a><span class="nroffip">default</span> </p>
+<p class="level1">This is the same as &quot;machine&quot; name except that default matches any name. There can be only one default token, and it must be after all machine tokens. To provide a default anonymous login for hosts that are not otherwise matched, add a line similar to this in the end: </p>
+<p class="level1">&nbsp;default login anonymous password user@domain </p>
+<p class="level0"><a name="login"></a><span class="nroffip">login &lt;name&gt;</span> </p>
+<p class="level1">The user name string for the remote machine. </p>
+<p class="level0"><a name="password"></a><span class="nroffip">password &lt;secret&gt;</span> </p>
+<p class="level1">Supply a password. If this token is present, curl will supply the specified string if the remote server requires a password as part of the login process. Note that if this token is present in the .netrc file you really should make sure the file is not readable by anyone besides the user. </p>
+<p class="level0"><a name="macdef"></a><span class="nroffip">macdef &lt;name&gt;</span> </p>
+<p class="level1">Define a macro. This feature is not supported by libcurl. In order for the rest of the .netrc to still work fine, libcurl will properly skip every definition done with &quot;macdef&quot; that it finds. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">CURL_NETRC_IGNORED </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">Most </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; CURLcode ret;
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;ftp://example.com/&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_NETRC, CURL_NETRC_OPTIONAL);
+&nbsp; ret = curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Always </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_USERPWD</span>(3), <span Class="bold">CURLOPT_USERNAME</span>(3), <span Class="bold">CURLOPT_NETRC_FILE</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

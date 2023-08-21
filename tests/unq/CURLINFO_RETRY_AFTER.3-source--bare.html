@@ -1,0 +1,32 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLINFO_RETRY_AFTER - returns the Retry-After retry delay </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_getinfo(CURL *handle, CURLINFO_RETRY_AFTER,
+&nbsp;                          curl_off_t *retry);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to a curl_off_t variable to receive the number of seconds the HTTP server suggests the client should wait until the next request is issued. The information from the &quot;Retry-After:&quot; header. </p>
+<p class="level0">While the HTTP header might contain a fixed date string, the <span Class="emphasis">CURLINFO_RETRY_AFTER(3)</span> will always return number of seconds to wait - or zero if there was no header or the header could not be parsed. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">Returns zero delay if there was no header. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP(S) </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; CURLcode res;
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp; res = curl_easy_perform(curl);
+&nbsp; if(res == CURLE_OK) {
+&nbsp;   curl_off_t wait = 0;
+&nbsp;   curl_easy_getinfo(curl, CURLINFO_RETRY_AFTER, &amp;wait);
+&nbsp;   if(wait)
+&nbsp;     printf(&quot;Wait for %&quot; CURL_FORMAT_CURL_OFF_T &quot; seconds&bsol;n&quot;, wait);
+&nbsp; }
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.66.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_STDERR</span>(3), <span Class="bold">CURLOPT_HEADERFUNCTION</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

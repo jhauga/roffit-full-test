@@ -1,0 +1,36 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_IPRESOLVE - IP protocol version to use </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_IPRESOLVE, long resolve);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Allows an application to select what kind of IP addresses to use when establishing a connection or choosing one from the connection pool. This is interesting when using host names that resolve to more than one version of IP. </p>
+<p class="level0">If the URL provided for a transfer contains a numerical IP version as a host name, this option will not override or prohibit libcurl from using that IP version. </p>
+<p class="level0">Available values for this option are: </p>
+<p class="level0"><a name="CURLIPRESOLVEWHATEVER"></a><span class="nroffip">CURL_IPRESOLVE_WHATEVER</span> </p>
+<p class="level1">Default, can use addresses of all IP versions that your system allows. </p>
+<p class="level0"><a name="CURLIPRESOLVEV4"></a><span class="nroffip">CURL_IPRESOLVE_V4</span> </p>
+<p class="level1">Uses only IPv4 addresses. </p>
+<p class="level0"><a name="CURLIPRESOLVEV6"></a><span class="nroffip">CURL_IPRESOLVE_V6</span> </p>
+<p class="level1">Uses only IPv6 addresses. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">CURL_IPRESOLVE_WHATEVER </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com/foo.bin&quot;);
+&nbsp;
+&nbsp; /* of all addresses example.com resolves to, only IPv6 ones are used */
+&nbsp; curl_easy_setopt(curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V6);
+&nbsp;
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp;
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Always </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_HTTP_VERSION</span>(3), <span Class="bold">CURLOPT_SSLVERSION</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

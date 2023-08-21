@@ -1,0 +1,25 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_channel_process_startup - request a shell on a channel </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&nbsp;
+int
+libssh2_channel_process_startup(LIBSSH2_CHANNEL *channel,
+&nbsp;                               const char *request,
+&nbsp;                               unsigned int request_len,
+&nbsp;                               const char *message,
+&nbsp;                               unsigned int message_len);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="emphasis">channel</span> - Active session channel instance. </p>
+<p class="level0"><span Class="emphasis">request</span> - Type of process to startup. The SSH2 protocol currently defines shell, exec, and subsystem as standard process services. </p>
+<p class="level0"><span Class="emphasis">request_len</span> - Length of request parameter. </p>
+<p class="level0"><span Class="emphasis">message</span> - Request specific message data to include. </p>
+<p class="level0"><span Class="emphasis">message_len</span> - Length of message parameter. </p>
+<p class="level0">Initiate a request on a session type channel such as returned by <span Class="bold">libssh2_channel_open_ex(3)</span> </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Return 0 on success or negative on failure.  It returns LIBSSH2_ERROR_EAGAIN when it would otherwise block. While LIBSSH2_ERROR_EAGAIN is a negative number, it is not really a failure per se. </p><a name="ERRORS"></a><h2 class="nroffsh">Errors</h2>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_ALLOC</span> -  An internal memory allocation call failed. </p>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_SOCKET_SEND</span> - Unable to send data on socket. </p>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_CHANNEL_REQUEST_DENIED</span> - </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">libssh2_channel_open_ex(3)</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

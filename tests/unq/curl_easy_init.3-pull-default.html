@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>curl_easy_init man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_easy_init - Start a libcurl easy session </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURL *curl_easy_init();
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">This function must be the first function to call, and it returns a CURL easy handle that you must use as input to other functions in the easy interface. This call <span Class="bold">MUST</span> have a corresponding call to <span Class="emphasis">curl_easy_cleanup(3)</span> when the operation is complete. </p>
+<p class="level0">If you did not already call <span Class="emphasis">curl_global_init(3)</span>, <span Class="emphasis">curl_easy_init(3)</span> does it automatically. This may be lethal in multi-threaded cases, since <span Class="emphasis">curl_global_init(3)</span> is not thread-safe, and it may result in resource problems because there is no corresponding cleanup. </p>
+<p class="level0">You are strongly advised to not allow this automatic behavior, by calling <span Class="emphasis">curl_global_init(3)</span> yourself properly. See the description in <span Class="bold">libcurl</span>(3) of global environment requirements for details of how to use this function. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; CURLcode res;
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp; res = curl_easy_perform(curl);
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Always </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">If this function returns NULL, something went wrong and you cannot use the other curl functions. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_easy_cleanup</span>(3), <span Class="bold">curl_global_init</span>(3), <span Class="bold">curl_easy_reset</span>(3),  <span Class="bold">curl_easy_perform</span>(3)  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

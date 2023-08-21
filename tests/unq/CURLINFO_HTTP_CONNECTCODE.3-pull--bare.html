@@ -1,0 +1,32 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLINFO_HTTP_CONNECTCODE - get the CONNECT response code </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_getinfo(CURL *handle, CURLINFO_HTTP_CONNECTCODE, long *p);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to a long to receive the last received HTTP proxy response code to a CONNECT request. The returned value will be zero if no such response code was available. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; CURLcode res;
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp;
+&nbsp; /* typically CONNECT is used to do HTTPS over HTTP proxies */
+&nbsp; curl_easy_setopt(curl, CURLOPT_PROXY, &quot;http://127.0.0.1&quot;);
+&nbsp; res = curl_easy_perform(curl);
+&nbsp; if(res == CURLE_OK) {
+&nbsp;   long code;
+&nbsp;   res = curl_easy_getinfo(curl, CURLINFO_HTTP_CONNECTCODE, &amp;code);
+&nbsp;   if(!res &amp;&amp; code)
+&nbsp;     printf(&quot;The CONNECT response code: %03ld&bsol;n&quot;, code);
+&nbsp; }
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.10.7 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLINFO_RESPONSE_CODE</span>(3),  <span Class="bold">curl_easy_getinfo</span>(3), <span Class="bold">curl_easy_setopt</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

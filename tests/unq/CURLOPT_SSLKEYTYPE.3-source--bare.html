@@ -1,0 +1,29 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_SSLKEYTYPE - type of the private key file </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_SSLKEYTYPE, char *type);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to a null-terminated string as parameter. The string should be the format of your private key. Supported formats are &quot;PEM&quot;, &quot;DER&quot; and &quot;ENG&quot;. </p>
+<p class="level0">The format &quot;ENG&quot; enables you to load the private key from a crypto engine. In this case <span Class="emphasis">CURLOPT_SSLKEY(3)</span> is used as an identifier passed to the engine. You have to set the crypto engine with <span Class="emphasis">CURLOPT_SSLENGINE(3)</span>. &quot;DER&quot; format key file currently does not work because of a bug in OpenSSL. </p>
+<p class="level0">The application does not have to keep the string around after setting this option. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">&quot;PEM&quot; </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All TLS based protocols: HTTPS, FTPS, IMAPS, POP3S, SMTPS etc. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com/&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_SSLCERT, &quot;client.pem&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_SSLKEY, &quot;key.pem&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_SSLKEYTYPE, &quot;PEM&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_KEYPASSWD, &quot;s3cret&quot;);
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">If built TLS enabled. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if TLS is supported, CURLE_UNKNOWN_OPTION if not, or CURLE_OUT_OF_MEMORY if there was insufficient heap space. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_SSLKEY</span>(3), <span Class="bold">CURLOPT_SSLCERT</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

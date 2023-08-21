@@ -1,0 +1,8 @@
+28c28
+< <p class="level0">A proxy host string can also include protocol scheme (<a href="http://)">http://)</a> and embedded user + password. </p>
+---
+> <p class="level0">A proxy host string can also include protocol scheme (<a>http://</a>) and embedded user + password. </p>
+32c32
+< <p class="level0">libcurl respects the proxy environment variables named <span Class="bold">http_proxy</span>, <span Class="bold">ftp_proxy</span>, <span Class="bold">sftp_proxy</span> etc. If set, libcurl will use the specified proxy for that URL scheme. So for a &quot;<a href="FTP://&quot;">FTP://&quot;</a> URL, the <span Class="bold">ftp_proxy</span> is considered. <span Class="bold">all_proxy</span> is used if no protocol specific proxy was set. </p>
+---
+> <p class="level0">libcurl respects the proxy environment variables named <span Class="bold">http_proxy</span>, <span Class="bold">ftp_proxy</span>, <span Class="bold">sftp_proxy</span> etc. If set, libcurl will use the specified proxy for that URL scheme. So for a &quot;FTP://&quot; URL, the <span Class="bold">ftp_proxy</span> is considered. <span Class="bold">all_proxy</span> is used if no protocol specific proxy was set. </p>

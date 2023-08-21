@@ -1,0 +1,37 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_PROXY_SSLKEY_BLOB - private key for proxy cert from memory blob </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_PROXY_SSLKEY_BLOB,
+&nbsp;                         struct curl_blob *blob);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to a curl_blob structure that contains information (pointer and size) about the private key for connecting to the HTTPS proxy. Compatible with OpenSSL. The format (like &quot;PEM&quot;) must be specified with <span Class="emphasis">CURLOPT_PROXY_SSLKEYTYPE(3)</span>. </p>
+<p class="level0">If the blob is initialized with the flags member of struct curl_blob set to CURL_BLOB_COPY, the application does not have to keep the buffer around after setting this. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All TLS based protocols: HTTPS, FTPS, IMAPS, POP3S, SMTPS etc. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; struct curl_blob blob;
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com/&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_PROXY, &quot;https://proxy&quot;);
+&nbsp; blob.data = certificateData;
+&nbsp; blob.len = filesize;
+&nbsp; blob.flags = CURL_BLOB_COPY;
+&nbsp; curl_easy_setopt(curl, CURLOPT_PROXY_SSLCERT_BLOB, &amp;blob);
+&nbsp; curl_easy_setopt(curl, CURLOPT_PROXY_SSLCERTTYPE, &quot;PEM&quot;);
+&nbsp;
+&nbsp; blob.data = privateKeyData;
+&nbsp; blob.len = privateKeySize;
+&nbsp; curl_easy_setopt(curl, CURLOPT_PROXY_SSLKEY_BLOB, &amp;blob);
+&nbsp; curl_easy_setopt(curl, CURLOPT_PROXY_KEYPASSWD, &quot;s3cret&quot;);
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.71.0. This option is supported by the OpenSSL backends. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if TLS enabled, CURLE_UNKNOWN_OPTION if not, or CURLE_OUT_OF_MEMORY if there was insufficient heap space. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_SSLKEYTYPE</span>(3), <span Class="bold">CURLOPT_SSLKEY</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

@@ -10,7 +10,7 @@
 # ---------------------------------------------------
 #
 # Set to 1 to agree; 0 to disagree.
-_acknowledgeAndAgreeToUSAGE_AGREEMENT=0
+_acknowledgeAndAgreeToUSAGE_AGREEMENT=1
 
 # INSTRUCTIONS:
 #  1. Define the new repo name in variable.
@@ -24,36 +24,36 @@ _acknowledgeAndAgreeToUSAGE_AGREEMENT=0
 #     - If needed edit data-test file.  104 an 107.
 
 # I. DEFINE NEW REPO
-# Name of new repository for tests result. 
-_testResultRepo="command-test" 
+# Name of new repository for tests result. CHANGE if needed.
+_testResultRepo="roffit-full-test" 
 
 # II. CHANGE CONFIG VARIABLES
-_COMMAND_TEST="command"  # command ------ the command/script that will run
-_sourceUserName="source" # source ------- user that the repo was forked from
-_pullUserName="pull"     # pull --------- user with fork and making pull request
-_repoName="command-repo" # command-repo - the repo where command is stored for clone
+_COMMAND_TEST="roffit"   # roffit ----- the command/script that will run
+_sourceUserName="bagder" # bagder ----- user that the repo was forked from
+_pullUserName="jhauga"     # pull ------- user with fork and making pull request
+_repoName="roffit"    # repo-name -- the repo where command is stored for clone
 _useSource=1             # use source - Start off using source user's command
 
 # III. DEFINE OPTIONS USED
 # Define options that will be used with command to test builds.
 # By default the command will be run with no options.
 # Remove "" from array to unset 'run with no option default'.
-declare -a _optionsToRun=("")
+declare -a _optionsToRun=("" "--bare")
 
 # IV. DECLARE SOURCE FILE EXTENSIONS
 # Configuration - file extension to match and move to data folder.
-declare -a _fileExtensions=('.ext1' '.ext2' '.ext3')
+declare -a _fileExtensions=('.1' '.3' '.8' '.1.in')
 
 # V. CHANGE FILE EXTENSION FOR TARGET FILE
 _targetFileExtension=".html"
 
 # VI. DECALREE ADDITIONAL REPOS TO TEST TOOL
 # Configure user(s) and repositories to clone and build ful test from.
-declare -a _fullTestRepos=('userA' 'repoA' 'userB' 'repoB' 'userC' 'repoC')
+declare -a _fullTestRepos=('nmap' 'nmap' 'libssh2' 'libssh2' 'curl' 'curl')
 
 # VII. CHANGE UNIQUE REPO
 # Specify unique user repo to make separate foler.
-_unqUser="userC"
+_unqUser="curl"
 
 # VIII. CHANGE COMMAND SYNTAX
 # IMPORTANT - DO NOT CHANGE ELEMENTS - ONLY HOW IT WILL BE CALLED IN COMMAND LINE
@@ -68,7 +68,7 @@ _commandSyntax() {
   
   _opt="$1" && _inputFile="$2" && _outputFile="$3"
   ./$_COMMAND_TEST "$_opt" < "$_inputFile" > "$_outputFile"
-
+      
   # EXAMPLE:
   # command opts inputfile > output file
   

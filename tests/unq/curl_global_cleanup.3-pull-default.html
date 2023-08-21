@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>curl_global_cleanup man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_global_cleanup - global libcurl cleanup </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+void curl_global_cleanup(void);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">This function releases resources acquired by <span Class="emphasis">curl_global_init(3)</span>. </p>
+<p class="level0">You should call <span Class="emphasis">curl_global_cleanup(3)</span> once for each call you make to <span Class="emphasis">curl_global_init(3)</span>, after you are done using libcurl. </p>
+<p class="level0">This function is thread-safe since libcurl 7.84.0 if <span Class="emphasis">curl_version_info(3)</span> has the CURL_VERSION_THREADSAFE feature bit set (most platforms). </p>
+<p class="level0">If this is not thread-safe, you must not call this function when any other thread in the program (i.e. a thread sharing the same memory) is running. This does not just mean no other thread that is using libcurl. Because <span Class="emphasis">curl_global_cleanup(3)</span> calls functions of other libraries that are similarly thread unsafe, it could conflict with any other thread that uses these other libraries. </p>
+<p class="level0">See the description in <span Class="emphasis">libcurl(3)</span> of global environment requirements for details of how to use this function. </p><a name="CAUTION"></a><h2 class="nroffsh">Caution</h2>
+<p class="level0"><span Class="emphasis">curl_global_cleanup(3)</span> does not block waiting for any libcurl-created threads to terminate (such as threads used for name resolving). If a module containing libcurl is dynamically unloaded while libcurl-created threads are still running then your program may crash or other corruption may occur. We recommend you do not run libcurl from any module that may be unloaded dynamically. This behavior may be addressed in the future. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&nbsp;curl_global_init(CURL_GLOBAL_DEFAULT);
+&nbsp;
+&nbsp;/* use libcurl, then before exiting... */
+&nbsp;
+&nbsp;curl_global_cleanup();
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.8 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">None </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_global_init</span>(3),  <span Class="bold">libcurl</span>(3),  <span Class="bold">libcurl-thread</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

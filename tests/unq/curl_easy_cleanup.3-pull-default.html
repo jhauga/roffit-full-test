@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>curl_easy_cleanup man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_easy_cleanup - End a libcurl easy handle </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+void curl_easy_cleanup(CURL *handle);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">This function must be the last function to call for an easy session. It is the opposite of the <span Class="emphasis">curl_easy_init(3)</span> function and must be called with the same <span Class="emphasis">handle</span> as input that a <span Class="emphasis">curl_easy_init(3)</span> call returned. </p>
+<p class="level0">This might close all connections this handle has used and possibly has kept open until now - unless it was attached to a multi handle while doing the transfers. Do not call this function if you intend to transfer more files, re-using handles is a key to good performance with libcurl. </p>
+<p class="level0">Occasionally you may get your progress callback or header callback called from within <span Class="emphasis">curl_easy_cleanup(3)</span> (if previously set for the handle using <span Class="emphasis">curl_easy_setopt(3)</span>). Like if libcurl decides to shut down the connection and the protocol is of a kind that requires a command/response sequence before disconnect. Examples of such protocols are FTP, POP3 and IMAP. </p>
+<p class="level0">Any use of the <span Class="bold">handle</span> after this function has been called and have returned, is illegal. <span Class="emphasis">curl_easy_cleanup(3)</span> kills the handle and all memory associated with it! </p>
+<p class="level0">To close an easy handle that has been used with the multi interface, make sure to call <span Class="emphasis">curl_multi_remove_handle(3)</span> first to remove it from the multi handle before it is closed. </p>
+<p class="level0">Passing in a NULL pointer in <span Class="emphasis">handle</span> will make this function return immediately with no action. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; CURLcode res;
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp; res = curl_easy_perform(curl);
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.1 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">None </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_easy_init</span>(3), <span Class="bold">curl_easy_duphandle</span>(3),  <span Class="bold">curl_easy_reset</span>(3),  <span Class="bold">curl_multi_cleanup</span>(3), <span Class="bold">curl_multi_remove_handle</span>(3)  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLINFO_CERTINFO man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLINFO_CERTINFO - get the TLS certificate chain </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_getinfo(CURL *handle, CURLINFO_CERTINFO,
+&nbsp;                          struct curl_certinfo **chainp);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to a <span Class="emphasis">struct curl_certinfo *</span> and it will be set to point to a struct that holds info about the server&#39;s certificate chain, assuming you had <span Class="emphasis">CURLOPT_CERTINFO(3)</span> enabled when the request was made. </p><pre class="level0">
+struct curl_certinfo {
+&nbsp; int num_of_certs;
+&nbsp; struct curl_slist **certinfo;
+};
+</pre>
+
+<p class="level0">The <span Class="emphasis">certinfo</span> struct member is an array of linked lists of certificate information. The <span Class="emphasis">num_of_certs</span> struct member is the number of certificates which is the number of elements in the array. Each certificate&#39;s list has items with textual information in the format &quot;name:content&quot; such as &quot;Subject:Foo&quot;, &quot;Issuer:Bar&quot;, etc. The items in each list will vary depending on the SSL backend and the certificate. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All TLS-based </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://www.example.com/&quot;);
+&nbsp;
+&nbsp; /* connect to any HTTPS site, trusted or not */
+&nbsp; curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+&nbsp; curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+&nbsp;
+&nbsp; curl_easy_setopt(curl, CURLOPT_CERTINFO, 1L);
+&nbsp;
+&nbsp; res = curl_easy_perform(curl);
+&nbsp;
+&nbsp; if (!res) {
+&nbsp;   struct curl_certinfo *ci;
+&nbsp;   res = curl_easy_getinfo(curl, CURLINFO_CERTINFO, &amp;ci);
+&nbsp;
+&nbsp;   if (!res) {
+&nbsp;     printf(&quot;%d certs!&bsol;n&quot;, ci-&gt;num_of_certs);
+&nbsp;
+&nbsp;     for(i = 0; i &lt; ci-&gt;num_of_certs; i++) {
+&nbsp;       struct curl_slist *slist;
+&nbsp;
+&nbsp;       for(slist = ci-&gt;certinfo[i]; slist; slist = slist-&gt;next)
+&nbsp;         printf(&quot;%s&bsol;n&quot;, slist-&gt;data);
+&nbsp;     }
+&nbsp;   }
+&nbsp; }
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+
+<p class="level0">See also the <span Class="emphasis">certinfo.c</span> example. </p><a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">This option is only working in libcurl built with OpenSSL, GnuTLS, Schannel or Secure Transport. GnuTLS support added in 7.42.0. Schannel support added in 7.50.0. Secure Transport support added in 7.79.0. </p>
+<p class="level0">Added in 7.19.1 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_easy_getinfo</span>(3), <span Class="bold">curl_easy_setopt</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

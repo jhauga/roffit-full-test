@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_STREAM_WEIGHT man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_STREAM_WEIGHT - numerical stream weight </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_STREAM_WEIGHT, long weight);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Set the long <span Class="emphasis">weight</span> to a number between 1 and 256. </p>
+<p class="level0">When using HTTP/2, this option sets the individual weight for this particular stream used by the easy <span Class="emphasis">handle</span>. Setting and using weights only makes sense and is only usable when doing multiple streams over the same connections, which thus implies that you use <span Class="emphasis">CURLMOPT_PIPELINING(3)</span>. </p>
+<p class="level0">This option can be set during transfer and will then cause the updated weight info get sent to the server the next time an HTTP/2 frame is sent to the server. </p>
+<p class="level0">See section 5.3 of <a href="http://www.ietf.org/rfc/rfc7540.txt">RFC 7540</a> for protocol details. </p>
+<p class="level0">Streams with the same parent should be allocated resources proportionally based on their weight. So if you have two streams going, stream A with weight 16 and stream B with weight 32, stream B will get two thirds (32/48) of the available bandwidth (assuming the server can send off the data equally for both streams). </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">If nothing is set, the HTTP/2 protocol itself will use its own default which is 16. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP/2 </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+CURL *curl2 = curl_easy_init(); /* a second handle */
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com/one&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_STREAM_WEIGHT, 10L);
+&nbsp;
+&nbsp; /* the second has twice the weight */
+&nbsp; curl_easy_setopt(curl2, CURLOPT_URL, &quot;https://example.com/two&quot;);
+&nbsp; curl_easy_setopt(curl2, CURLOPT_STREAM_WEIGHT, 20L);
+&nbsp;
+&nbsp; /* then add both to a multi handle and transfer them! */
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.46.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_STREAM_DEPENDS</span>(3), <span Class="bold">CURLOPT_STREAM_DEPENDS_E</span>(3),  <span Class="bold">CURLOPT_PIPEWAIT</span>(3), <span Class="bold">CURLMOPT_PIPELINING</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

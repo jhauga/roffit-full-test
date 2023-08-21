@@ -1,0 +1,14 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_channel_free - free all resources associated with a channel </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&nbsp;
+int
+libssh2_channel_free(LIBSSH2_CHANNEL *channel);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="emphasis">channel</span> - Channel stream to free. </p>
+<p class="level0">Release all resources associated with a channel stream. If the channel has not yet been closed with <span Class="bold">libssh2_channel_close(3)</span> , it will be called automatically so that the remote end may know that it can safely free its own resources. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Return 0 on success or negative on failure.  It returns LIBSSH2_ERROR_EAGAIN when it would otherwise block. While LIBSSH2_ERROR_EAGAIN is a negative number, it is not really a failure per se. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">libssh2_channel_close(3)</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

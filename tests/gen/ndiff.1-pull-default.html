@@ -1,0 +1,244 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>"NDIFF" man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">ndiff - Utility to compare the results of Nmap scans </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2>
+<p class="level0"><span Class="bold">ndiff</span> [<span Class="emphasis">options</span>] {<span Class="emphasis">a.xml</span>} {<span Class="emphasis">b.xml</span>} </p><a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Ndiff is a tool to aid in the comparison of Nmap scans. It takes two Nmap XML output files and prints the differences between them. The differences observed are: </p>
+<p class="level1">h&#39;-04&#39;(buh&#39;+03&#39;c </p>
+<p class="level0"><a name="bu"></a><span class="nroffip">\(bu 2.3</span> </p>
+<p class="level1">Host states (e.g. up to down) </p>
+<p class="level1">h&#39;-04&#39;(buh&#39;+03&#39;c </p>
+<p class="level0"><a name="bu"></a><span class="nroffip">\(bu 2.3</span> </p>
+<p class="level1">Port states (e.g. open to closed) </p>
+<p class="level1">h&#39;-04&#39;(buh&#39;+03&#39;c </p>
+<p class="level0"><a name="bu"></a><span class="nroffip">\(bu 2.3</span> </p>
+<p class="level1">Service versions (from <span Class="bold">-sV</span>) </p>
+<p class="level1">h&#39;-04&#39;(buh&#39;+03&#39;c </p>
+<p class="level0"><a name="bu"></a><span class="nroffip">\(bu 2.3</span> </p>
+<p class="level1">OS matches (from <span Class="bold">-O</span>) </p>
+<p class="level1">h&#39;-04&#39;(buh&#39;+03&#39;c </p>
+<p class="level0"><a name="bu"></a><span class="nroffip">\(bu 2.3</span> </p>
+<p class="level1">Script output </p>
+<p class="level0">Ndiff, like the standard <span Class="bold">diff</span> utility, compares two scans at a time. </p><a name="OPTIONS"></a><h2 class="nroffsh">Options summary</h2>
+<p class="level0"><span Class="bold">-h</span>, <span Class="bold">--help</span> </p>
+<p class="level1">Show a help message and exit. </p>
+<p class="level0"><span Class="bold">-v</span>, <span Class="bold">--verbose</span> </p>
+<p class="level1">Include all hosts and ports in the output, not only those that have changed. </p>
+<p class="level0"><span Class="bold">--text</span> </p>
+<p class="level1">Write output in human-readable text format. </p>
+<p class="level0"><span Class="bold">--xml</span> </p>
+<p class="level1">Write output in machine-readable XML format. The document structure is defined in the file ndiff.dtd included in the distribution. </p>
+<p class="level0">Any other arguments are taken to be the names of Nmap XML output files. There must be exactly two. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2>
+<p class="level0">Let*(Aqs use Ndiff to compare the output of two Nmap scans that use different options. In the first, we*(Aqll do a fast scan (<span Class="bold">-F</span>), which scans fewer ports for speed. In the second, we*(Aqll scan the larger default set of ports, and run an NSE script. </p><pre class="level1">
+&#35; <span class="bold">nmap -F scanme.nmap.org -oX scanme-1.xml</span>
+&#35; <span class="bold">nmap --script=html-title scanme.nmap.org -oX scanme-2.xml</span>
+$ <span class="bold">ndiff -v scanme-1.xml scanme-2.xml</span>
+-Nmap 5.35DC1 at 2010-07-16 12:09
++Nmap 5.35DC1 at 2010-07-16 12:13
+&nbsp;
+&nbsp;scanme.nmap.org (64.13.134.52):
+&nbsp;Host is up.
+-Not shown: 95 filtered ports
++Not shown: 993 filtered ports
+&nbsp;PORT      STATE  SERVICE VERSION
+&nbsp;22/tcp    open   ssh
+&nbsp;25/tcp    closed smtp
+&nbsp;53/tcp    open   domain
++70/tcp    closed gopher
+&nbsp;80/tcp    open   http
++|_ html-title: Go ahead and ScanMe!
+&nbsp;113/tcp   closed auth
++31337/tcp closed Elite
+</pre>
+
+<p class="level0">Changes are marked by a - or + at the beginning of a line. We can see from the output that the scan without the <span Class="bold">-F</span> fast scan option found two additional ports: 70 and 31337. The html-title script produced some additional output for port 80. From the port counts, we may infer that the fast scan scanned 100 ports (95 filtered, 3 open, and 2 closed), while the normal scan scanned 1000 (993 filtered, 3 open, and 4 closed). </p>
+<p class="level0">The <span Class="bold">-v</span> (or <span Class="bold">--verbose</span>) option to Ndiff made it show even the ports that didn*(Aqt change, like 22 and 25. Without <span Class="bold">-v</span>, they would not have been shown. </p><a name="OUTPUT"></a><h2 class="nroffsh">Output</h2>
+<p class="level0">There are two output modes: text and XML. Text output is the default, and can also be selected with the <span Class="bold">--text</span> option. Text output resembles a unified diff of Nmap*(Aqs normal terminal output. Each line is preceded by a character indicating whether and how it changed. - means that the line was in the first scan but not in the second; + means it was in the second but not the first. A line that changed is represented by a - line followed by a + line. Lines that did not change are preceded by a blank space. </p>
+<p class="level0">Example&nbsp;1 is an example of text output. Here, port 80 on the host photos-cache-snc1.facebook.com gained a service version (lighttpd 1.5.0). The host at 69.63.179.25 changed its reverse DNS name. The host at 69.63.184.145 was completely absent in the first scan but came up in the second. </p>
+<p class="level0"><span Class="bold">Example&nbsp;1.&nbsp;Ndiff text output</span> </p><pre class="level1">
+-Nmap 4.85BETA3 at 2009-03-15 11:00
++Nmap 4.85BETA4 at 2009-03-18 11:00
+&nbsp;
+&nbsp;photos-cache-snc1.facebook.com (69.63.178.41):
+&nbsp;Host is up.
+&nbsp;Not shown: 99 filtered ports
+&nbsp;PORT   STATE SERVICE VERSION
+-80/tcp open  http
++80/tcp open  http    lighttpd 1.5.0
+&nbsp;
+-cm.out.snc1.tfbnw.net (69.63.179.25):
++mailout-snc1.facebook.com (69.63.179.25):
+&nbsp;Host is up.
+&nbsp;Not shown: 100 filtered ports
+&nbsp;
++69.63.184.145:
++Host is up.
++Not shown: 98 filtered ports
++PORT    STATE SERVICE  VERSION
++80/tcp  open  http     Apache httpd 1.3.41.fb1
++443/tcp open  ssl/http Apache httpd 1.3.41.fb1
+</pre>
+
+<p class="level0">XML output, intended to be processed by other programs, is selected with the <span Class="bold">--xml</span> option. It is based on Nmap*(Aqs XML output, with a few additional elements to indicate differences. The XML document is enclosed in <span Class="emphasis">nmapdiff</span> and <span Class="emphasis">scandiff</span> elements. Host differences are enclosed in <span Class="emphasis">hostdiff</span> tags and port differences are enclosed in <span Class="emphasis">portdiff</span> tags. Inside a <span Class="emphasis">hostdiff</span> or <span Class="emphasis">portdiff</span>, <span Class="emphasis">a</span> and <span Class="emphasis">b</span> tags show the state of the host or port in the first scan (<span Class="emphasis">a</span>) or the second scan (<span Class="emphasis">b</span>). </p>
+<p class="level0">Example&nbsp;2 shows the XML diff of the same scans shown above in Example&nbsp;1. Notice how port 80 of photos-cache-snc1.facebook.com is enclosed in <span Class="emphasis">portdiff</span> tags. For 69.63.179.25, the old hostname is in <span Class="emphasis">a</span> tags and the new is in <span Class="emphasis">b</span>. For the new host 69.63.184.145, there is a <span Class="emphasis">b</span> in the <span Class="emphasis">hostdiff</span> without a corresponding <span Class="emphasis">a</span>, indicating that there was no information for the host in the first scan. </p>
+<p class="level0"><span Class="bold">Example&nbsp;2.&nbsp;Ndiff XML output</span> </p><pre class="level1">
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;nmapdiff version=&quot;1&quot;&gt;
+&nbsp; &lt;scandiff&gt;
+&nbsp;   &lt;hostdiff&gt;
+&nbsp;     &lt;host&gt;
+&nbsp;       &lt;status state=&quot;up&quot;/&gt;
+&nbsp;       &lt;address addr=&quot;69.63.178.41&quot; addrtype=&quot;ipv4&quot;/&gt;
+&nbsp;       &lt;hostnames&gt;
+&nbsp;         &lt;hostname name=&quot;photos-cache-snc1.facebook.com&quot;/&gt;
+&nbsp;       &lt;/hostnames&gt;
+&nbsp;       &lt;ports&gt;
+&nbsp;         &lt;extraports count=&quot;99&quot; state=&quot;filtered&quot;/&gt;
+&nbsp;         &lt;portdiff&gt;
+&nbsp;           &lt;port portid=&quot;80&quot; protocol=&quot;tcp&quot;&gt;
+&nbsp;             &lt;state state=&quot;open&quot;/&gt;
+&nbsp;             &lt;a&gt;
+&nbsp;               &lt;service name=&quot;http&quot;/&gt;
+&nbsp;             &lt;/a&gt;
+&nbsp;             &lt;b&gt;
+&nbsp;               &lt;service name=&quot;http&quot; product=&quot;lighttpd&quot; version=&quot;1.5.0&quot;/&gt;
+&nbsp;             &lt;/b&gt;
+&nbsp;           &lt;/port&gt;
+&nbsp;         &lt;/portdiff&gt;
+&nbsp;       &lt;/ports&gt;
+&nbsp;     &lt;/host&gt;
+&nbsp;   &lt;/hostdiff&gt;
+&nbsp;   &lt;hostdiff&gt;
+&nbsp;     &lt;host&gt;
+&nbsp;       &lt;status state=&quot;up&quot;/&gt;
+&nbsp;       &lt;address addr=&quot;69.63.179.25&quot; addrtype=&quot;ipv4&quot;/&gt;
+&nbsp;       &lt;hostnames&gt;
+&nbsp;         &lt;a&gt;
+&nbsp;           &lt;hostname name=&quot;cm.out.snc1.tfbnw.net&quot;/&gt;
+&nbsp;         &lt;/a&gt;
+&nbsp;         &lt;b&gt;
+&nbsp;           &lt;hostname name=&quot;mailout-snc1.facebook.com&quot;/&gt;
+&nbsp;         &lt;/b&gt;
+&nbsp;       &lt;/hostnames&gt;
+&nbsp;       &lt;ports&gt;
+&nbsp;         &lt;extraports count=&quot;100&quot; state=&quot;filtered&quot;/&gt;
+&nbsp;       &lt;/ports&gt;
+&nbsp;     &lt;/host&gt;
+&nbsp;   &lt;/hostdiff&gt;
+&nbsp;   &lt;hostdiff&gt;
+&nbsp;     &lt;b&gt;
+&nbsp;       &lt;host&gt;
+&nbsp;         &lt;status state=&quot;up&quot;/&gt;
+&nbsp;         &lt;address addr=&quot;69.63.184.145&quot; addrtype=&quot;ipv4&quot;/&gt;
+&nbsp;         &lt;ports&gt;
+&nbsp;           &lt;extraports count=&quot;98&quot; state=&quot;filtered&quot;/&gt;
+&nbsp;           &lt;port portid=&quot;80&quot; protocol=&quot;tcp&quot;&gt;
+&nbsp;             &lt;state state=&quot;open&quot;/&gt;
+&nbsp;             &lt;service name=&quot;http&quot; product=&quot;Apache httpd&quot;
+&nbsp;                      version=&quot;1.3.41.fb1&quot;/&gt;
+&nbsp;           &lt;/port&gt;
+&nbsp;           &lt;port portid=&quot;443&quot; protocol=&quot;tcp&quot;&gt;
+&nbsp;             &lt;state state=&quot;open&quot;/&gt;
+&nbsp;             &lt;service name=&quot;http&quot; product=&quot;Apache httpd&quot; tunnel=&quot;ssl&quot;
+&nbsp;                      version=&quot;1.3.41.fb1&quot;/&gt;
+&nbsp;           &lt;/port&gt;
+&nbsp;         &lt;/ports&gt;
+&nbsp;       &lt;/host&gt;
+&nbsp;     &lt;/b&gt;
+&nbsp;   &lt;/hostdiff&gt;
+&nbsp; &lt;/scandiff&gt;
+&lt;/nmapdiff&gt;
+</pre>
+<a name="PERIODIC"></a><h2 class="nroffsh">Periodic diffs</h2>
+<p class="level0">Using Nmap, Ndiff, cron, and a shell script, it*(Aqs possible to scan a network daily and get email reports of the state of the network and changes since the previous scan. Example&nbsp;3 shows the script that ties it together. </p>
+<p class="level0"><span Class="bold">Example&nbsp;3.&nbsp;Scanning a network periodically with Ndiff and cron</span> </p><pre class="level1">
+&#35;!/bin/sh
+TARGETS=&quot;<span class="emphasis">targets</span>&quot;
+OPTIONS=&quot;-v -T4 -F -sV&quot;
+date=`date +%F`
+cd /root/scans
+nmap $OPTIONS $TARGETS -oA scan-$date &gt; /dev/null
+if [ -e scan-prev.xml ]; then
+&nbsp;       ndiff scan-prev.xml scan-$date.xml &gt; diff-$date
+&nbsp;       echo &quot;*** NDIFF RESULTS ***&quot;
+&nbsp;       cat diff-$date
+&nbsp;       echo
+fi
+echo &quot;*** NMAP RESULTS ***&quot;
+cat scan-$date.nmap
+ln -sf scan-$date.xml scan-prev.xml
+</pre>
+
+<p class="level0">If the script is saved as /root/scan-ndiff.sh, add the following line to root*(Aqs crontab: </p><pre class="level1">
+0 12 * * * /root/scan-ndiff.sh
+</pre>
+<a name="EXIT"></a><h2 class="nroffsh">Exit code</h2>
+<p class="level0">The exit code indicates whether the scans are equal. </p>
+<p class="level1">h&#39;-04&#39;(buh&#39;+03&#39;c </p>
+<p class="level0"><a name="bu"></a><span class="nroffip">\(bu 2.3</span> </p>
+<p class="level1">0 means that the scans are the same in all the aspects Ndiff knows about. </p>
+<p class="level1">h&#39;-04&#39;(buh&#39;+03&#39;c </p>
+<p class="level0"><a name="bu"></a><span class="nroffip">\(bu 2.3</span> </p>
+<p class="level1">1 means that the scans differ. </p>
+<p class="level1">h&#39;-04&#39;(buh&#39;+03&#39;c </p>
+<p class="level0"><a name="bu"></a><span class="nroffip">\(bu 2.3</span> </p>
+<p class="level1">2 indicates a runtime error, such as the failure to open a file. </p><a name="BUGS"></a><h2 class="nroffsh">Bugs</h2>
+<p class="level0">Report bugs to the nmap-dev mailing list at &lt;dev@nmap.org&gt;. </p><a name="HISTORY"></a><h2 class="nroffsh">History</h2>
+<p class="level0">Ndiff started as a project by Michael Pattrick during the 2008 Google Summer of Code. Michael designed the program and led the discussion of its output formats. He wrote versions of the program in Perl and C++, but the summer ended shortly after it was decided to rewrite the program in Python for the sake of Windows (and Zenmap) compatibility. This Python version was written by David Fifield. James Levine m[blue]<span Class="bold">released</span>m[]s-2u[1]ds+2 a Perl script named Ndiff with similar functionality in 2000. </p><a name="AUTHORS"></a><h2 class="nroffsh">Authors</h2>
+<p class="level0">David Fifield &lt;david@bamsoftware.com&gt; </p>
+<p class="level0">Michael Pattrick &lt;mpattrick@rhinovirus.org&gt; </p><a name="WEB"></a><h2 class="nroffsh">Web site</h2>
+<p class="level0">m[blue]<span Class="bold">%<a href="https://nmap.org/ndiff/">https://nmap.org/ndiff/</a></span>m[] </p><a name="NOTES"></a><h2 class="nroffsh">Notes</h2>
+<p class="level0"><a name=""></a><span class="nroffip"> 1. 4</span> </p>
+<p class="level1">released </p>
+<p class="level2">%<a href="https://seclists.org/nmap-hackers/2000/315">https://seclists.org/nmap-hackers/2000/315</a> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>libssh2_knownhost_addc man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_knownhost_addc - add a known host </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&nbsp;
+int
+libssh2_knownhost_addc(LIBSSH2_KNOWNHOSTS *hosts,
+&nbsp;                      char *host, char *salt,
+&nbsp;                      char *key, size_t keylen,
+&nbsp;                      const char *comment, size_t commentlen,
+&nbsp;                      int typemask,
+&nbsp;                      struct libssh2_knownhost **store);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Adds a known host to the collection of known hosts identified by the &#39;hosts&#39; handle. </p>
+<p class="level0"><span Class="emphasis">host</span> is a pointer the host name in plain text or hashed. If hashed, it must be provided base64 encoded. The host name can be the IP numerical address of the host or the full name. </p>
+<p class="level0">If you want to add a key for a specific port number for the given host, you must provide the host name like &#39;[host]:port&#39; with the actual characters &#39;[&#39; and &#39;]&#39; enclosing the host name and a colon separating the host part from the port number. For example: &quot;[host.example.com]:222&quot;. </p>
+<p class="level0"><span Class="emphasis">salt</span> is a pointer to the salt used for the host hashing, if the host is provided hashed. If the host is provided in plain text, salt has no meaning. The salt has to be provided base64 encoded with a trailing zero byte. </p>
+<p class="level0"><span Class="emphasis">key</span> is a pointer to the key for the given host. </p>
+<p class="level0"><span Class="emphasis">keylen</span> is the total size in bytes of the key pointed to by the <span Class="emphasis">key</span> argument </p>
+<p class="level0"><span Class="emphasis">comment</span> is a pointer to a comment for the key. </p>
+<p class="level0"><span Class="emphasis">commentlen</span> is the total size in bytes of the comment pointed to by the <span Class="emphasis">comment</span> argument </p>
+<p class="level0"><span Class="emphasis">typemask</span> is a bitmask that specifies format and info about the data passed to this function. Specifically, it details what format the host name is, what format the key is and what key type it is. </p>
+<p class="level0">The host name is given as one of the following types: LIBSSH2_KNOWNHOST_TYPE_PLAIN, LIBSSH2_KNOWNHOST_TYPE_SHA1 or LIBSSH2_KNOWNHOST_TYPE_CUSTOM. </p>
+<p class="level0">The key is encoded using one of the following encodings: LIBSSH2_KNOWNHOST_KEYENC_RAW or LIBSSH2_KNOWNHOST_KEYENC_BASE64. </p>
+<p class="level0">The key is using one of these algorithms: LIBSSH2_KNOWNHOST_KEY_RSA1, LIBSSH2_KNOWNHOST_KEY_SSHRSA or LIBSSH2_KNOWNHOST_KEY_SSHDSS. </p>
+<p class="level0"><span Class="emphasis">store</span> should point to a pointer that gets filled in to point to the known host data after the addition. NULL can be passed if you do not care about this pointer. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns a regular libssh2 error code, where negative values are error codes and 0 indicates success. </p><a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in libssh2 1.2.5 </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">libssh2_knownhost_init(3)</span> <span Class="bold">libssh2_knownhost_free(3)</span> <span Class="bold">libssh2_knownhost_check(3)</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

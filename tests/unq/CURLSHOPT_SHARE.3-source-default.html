@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLSHOPT_SHARE man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLSHOPT_SHARE - add data to share </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLSHcode curl_share_setopt(CURLSH *share, CURLSHOPT_SHARE, long type);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">The <span Class="emphasis">type</span> parameter specifies what specific data that should be shared and kept in the share object that was created with <span Class="emphasis">curl_share_init(3)</span>. The given <span Class="emphasis">type</span> must be be one of the values described below. You can set <span Class="emphasis">CURLSHOPT_SHARE(3)</span> multiple times with different data arguments to have the share object share multiple types of data. Unset a type again by setting <span Class="emphasis">CURLSHOPT_UNSHARE(3)</span>. </p>
+<p class="level0"><a name="CURLLOCKDATACOOKIE"></a><span class="nroffip">CURL_LOCK_DATA_COOKIE</span> </p>
+<p class="level1">Cookie data will be shared across the easy handles using this shared object. Note that this does not activate an easy handle&#39;s cookie handling. You can do that separately by using <span Class="emphasis">CURLOPT_COOKIEFILE(3)</span> for example. </p>
+<p class="level0"><a name="CURLLOCKDATADNS"></a><span class="nroffip">CURL_LOCK_DATA_DNS</span> </p>
+<p class="level1">Cached DNS hosts will be shared across the easy handles using this shared object. Note that when you use the multi interface, all easy handles added to the same multi handle will share DNS cache by default without using this option. </p>
+<p class="level0"><a name="CURLLOCKDATASSLSESSION"></a><span class="nroffip">CURL_LOCK_DATA_SSL_SESSION</span> </p>
+<p class="level1">SSL session IDs will be shared across the easy handles using this shared object. This will reduce the time spent in the SSL handshake when reconnecting to the same server. Note SSL session IDs are reused within the same easy handle by default. Note this symbol was added in 7.10.3 but was not implemented until 7.23.0. </p>
+<p class="level0"><a name="CURLLOCKDATACONNECT"></a><span class="nroffip">CURL_LOCK_DATA_CONNECT</span> </p>
+<p class="level1">Put the connection cache in the share object and make all easy handles using this share object share the connection cache. </p>
+<p class="level1">It is not supported to share connections between multiple concurrent threads. </p>
+<p class="level1">Connections that are used for HTTP/1.1 Pipelining or HTTP/2 multiplexing only get additional transfers added to them if the existing connection is held by the same multi or easy handle. libcurl does not support doing HTTP/2 streams in different threads using a shared connection. </p>
+<p class="level1">Support for <a class="bold" href="#CURLLOCKDATACONNECT">CURL_LOCK_DATA_CONNECT</a> was added in 7.57.0, but the symbol existed before this. </p>
+<p class="level1">Note that when you use the multi interface, all easy handles added to the same multi handle will share connection cache by default without using this option. </p>
+<p class="level0"><a name="CURLLOCKDATAPSL"></a><span class="nroffip">CURL_LOCK_DATA_PSL</span> </p>
+<p class="level1">The Public Suffix List stored in the share object is made available to all easy handle bound to the later. Since the Public Suffix List is periodically refreshed, this avoids updates in too many different contexts. </p>
+<p class="level1">Added in 7.61.0. </p>
+<p class="level1">Note that when you use the multi interface, all easy handles added to the same multi handle will share PSL cache by default without using this option. </p>
+<p class="level0"><a name="CURLLOCKDATAHSTS"></a><span class="nroffip">CURL_LOCK_DATA_HSTS</span> </p>
+<p class="level1">The in-memory HSTS cache. </p>
+<p class="level1">It is not supported to share the HSTS between multiple concurrent threads. </p>
+<p class="level1">Added in 7.88.0 </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&nbsp; CURLSHcode sh;
+&nbsp; share = curl_share_init();
+&nbsp; sh = curl_share_setopt(share, CURLSHOPT_SHARE, CURL_LOCK_DATA_COOKIE);
+&nbsp; if(sh)
+&nbsp;   printf(&quot;Error: %s&bsol;n&quot;, curl_share_strerror(sh));
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.10 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">CURLSHE_OK (zero) means that the option was set properly, non-zero means an error occurred. See <span Class="emphasis">libcurl-errors(3)</span> for the full list with descriptions. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLSHOPT_UNSHARE</span>(3),  <span Class="bold">curl_share_setopt</span>(3), <span Class="bold">curl_share_cleanup</span>(3), <span Class="bold">curl_share_init</span>(3) </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

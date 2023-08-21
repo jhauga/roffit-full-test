@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>"ZENMAP" man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">zenmap - Graphical Nmap frontend and results viewer </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2>
+<p class="level0"><span Class="bold">zenmap</span> [<span Class="emphasis">options</span>] [<span Class="emphasis">results&nbsp;file</span>] </p><a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Zenmap is a multi-platform graphical Nmap frontend and results viewer. Zenmap aims to make Nmap easy for beginners to use while giving experienced Nmap users advanced features. Frequently used scans can be saved as profiles to make them easy to run repeatedly. A command creator allows interactive creation of Nmap command lines. Scan results can be saved and viewed later. Saved scan results can be compared with one another to see how they differ. The results of recent scans are stored in a searchable database. </p>
+<p class="level0">This man page only describes the few Zenmap command-line options and some critical notes. A much more detailed Zenmap User*(Aqs Guide is available at m[blue]<span Class="bold">%<a href="https://nmap.org/book/zenmap.html">https://nmap.org/book/zenmap.html</a></span>m[]. Other documentation and information is available from the Zenmap web page at m[blue]<span Class="bold">%<a href="https://nmap.org/zenmap/">https://nmap.org/zenmap/</a></span>m[]. </p><a name="OPTIONS"></a><h2 class="nroffsh">Options summary</h2>
+<p class="level0"><span Class="bold">-f</span>, <span Class="bold">--file </span><span class="bold"><span Class="emphasis">results file</span></span> </p>
+<p class="level1">Open the given results file for viewing. The results file may be an Nmap XML output file (.xml, as produced by <span Class="bold">nmap -oX</span>) or a Umit scan results file (.usr). This option may be given more than once. </p>
+<p class="level0"><span Class="bold">-h</span>, <span Class="bold">--help</span> </p>
+<p class="level1">Show a help message and exit. </p>
+<p class="level0"><span Class="bold">-n</span>, <span Class="bold">--nmap </span><span class="bold"><a class="emphasis" href="#Nmap">Nmap command line</a></span> </p>
+<p class="level1">Run the given Nmap command within the Zenmap interface. After <span Class="bold">-n</span> or <span Class="bold">--nmap</span>, every remaining command line argument is read as the command line to execute. This means that <span Class="bold">-n</span> or <span Class="bold">--nmap</span> must be given last, after any other options. Note that the command line must include the <span Class="bold">nmap</span> executable name: <span Class="bold">zenmap -n nmap -sS target</span>. </p>
+<p class="level0"><span Class="bold">-p</span>, <span Class="bold">--profile </span><span class="bold"><span Class="emphasis">profile</span></span> </p>
+<p class="level1">Start with the given profile selected. The profile name is just a string: &quot;Regular scan&quot;. If combined with <span Class="bold">-t</span>, begin a scan with the given profile against the specified target. </p>
+<p class="level0"><span Class="bold">-t</span>, <span Class="bold">--target </span><span class="bold"><span Class="emphasis">target</span></span> </p>
+<p class="level1">Start with the given target. If combined with <span Class="bold">-p</span>, begin a scan with the given profile against the specified target. </p>
+<p class="level0"><span Class="bold">-v</span>, <span Class="bold">--verbose</span> </p>
+<p class="level1">Increase verbosity (of Zenmap, not Nmap). This option may be given multiple times to get even more verbosity. </p>
+<p class="level0">Any other arguments are taken to be the names of results files to open. </p><a name="ENVIRONMENT"></a><h2 class="nroffsh">Environment variables</h2>
+<p class="level0"><span Class="bold">ZENMAP_DEVELOPMENT</span> </p>
+<p class="level1">Set <span Class="bold">ZENMAP_DEVELOPMENT</span> to disable automatic crash reporting. </p><a name="BUGS"></a><h2 class="nroffsh">Bugs</h2>
+<p class="level0">Like their authors, Nmap and Zenmap aren&apos;t perfect. But you can help make them better by sending bug reports or even writing patches. If Nmap or Zenmap doesn&apos;t behave the way you expect, first upgrade to the latest version available from m[blue]<span Class="bold">%<a href="https://nmap.org">https://nmap.org</a></span>m[]. If the problem persists, do some research to determine whether it has already been discovered and addressed. Try Googling the error message or browsing the nmap-dev archives at m[blue]<span Class="bold">%<a href="https://seclists.org/">https://seclists.org/</a></span>m[]. Read this full manual page as well. If nothing comes of this, mail a bug report to &lt;dev@nmap.org&gt;. Please include everything you have learned about the problem, as well as what version of Zenmap you are running and what operating system version it is running on. Problem reports and Zenmap usage questions sent to dev@nmap.org are far more likely to be answered than those sent to Fyodor directly. </p>
+<p class="level0">Code patches to fix bugs are even better than bug reports. Basic instructions for creating patch files with your changes are available at m[blue]<span Class="bold">%<a href="https://svn.nmap.org/nmap/HACKING">https://svn.nmap.org/nmap/HACKING</a></span>m[]. Patches may be sent to nmap-dev (recommended) or to Fyodor directly. </p><a name="HISTORY"></a><h2 class="nroffsh">History</h2>
+<p class="level0">Zenmap was originally derived from Umit, an Nmap GUI created during the Google-sponsored Nmap Summer of Code in 2005 and 2006. The primary author of Umit was Adriano Monteiro Marques. When Umit was modified and integrated into Nmap in 2007, it was renamed Zenmap. </p><a name="AUTHORS"></a><h2 class="nroffsh">Authors</h2><a name="Nmap"></a><h2 class="nroffsh">Nmap</h2>
+<p class="level0">Fyodor &lt;fyodor@nmap.org&gt; (m[blue]<span Class="bold">%<a href="https://insecure.org">https://insecure.org</a></span>m[]) </p>
+<p class="level0">Hundreds of people have made valuable contributions to Nmap over the years. These are detailed in the CHANGELOG file which is distributed with Nmap and also available from m[blue]<span Class="bold">%<a href="https://nmap.org/changelog.html">https://nmap.org/changelog.html</a></span>m[]. </p><a name="Umit"></a><h2 class="nroffsh">Umit</h2>
+<p class="level0">Zenmap is derived from the Umit Nmap frontend, which was started by Adriano Monteiro Marques as an Nmap/Google Summer of Code project (&lt;py.adriano@gmail.com&gt;, m[blue]<span Class="bold">%<a href="http://www.umitproject.org">http://www.umitproject.org</a></span>m[]). </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

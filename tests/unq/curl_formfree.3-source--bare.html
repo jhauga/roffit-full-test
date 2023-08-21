@@ -1,0 +1,32 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_formfree - free a previously build multipart form post chain </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+void curl_formfree(struct curl_httppost *form);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">This function is deprecated. Do not use. See <span Class="emphasis">curl_mime_init(3)</span> instead! </p>
+<p class="level0">curl_formfree() is used to clean up data previously built/appended with <span Class="emphasis">curl_formadd(3)</span>. This must be called when the data has been used, which typically means after <span Class="emphasis">curl_easy_perform(3)</span> has been called. </p>
+<p class="level0">The pointer to free is the same pointer you passed to the <span Class="emphasis">CURLOPT_HTTPPOST(3)</span> option, which is the <span Class="emphasis">firstitem</span> pointer from the <span Class="emphasis">curl_formadd(3)</span> invoke(s). </p>
+<p class="level0"><span Class="bold">form</span> is the pointer as returned from a previous call to <span Class="emphasis">curl_formadd(3)</span> and may be NULL. </p>
+<p class="level0">Passing in a NULL pointer in <span Class="emphasis">form</span> will make this function return immediately with no action. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&nbsp; /* Fill in a file upload field */
+&nbsp; curl_formadd(&amp;formpost,
+&nbsp;              &amp;lastptr,
+&nbsp;              CURLFORM_COPYNAME, &quot;file&quot;,
+&nbsp;              CURLFORM_FILE, &quot;nice-image.jpg&quot;,
+&nbsp;              CURLFORM_END);
+&nbsp;
+&nbsp; curl_easy_setopt(curl, CURLOPT_HTTPPOST, formpost);
+&nbsp;
+&nbsp; curl_easy_perform(curl);
+&nbsp;
+&nbsp; /* then cleanup the formpost chain */
+&nbsp; curl_formfree(formpost);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Deprecated in 7.56.0. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">None </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_formadd</span>(3), <span Class="bold">curl_mime_init</span>(3), <span Class="bold">curl_mime_free</span>(3) </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

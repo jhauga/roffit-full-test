@@ -1,0 +1,31 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_TIMEVALUE - time value for conditional </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_TIMEVALUE, long val);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a long <span Class="emphasis">val</span> as parameter. This should be the time counted as seconds since 1 Jan 1970, and the time will be used in a condition as specified with <span Class="emphasis">CURLOPT_TIMECONDITION(3)</span>. </p>
+<p class="level0">On systems with 32 bit &#39;long&#39; variables, this option cannot set dates beyond the year 2038. Consider <span Class="emphasis">CURLOPT_TIMEVALUE_LARGE(3)</span> instead. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">0 </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP, FTP, RTSP, and FILE </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp;
+&nbsp; /* January 1, 2020 is 1577833200 */
+&nbsp; curl_easy_setopt(curl, CURLOPT_TIMEVALUE, 1577833200L);
+&nbsp;
+&nbsp; /* If-Modified-Since the above time stamp */
+&nbsp; curl_easy_setopt(curl, CURLOPT_TIMECONDITION, CURL_TIMECOND_IFMODSINCE);
+&nbsp;
+&nbsp; /* Perform the request */
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Always </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_TIMECONDITION</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

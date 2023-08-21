@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>curl_easy_option_next man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_easy_option_next - iterate over easy setopt options </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+typedef enum {
+&nbsp; CURLOT_LONG,    /* long (a range of values) */
+&nbsp; CURLOT_VALUES,  /*      (a defined set or bitmask) */
+&nbsp; CURLOT_OFF_T,   /* curl_off_t (a range of values) */
+&nbsp; CURLOT_OBJECT,  /* pointer (void *) */
+&nbsp; CURLOT_STRING,  /*         (char * to null-terminated buffer) */
+&nbsp; CURLOT_SLIST,   /*         (struct curl_slist *) */
+&nbsp; CURLOT_CBPTR,   /*         (void * passed as-is to a callback) */
+&nbsp; CURLOT_BLOB,    /* blob (struct curl_blob *) */
+&nbsp; CURLOT_FUNCTION /* function pointer */
+} curl_easytype;
+&nbsp;
+/* The CURLOPTTYPE_* id ranges can still be used to figure out what type/size
+&nbsp;  to use for curl_easy_setopt() for the given id */
+struct curl_easyoption {
+&nbsp; const char *name;
+&nbsp; CURLoption id;
+&nbsp; curl_easytype type;
+&nbsp; unsigned int flags;
+};
+&nbsp;
+const struct curl_easyoption *
+curl_easy_option_next(const struct curl_easyoption *prev);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">This function returns a pointer to the first or the next <span Class="emphasis">curl_easyoption</span> struct, providing an ability to iterate over all known options for <span Class="emphasis">curl_easy_setopt(3)</span> in this instance of libcurl. </p>
+<p class="level0">Pass a <span Class="bold">NULL</span> argument as <span Class="bold">prev</span> to get the first option returned, or pass in the current option to get the next one returned. If there is no more option to return, <span Class="emphasis">curl_easy_option_next(3)</span> returns NULL. </p>
+<p class="level0">The options returned by this functions are the ones known to this libcurl and information about what argument type they want. </p>
+<p class="level0">If the <span Class="bold">CURLOT_FLAG_ALIAS</span> bit is set in the flags field, it means the name is provided for backwards compatibility as an alias. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+/* iterate over all available options */
+const struct curl_easyoption *opt;
+opt = curl_easy_option_by_next(NULL);
+while(opt) {
+&nbsp; printf(&quot;Name: %s&bsol;n&quot;, opt-&gt;name);
+&nbsp; opt = curl_easy_option_by_next(opt);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">This function was added in libcurl 7.73.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">A pointer to the <span Class="emphasis">curl_easyoption</span> struct for the next option or NULL if no more options. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_easy_option_by_name</span>(3),<span Class="bold">curl_easy_option_by_id</span>(3), <span Class="bold">curl_easy_setopt</span>(3), </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

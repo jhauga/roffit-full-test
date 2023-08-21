@@ -1,0 +1,103 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_SSL_CTX_FUNCTION - SSL context callback for OpenSSL, wolfSSL or mbedTLS </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode ssl_ctx_callback(CURL *curl, void *ssl_ctx, void *clientp);
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_SSL_CTX_FUNCTION,
+&nbsp;                         ssl_ctx_callback);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">This option only works for libcurl powered by OpenSSL, wolfSSL, mbedTLS or BearSSL. If libcurl was built against another SSL library this functionality is absent. </p>
+<p class="level0">Pass a pointer to your callback function, which should match the prototype shown above. </p>
+<p class="level0">This callback function gets called by libcurl just before the initialization of an SSL connection after having processed all other SSL related options to give a last chance to an application to modify the behavior of the SSL initialization. The <span Class="emphasis">ssl_ctx</span> parameter is actually a pointer to the SSL library&#39;s <span Class="emphasis">SSL_CTX</span> for OpenSSL or wolfSSL, a pointer to <span Class="emphasis">mbedtls_ssl_config</span> for mbedTLS or a pointer to <span Class="emphasis">br_ssl_client_context</span> for BearSSL. If an error is returned from the callback no attempt to establish a connection is made and the perform operation will return the callback&#39;s error code. Set the <span Class="emphasis">clientp</span> argument with the <span Class="emphasis">CURLOPT_SSL_CTX_DATA(3)</span> option. </p>
+<p class="level0">This function will get called on all new connections made to a server, during the SSL negotiation. The <span Class="emphasis">ssl_ctx</span> will point to a newly initialized object each time, but note the pointer may be the same as from a prior call. </p>
+<p class="level0">To use this properly, a non-trivial amount of knowledge of your SSL library is necessary. For example, you can use this function to call library-specific callbacks to add additional validation code for certificates, and even to change the actual URI of an HTTPS request. </p>
+<p class="level0">For OpenSSL, asynchronous certificate verification via <span Class="emphasis">SSL_set_retry_verify</span> is supported. (Added in 8.3.0) </p>
+<p class="level0">WARNING: The <span Class="emphasis">CURLOPT_SSL_CTX_FUNCTION(3)</span> callback allows the application to reach in and modify SSL details in the connection without libcurl itself knowing anything about it, which then subsequently can lead to libcurl unknowingly reusing SSL connections with different properties. To remedy this you may set <span Class="emphasis">CURLOPT_FORBID_REUSE(3)</span> from the callback function. </p>
+<p class="level0">WARNING: If you are using DNS-over-HTTPS (DoH) via <span Class="emphasis">CURLOPT_DOH_URL(3)</span> then this callback will also be called for those transfers and the curl handle is set to an internal handle. <span Class="bold">This behavior is subject to change.</span> We recommend before performing your transfer set <span Class="emphasis">CURLOPT_PRIVATE(3)</span> on your curl handle so you can identify it in the context callback. If you have a reason to modify DoH SSL context please let us know on the curl-library mailing list because we are considering removing this capability. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All TLS based protocols: HTTPS, FTPS, IMAPS, POP3S, SMTPS etc. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+/* OpenSSL specific */
+&nbsp;
+&#35;include &lt;openssl/ssl.h&gt;
+&#35;include &lt;curl/curl.h&gt;
+&#35;include &lt;stdio.h&gt;
+&nbsp;
+static CURLcode sslctx_function(CURL *curl, void *sslctx, void *parm)
+{
+&nbsp; X509_STORE *store;
+&nbsp; X509 *cert = NULL;
+&nbsp; BIO *bio;
+&nbsp; char *mypem = parm;
+&nbsp; /* get a BIO */
+&nbsp; bio = BIO_new_mem_buf(mypem, -1);
+&nbsp; /* use it to read the PEM formatted certificate from memory into an
+&nbsp;  * X509 structure that SSL can use
+&nbsp;  */
+&nbsp; PEM_read_bio_X509(bio, &amp;cert, 0, NULL);
+&nbsp; if(cert == NULL)
+&nbsp;   printf(&quot;PEM_read_bio_X509 failed...&bsol;n&quot;);
+&nbsp;
+&nbsp; /* get a pointer to the X509 certificate store (which may be empty) */
+&nbsp; store = SSL_CTX_get_cert_store((SSL_CTX *)sslctx);
+&nbsp;
+&nbsp; /* add our certificate to this store */
+&nbsp; if(X509_STORE_add_cert(store, cert) == 0)
+&nbsp;   printf(&quot;error adding certificate&bsol;n&quot;);
+&nbsp;
+&nbsp; /* decrease reference counts */
+&nbsp; X509_free(cert);
+&nbsp; BIO_free(bio);
+&nbsp;
+&nbsp; /* all set to go */
+&nbsp; return CURLE_OK;
+}
+&nbsp;
+int main(void)
+{
+&nbsp; CURL * ch;
+&nbsp; CURLcode rv;
+&nbsp; char *mypem = /* example CA cert PEM - shortened */
+&nbsp;   &quot;-----BEGIN CERTIFICATE-----&bsol;n&quot;
+&nbsp;   &quot;MIIHPTCCBSWgAwIBAgIBADANBgkqhkiG9w0BAQQFADB5MRAwDgYDVQQKEwdSb290&bsol;n&quot;
+&nbsp;   &quot;IENBMR4wHAYDVQQLExVodHRwOi8vd3d3LmNhY2VydC5vcmcxIjAgBgNVBAMTGUNB&bsol;n&quot;
+&nbsp;   &quot;IENlcnQgU2lnbmluZyBBdXRob3JpdHkxITAfBgkqhkiG9w0BCQEWEnN1cHBvcnRA&bsol;n&quot;
+&nbsp;   &quot;Y2FjZXJ0Lm9yZzAeFw0wMzAzMzAxMjI5NDlaFw0zMzAzMjkxMjI5NDlaMHkxEDAO&bsol;n&quot;
+&nbsp;   &quot;GCSNe9FINSkYQKyTYOGWhlC0elnYjyELn8+CkcY7v2vcB5G5l1YjqrZslMZIBjzk&bsol;n&quot;
+&nbsp;   &quot;zk6q5PYvCdxTby78dOs6Y5nCpqyJvKeyRKANihDjbPIky/qbn3BHLt4Ui9SyIAmW&bsol;n&quot;
+&nbsp;   &quot;omTxJBzcoTWcFbLUvFUufQb1nA5V9FrWk9p2rSVzTMVD&bsol;n&quot;
+&nbsp;   &quot;-----END CERTIFICATE-----&bsol;n&quot;;
+&nbsp;
+&nbsp; curl_global_init(CURL_GLOBAL_ALL);
+&nbsp; ch = curl_easy_init();
+&nbsp;
+&nbsp; curl_easy_setopt(ch, CURLOPT_SSLCERTTYPE, &quot;PEM&quot;);
+&nbsp; curl_easy_setopt(ch, CURLOPT_SSL_VERIFYPEER, 1L);
+&nbsp; curl_easy_setopt(ch, CURLOPT_URL, &quot;https://www.example.com/&quot;);
+&nbsp;
+&nbsp; /* Retrieve page using cacerts&#39; certificate -&gt; will succeed
+&nbsp;  * load the certificate by installing a function doing the necessary
+&nbsp;  * &quot;modifications&quot; to the SSL CONTEXT just before link init
+&nbsp;  */
+&nbsp; curl_easy_setopt(ch, CURLOPT_SSL_CTX_FUNCTION, *sslctx_function);
+&nbsp; curl_easy_setopt(ch, CURLOPT_SSL_CTX_DATA, mypem);
+&nbsp; rv = curl_easy_perform(ch);
+&nbsp; if(!rv)
+&nbsp;   printf(&quot;*** transfer succeeded ***&bsol;n&quot;);
+&nbsp; else
+&nbsp;   printf(&quot;*** transfer failed ***&bsol;n&quot;);
+&nbsp;
+&nbsp; curl_easy_cleanup(ch);
+&nbsp; curl_global_cleanup();
+&nbsp; return rv;
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.11.0 for OpenSSL, in 7.42.0 for wolfSSL, in 7.54.0 for mbedTLS, in 7.83.0 in BearSSL. Other SSL backends are not supported. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">CURLE_OK if supported; or an error such as: </p>
+<p class="level0">CURLE_NOT_BUILT_IN - Not supported by the SSL backend </p>
+<p class="level0">CURLE_UNKNOWN_OPTION </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_SSL_CTX_DATA</span>(3), <span Class="bold">CURLOPT_SSL_VERIFYPEER</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

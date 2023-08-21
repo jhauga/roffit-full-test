@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>libssh2_sftp_write man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_sftp_write - write SFTP data </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&#35;include &lt;libssh2_sftp.h&gt;
+&nbsp;
+ssize_t
+libssh2_sftp_write(LIBSSH2_SFTP_HANDLE *handle,
+&nbsp;                  const char *buffer,
+&nbsp;                  size_t count);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="bold">libssh2_sftp_write(3)</span> writes a block of data to the SFTP server. This method is modeled after the POSIX write() function and uses the same calling semantics. </p>
+<p class="level0"><span Class="emphasis">handle</span> - SFTP file handle as returned by <span Class="emphasis">libssh2_sftp_open_ex(3)</span>. </p>
+<p class="level0"><span Class="emphasis">buffer</span> - points to the data to send off. </p>
+<p class="level0"><span Class="emphasis">count</span> - Number of bytes from &#39;buffer&#39; to write. Note that it may not be possible to write all bytes as requested. </p>
+<p class="level0"><span Class="emphasis">libssh2_sftp_handle(3)</span> will use as much as possible of the buffer and put it into a single SFTP protocol packet. This means that to get maximum performance when sending larger files, you should try to always pass in at least 32K of data to this function. </p><a name="WRITE"></a><h2 class="nroffsh">Write ahead</h2>
+<p class="level0">Starting in libssh2 version 1.2.8, the default behavior of libssh2 is to create several smaller outgoing packets for all data you pass to this function and it will return a positive number as soon as the first packet is acknowledged from the server. </p>
+<p class="level0">This has the effect that sometimes more data has been sent off but is not acked yet when this function returns, and when this function is subsequently called again to write more data, libssh2 will immediately figure out that the data is already received remotely. </p>
+<p class="level0">In most normal situation this should not cause any problems, but it should be noted that if you have once called libssh2_sftp_write() with data and it returns short, you MUST still assume that the rest of the data might have been cached so you need to make sure you do not alter that data and think that the version you have in your next function invoke will be detected or used. </p>
+<p class="level0">The reason for this funny behavior is that SFTP can only send 32K data in each packet and it gets all packets acked individually. This means we cannot use a simple serial approach if we want to reach high performance even on high latency connections. And we want that. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Actual number of bytes written or negative on failure. </p>
+<p class="level0">If used in non-blocking mode, it returns LIBSSH2_ERROR_EAGAIN when it would otherwise block. While LIBSSH2_ERROR_EAGAIN is a negative number, it is not really a failure per se. </p>
+<p class="level0">If this function returns 0 (zero) it should not be considered an error, but that there was no error but yet no payload data got sent to the other end. </p><a name="ERRORS"></a><h2 class="nroffsh">Errors</h2>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_ALLOC</span> -  An internal memory allocation call failed. </p>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_SOCKET_SEND</span> - Unable to send data on socket. </p>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_SOCKET_TIMEOUT</span> - </p>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_SFTP_PROTOCOL</span> - An invalid SFTP protocol response was received on the socket, or an SFTP operation caused an errorcode to be returned by the server. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">libssh2_sftp_open_ex(3)</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

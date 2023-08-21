@@ -1,0 +1,28 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_TLSAUTH_USERNAME - user name to use for TLS authentication </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_TLSAUTH_USERNAME, char *user);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a char * as parameter, which should point to the null-terminated username to use for the TLS authentication method specified with the <span Class="emphasis">CURLOPT_TLSAUTH_TYPE(3)</span> option. Requires that the <span Class="emphasis">CURLOPT_TLSAUTH_PASSWORD(3)</span> option also be set. </p>
+<p class="level0">The application does not have to keep the string around after setting this option. </p>
+<p class="level0">This feature relies in TLS SRP which does not work with TLS 1.3. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All TLS-based protocols </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com/&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_TLSAUTH_TYPE, &quot;SRP&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_TLSAUTH_USERNAME, &quot;user&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_TLSAUTH_PASSWORD, &quot;secret&quot;);
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.21.4, with the OpenSSL and GnuTLS backends only </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, CURLE_UNKNOWN_OPTION if not, or CURLE_OUT_OF_MEMORY if there was insufficient heap space. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_TLSAUTH_TYPE</span>(3), <span Class="bold">CURLOPT_TLSAUTH_PASSWORD</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

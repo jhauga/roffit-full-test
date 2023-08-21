@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>curl_easy_strerror man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_easy_strerror - return string describing error code </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+const char *curl_easy_strerror(CURLcode errornum);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">The <span Class="emphasis">curl_easy_strerror(3)</span> function returns a string describing the CURLcode error code passed in the argument <span Class="emphasis">errornum</span>. </p>
+<p class="level0">Typically applications also appreciate <span Class="emphasis">CURLOPT_ERRORBUFFER(3)</span> for more specific error descriptions generated at runtime. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&nbsp; /* Perform the request, res will get the return code */
+&nbsp; res = curl_easy_perform(curl);
+&nbsp; /* Check for errors */
+&nbsp; if(res != CURLE_OK)
+&nbsp;   fprintf(stderr, &quot;curl_easy_perform() failed: %s&bsol;n&quot;,
+&nbsp;           curl_easy_strerror(res));
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">This function was added in libcurl 7.12.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">A pointer to a null-terminated string. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">libcurl-errors</span>(3), <span Class="bold">curl_multi_strerror</span>(3),  <span Class="bold">curl_share_strerror</span>(3), <span Class="bold">curl_url_strerror</span>(3) </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

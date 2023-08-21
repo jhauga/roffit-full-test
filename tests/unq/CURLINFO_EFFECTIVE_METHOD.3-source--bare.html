@@ -1,0 +1,34 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLINFO_EFFECTIVE_METHOD - get the last used HTTP method </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_getinfo(CURL *handle, CURLINFO_EFFECTIVE_METHOD,
+&nbsp;                          char **methodp);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass in a pointer to a char pointer and get the last used effective HTTP method. </p>
+<p class="level0">In cases when you have asked libcurl to follow redirects, the method may not be the same method the first request would use. </p>
+<p class="level0">The <span Class="bold">methodp</span> pointer will be NULL or pointing to private memory you MUST NOT free - it gets freed when you call <span Class="emphasis">curl_easy_cleanup(3)</span> on the corresponding CURL handle. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP(S) </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; CURLcode res;
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_POSTFIELDS, &quot;data&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+&nbsp; res = curl_easy_perform(curl);
+&nbsp; if(res == CURLE_OK) {
+&nbsp;   char *method = NULL;
+&nbsp;   curl_easy_getinfo(curl, CURLINFO_EFFECTIVE_METHOD, &amp;method);
+&nbsp;   if(method)
+&nbsp;     printf(&quot;Redirected to method: %s&bsol;n&quot;, method);
+&nbsp; }
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.72.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_easy_getinfo</span>(3), <span Class="bold">curl_easy_setopt</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

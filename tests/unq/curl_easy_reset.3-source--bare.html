@@ -1,0 +1,21 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_easy_reset - reset all options of a libcurl session handle </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+void curl_easy_reset(CURL *handle);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Re-initializes all options previously set on a specified CURL handle to the default values. This puts back the handle to the same state as it was in when it was just created with <span Class="emphasis">curl_easy_init(3)</span>. </p>
+<p class="level0">It does not change the following information kept in the handle: live connections, the Session ID cache, the DNS cache, the cookies, the shares or the alt-svc cache. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+&nbsp;
+/* ... the handle is used and options are set ... */
+&nbsp;
+curl_easy_reset(curl);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">This function was added in libcurl 7.12.1 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Nothing </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_easy_init</span>(3),<span Class="bold">curl_easy_cleanup</span>(3),<span Class="bold">curl_easy_setopt</span>(3), <span Class="bold">curl_easy_duphandle</span>(3) </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

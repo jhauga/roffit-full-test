@@ -1,0 +1,34 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLMOPT_PIPELINING - enable HTTP pipelining and multiplexing </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLMcode curl_multi_setopt(CURLM *handle, CURLMOPT_PIPELINING, long bitmask);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass in the <span Class="bold">bitmask</span> parameter to instruct libcurl to enable HTTP pipelining and/or HTTP/2 multiplexing for this multi handle. </p>
+<p class="level0">When enabled, libcurl will attempt to use those protocol features when doing parallel requests to the same hosts. </p>
+<p class="level0">For pipelining, this means that if you add a second request that can use an already existing connection, the second request will be &quot;piped&quot; on the same connection rather than being executed in parallel. </p>
+<p class="level0">For multiplexing, this means that follow-up requests can re-use an existing connection and send the new request multiplexed over that at the same time as other transfers are already using that single connection. </p>
+<p class="level0">There are several other related options that are interesting to tweak and adjust to alter how libcurl spreads out requests on different connections or not etc. </p>
+<p class="level0">Before 7.43.0, this option was set to 1 and 0 to enable and disable HTTP/1.1 pipelining. </p>
+<p class="level0">Starting in 7.43.0, <span Class="bold">bitmask</span>&#39;s second bit also has a meaning, and you can ask for pipelining and multiplexing independently of each other by toggling the correct bits. </p>
+<p class="level0"><a name="CURLPIPENOTHING"></a><span class="nroffip">CURLPIPE_NOTHING (0)</span> </p>
+<p class="level1">Default, which means doing no attempts at pipelining or multiplexing. </p>
+<p class="level0"><a name="CURLPIPEHTTP1"></a><span class="nroffip">CURLPIPE_HTTP1 (1)</span> </p>
+<p class="level1">If this bit is set, libcurl will try to pipeline HTTP/1.1 requests on connections that are already established and in use to hosts. </p>
+<p class="level1">This bit is deprecated and has no effect since version 7.62.0. </p>
+<p class="level0"><a name="CURLPIPEMULTIPLEX"></a><span class="nroffip">CURLPIPE_MULTIPLEX (2)</span> </p>
+<p class="level1">If this bit is set, libcurl will try to multiplex the new transfer over an existing connection if possible. This requires HTTP/2. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">Since 7.62.0, <a class="bold" href="#CURLPIPEMULTIPLEX">CURLPIPE_MULTIPLEX</a> is enabled by default. </p>
+<p class="level0">Before that, default was <a class="bold" href="#CURLPIPENOTHING">CURLPIPE_NOTHING</a>. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP(S) </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURLM *m = curl_multi_init();
+/* try HTTP/2 multiplexing */
+curl_multi_setopt(m, CURLMOPT_PIPELINING, CURLPIPE_MULTIPLEX);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.16.0. Multiplex support bit added in 7.43.0. HTTP/1 Pipelining support was disabled in 7.62.0. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLM_OK if the option is supported, and CURLM_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLMOPT_MAX_PIPELINE_LENGTH</span>(3),  <span Class="bold">CURLMOPT_PIPELINING_SITE_BL</span>(3),  <span Class="bold">CURLMOPT_CONTENT_LENGTH_PENALTY_SIZE</span>(3),  <span Class="bold">CURLMOPT_CHUNK_LENGTH_PENALTY_SIZE</span>(3),  <span Class="bold">CURLMOPT_MAXCONNECTS</span>(3),  <span Class="bold">CURLMOPT_MAX_HOST_CONNECTIONS</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

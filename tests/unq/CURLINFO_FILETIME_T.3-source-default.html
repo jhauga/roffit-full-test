@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLINFO_FILETIME man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLINFO_FILETIME_T - get the remote time of the retrieved document </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_getinfo(CURL *handle, CURLINFO_FILETIME_T,
+&nbsp;                          curl_off_t *timep);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to a curl_off_t to receive the remote time of the retrieved document in number of seconds since January 1 1970 in the GMT/UTC time zone. If you get -1, it can be because of many reasons (it might be unknown, the server might hide it or the server does not support the command that tells document time etc) and the time of the document is unknown. </p>
+<p class="level0">You must ask libcurl to collect this information before the transfer is made, by using the <span Class="emphasis">CURLOPT_FILETIME(3)</span> option to <span Class="emphasis">curl_easy_setopt(3)</span> or you will unconditionally get a -1 back. </p>
+<p class="level0">This option is an alternative to <span Class="emphasis">CURLINFO_FILETIME(3)</span> to allow systems with 32 bit long variables to extract dates outside of the 32bit timestamp range. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP(S), FTP(S), SFTP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, url);
+&nbsp; /* Ask for filetime */
+&nbsp; curl_easy_setopt(curl, CURLOPT_FILETIME, 1L);
+&nbsp; res = curl_easy_perform(curl);
+&nbsp; if(CURLE_OK == res) {
+&nbsp;   curl_off_t filetime;
+&nbsp;   res = curl_easy_getinfo(curl, CURLINFO_FILETIME_T, &amp;filetime);
+&nbsp;   if((CURLE_OK == res) &amp;&amp; (filetime &gt;= 0)) {
+&nbsp;     time_t file_time = (time_t)filetime;
+&nbsp;     printf(&quot;filetime %s: %s&quot;, filename, ctime(&amp;file_time));
+&nbsp;   }
+&nbsp; }
+&nbsp; /* always cleanup */
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.59.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_easy_getinfo</span>(3), <span Class="bold">curl_easy_setopt</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

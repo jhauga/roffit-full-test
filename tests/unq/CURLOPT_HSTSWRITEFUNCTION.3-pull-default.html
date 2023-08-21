@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_HSTSWRITEFUNCTION man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_HSTSWRITEFUNCTION - write callback for HSTS hosts </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+struct curl_hstsentry {
+&nbsp; char *name;
+&nbsp; size_t namelen;
+&nbsp; unsigned int includeSubDomains:1;
+&nbsp; char expire[18]; /* YYYYMMDD HH:MM:SS [null-terminated] */
+};
+&nbsp;
+struct curl_index {
+&nbsp; size_t index; /* the provided entry&#39;s &quot;index&quot; or count */
+&nbsp; size_t total; /* total number of entries to save */
+};
+&nbsp;
+CURLSTScode hstswrite(CURL *easy, struct curl_hstsentry *sts,
+&nbsp;                     struct curl_index *count, void *clientp);
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_HSTSWRITEFUNCTION, hstswrite);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to your callback function, as the prototype shows above. </p>
+<p class="level0">This callback function gets called by libcurl repeatedly to allow the application to store the in-memory HSTS cache when libcurl is about to discard it. </p>
+<p class="level0">Set the <span Class="emphasis">clientp</span> argument with the <span Class="emphasis">CURLOPT_HSTSWRITEDATA(3)</span> option or it will be NULL. </p>
+<p class="level0">When the callback is invoked, the <span Class="emphasis">sts</span> pointer points to a populated struct: Read the host name to &#39;name&#39; (it is <span Class="emphasis">namelen</span> bytes long and null terminated. The <span Class="emphasis">includeSubDomains</span> field is non-zero if the entry matches subdomains. The <span Class="emphasis">expire</span> string is a date stamp null-terminated string using the syntax YYYYMMDD HH:MM:SS. </p>
+<p class="level0">The callback should return <span Class="emphasis">CURLSTS_OK</span> if it succeeded and is prepared to be called again (for another host) or <span Class="emphasis">CURLSTS_DONE</span> if there&#39;s nothing more to do. It can also return <span Class="emphasis">CURLSTS_FAIL</span> to signal error. </p>
+<p class="level0">This option does not enable HSTS, you need to use <span Class="emphasis">CURLOPT_HSTS_CTRL(3)</span> to do that. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL - no callback. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">This feature is only used for HTTP(S) transfer. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+{
+&nbsp; /* set HSTS read callback */
+&nbsp; curl_easy_setopt(curl, CURLOPT_HSTSWRITEFUNCTION, hstswrite);
+&nbsp;
+&nbsp; /* pass in suitable argument to the callback */
+&nbsp; curl_easy_setopt(curl, CURLOPT_HSTSWRITEDATA, &amp;hstspreload[0]);
+&nbsp;
+&nbsp; result = curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.74.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">This will return CURLE_OK. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_HSTSWRITEDATA</span>(3), <span Class="bold">CURLOPT_HSTSWRITEFUNCTION</span>(3),  <span Class="bold">CURLOPT_HSTS</span>(3), <span Class="bold">CURLOPT_HSTS_CTRL</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

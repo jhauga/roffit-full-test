@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>curl_multi_fdset man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_multi_fdset - extracts file descriptor information from a multi handle </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLMcode curl_multi_fdset(CURLM *multi_handle,
+&nbsp;                          fd_set *read_fd_set,
+&nbsp;                          fd_set *write_fd_set,
+&nbsp;                          fd_set *exc_fd_set,
+&nbsp;                          int *max_fd);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">This function extracts file descriptor information from a given multi_handle. libcurl returns its <span Class="emphasis">fd_set</span> sets. The application can use these to select() on, but be sure to <span Class="emphasis">FD_ZERO</span> them before calling this function as <span Class="emphasis">curl_multi_fdset(3)</span> only adds its own descriptors, it does not zero or otherwise remove any others. The <span Class="emphasis">curl_multi_perform(3)</span> function should be called as soon as one of them is ready to be read from or written to. </p>
+<p class="level0">If the <span Class="emphasis">read_fd_set</span> argument is not a null pointer, it points to an object of type <span Class="bold">fd_set</span> that on returns specifies the file descriptors to be checked for being ready to read. </p>
+<p class="level0">If the <span Class="emphasis">write_fd_set</span> argument is not a null pointer, it points to an object of type <span Class="bold">fd_set</span> that on return specifies the file descriptors to be checked for being ready to write. </p>
+<p class="level0">If the <span Class="emphasis">exc_fd_set</span> argument is not a null pointer, it points to an object of type <span Class="bold">fd_set</span> that on return specifies the file descriptors to be checked for error conditions pending. </p>
+<p class="level0">If no file descriptors are set by libcurl, <span Class="emphasis">max_fd</span> will contain -1 when this function returns. Otherwise it will contain the highest descriptor number libcurl set. When libcurl returns -1 in <span Class="emphasis">max_fd</span>, it is because libcurl currently does something that is not possible for your application to monitor with a socket and unfortunately you can then not know exactly when the current action is completed using select(). You then need to wait a while before you proceed and call <span Class="emphasis">curl_multi_perform(3)</span> anyway. How long to wait? Unless <span Class="emphasis">curl_multi_timeout(3)</span> gives you a lower number, we suggest 100 milliseconds or so, but you may want to test it out in your own particular conditions to find a suitable value. </p>
+<p class="level0">When doing select(), you should use <span Class="emphasis">curl_multi_timeout(3)</span> to figure out how long to wait for action. Call <span Class="emphasis">curl_multi_perform(3)</span> even if no activity has been seen on the <span Class="bold">fd_sets</span> after the timeout expires as otherwise internal retries and timeouts may not work as you would think and want. </p>
+<p class="level0">If one of the sockets used by libcurl happens to be larger than what can be set in an <span Class="bold">fd_set</span>, which on POSIX systems means that the file descriptor is larger than <span Class="bold">FD_SETSIZE</span>, then libcurl will try to not set it. Setting a too large file descriptor in an <span Class="bold">fd_set</span> implies an out of bounds write which can cause crashes, or worse. The effect of NOT storing it will possibly save you from the crash, but will make your program NOT wait for sockets it should wait for... </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&nbsp;/* get file descriptors from the transfers */
+&nbsp;mc = curl_multi_fdset(multi_handle, &amp;fdread, &amp;fdwrite, &amp;fdexcep, &amp;maxfd);
+&nbsp;
+&nbsp;if(mc != CURLM_OK) {
+&nbsp;  fprintf(stderr, &quot;curl_multi_fdset() failed, code %d.&bsol;n&quot;, mc);
+&nbsp;  break;
+&nbsp;}
+&nbsp;
+&nbsp;/* wait for activity on one of the sockets */
+&nbsp;rc = select(maxfd + 1, &amp;fdread, &amp;fdwrite, &amp;fdexcep, &amp;timeout);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.9.6 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0"><span Class="bold">CURLMcode</span> type, general libcurl multi interface error code. See <span Class="emphasis">libcurl-errors(3)</span> </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_multi_cleanup</span>(3), <span Class="bold">curl_multi_init</span>(3),  <span Class="bold">curl_multi_wait</span>(3),  <span Class="bold">curl_multi_timeout</span>(3), <span Class="bold">curl_multi_perform</span>(3), <span Class="bold">select</span>(2)  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

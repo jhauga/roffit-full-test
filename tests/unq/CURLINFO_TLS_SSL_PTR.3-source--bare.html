@@ -1,0 +1,84 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLINFO_TLS_SESSION, CURLINFO_TLS_SSL_PTR - get TLS session info </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_getinfo(CURL *handle, CURLINFO_TLS_SSL_PTR,
+&nbsp;                          struct curl_tlssessioninfo **session);
+&nbsp;
+/* if you need compatibility with libcurl &lt; 7.48.0 use
+&nbsp;  CURLINFO_TLS_SESSION instead: */
+&nbsp;
+CURLcode curl_easy_getinfo(CURL *handle, CURLINFO_TLS_SESSION,
+&nbsp;                          struct curl_tlssessioninfo **session);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to a <span Class="emphasis">struct curl_tlssessioninfo *</span>.  The pointer will be initialized to refer to a <span Class="emphasis">struct curl_tlssessioninfo *</span> that will contain an enum indicating the SSL library used for the handshake and a pointer to the respective internal TLS session structure of this underlying SSL library. </p>
+<p class="level0">This option may be useful for example to extract certificate information in a format convenient for further processing, such as manual validation. Refer to the <a class="bold" href="#LIMITATIONS">LIMITATIONS</a> section. </p><pre class="level0">
+struct curl_tlssessioninfo {
+&nbsp; curl_sslbackend backend;
+&nbsp; void *internals;
+};
+</pre>
+
+<p class="level0">The <span Class="emphasis">backend</span> struct member is one of the defines in the CURLSSLBACKEND_* series: CURLSSLBACKEND_NONE (when built without TLS support), CURLSSLBACKEND_WOLFSSL, CURLSSLBACKEND_SECURETRANSPORT, CURLSSLBACKEND_GNUTLS, CURLSSLBACKEND_MBEDTLS, CURLSSLBACKEND_NSS, CURLSSLBACKEND_OPENSSL, CURLSSLBACKEND_SCHANNEL or CURLSSLBACKEND_MESALINK. (Note that the OpenSSL forks are all reported as just OpenSSL here.) </p>
+<p class="level0">The <span Class="emphasis">internals</span> struct member will point to a TLS library specific pointer for the active (&quot;in use&quot;) SSL connection, with the following underlying types: </p>
+<p class="level0"><a name="GnuTLS"></a><span class="nroffip">GnuTLS</span> </p>
+<p class="level1"><span Class="bold">gnutls_session_t</span> </p>
+<p class="level0"><a name="NSS"></a><span class="nroffip">NSS</span> </p>
+<p class="level1"><span Class="bold">PRFileDesc *</span> </p>
+<p class="level0"><a name="OpenSSL"></a><span class="nroffip">OpenSSL</span> </p>
+<p class="level1"><span Class="emphasis">CURLINFO_TLS_SESSION(3)</span>: <span Class="bold">SSL_CTX *</span> </p>
+<p class="level1"><span Class="emphasis">CURLINFO_TLS_SSL_PTR(3)</span>: <span Class="bold">SSL *</span> </p>
+<p class="level0">Since 7.48.0 the <span Class="emphasis">internals</span> member can point to these other SSL backends as well: </p>
+<p class="level0"><a name="mbedTLS"></a><span class="nroffip">mbedTLS</span> </p>
+<p class="level1"><span Class="bold">mbedTLS_ssl_context *</span> </p>
+<p class="level0"><a name="Secure"></a><span class="nroffip">Secure Channel</span> </p>
+<p class="level1"><span Class="bold">CtxtHandle *</span> </p>
+<p class="level0"><a name="Secure"></a><span class="nroffip">Secure Transport</span> </p>
+<p class="level1"><span Class="bold">SSLContext *</span> </p>
+<p class="level0"><a name="wolfSSL"></a><span class="nroffip">wolfSSL</span> </p>
+<p class="level1"><span Class="bold">SSL *</span> </p>
+<p class="level0">If the <span Class="emphasis">internals</span> pointer is NULL then either the SSL backend is not supported, an SSL session has not yet been established or the connection is no longer associated with the easy handle (e.g. curl_easy_perform has returned). </p><a name="LIMITATIONS"></a><h2 class="nroffsh">Limitations</h2>
+<p class="level0">This option has some limitations that could make it unsafe when it comes to the manual verification of certificates. </p>
+<p class="level0">This option only retrieves the first in-use SSL session pointer for your easy handle, however your easy handle may have more than one in-use SSL session if using FTP over SSL. That is because the FTP protocol has a control channel and a data channel and one or both may be over SSL. Currently there is no way to retrieve a second in-use SSL session associated with an easy handle. </p>
+<p class="level0">This option has not been thoroughly tested with clear text protocols that can be upgraded/downgraded to/from SSL: FTP, SMTP, POP3, IMAP when used with <span Class="emphasis">CURLOPT_USE_SSL(3)</span>. Though you will be able to retrieve the SSL pointer, it&#39;s possible that before you can do that data (including auth) may have already been sent over a connection after it was upgraded. </p>
+<p class="level0">Renegotiation. If unsafe renegotiation or renegotiation in a way that the certificate is allowed to change is allowed by your SSL library this may occur and the certificate may change, and data may continue to be sent or received after renegotiation but before you are able to get the (possibly) changed SSL pointer, with the (possibly) changed certificate information. </p>
+<p class="level0">Instead of using this option to poll for certificate changes use <span Class="emphasis">CURLOPT_SSL_CTX_FUNCTION(3)</span> to set a verification callback, if supported. That is safer and does not suffer from any of the problems above. </p>
+<p class="level0">How are you using this option? Are you affected by any of these limitations? Please let us know by making a comment at <a href="https://github.com/curl/curl/issues/685">https://github.com/curl/curl/issues/685</a> </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All TLS-based </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&#35;include &lt;openssl/ssl.h&gt;
+&nbsp;
+CURL *curl;
+static size_t wf(void *ptr, size_t size, size_t nmemb, void *stream)
+{
+&nbsp; const struct curl_tlssessioninfo *info = NULL;
+&nbsp; CURLcode res = curl_easy_getinfo(curl, CURLINFO_TLS_SSL_PTR, &amp;info);
+&nbsp; if(info &amp;&amp; !res) {
+&nbsp;   if(CURLSSLBACKEND_OPENSSL == info-&gt;backend) {
+&nbsp;      printf(&quot;OpenSSL ver. %s&bsol;n&quot;, SSL_get_version((SSL*)info-&gt;internals));
+&nbsp;   }
+&nbsp; }
+&nbsp; return size * nmemb;
+}
+&nbsp;
+int main(int argc, char** argv)
+{
+&nbsp; CURLcode res;
+&nbsp; curl = curl_easy_init();
+&nbsp; if(curl) {
+&nbsp;   curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp;   curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, wf);
+&nbsp;   res = curl_easy_perform(curl);
+&nbsp;   curl_easy_cleanup(curl);
+&nbsp; }
+&nbsp; return res;
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.48.0. </p>
+<p class="level0">This option supersedes <span Class="emphasis">CURLINFO_TLS_SESSION(3)</span> which was added in 7.34.0. This option is exactly the same as that option except in the case of OpenSSL. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_easy_getinfo</span>(3), <span Class="bold">curl_easy_setopt</span>(3),  <span Class="bold">CURLINFO_TLS_SESSION</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

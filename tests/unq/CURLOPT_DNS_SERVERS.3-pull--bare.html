@@ -1,0 +1,29 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_DNS_SERVERS - DNS servers to use </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_DNS_SERVERS, char *servers);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a char * that is the list of DNS servers to be used instead of the system default. The format of the dns servers option is: </p>
+<p class="level0">host[:port][,host[:port]]... </p>
+<p class="level0">For example: </p>
+<p class="level0">192.168.1.100,192.168.1.101,3.4.5.6 </p>
+<p class="level0">The application does not have to keep the string around after setting this option. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL - use system default </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com/foo.bin&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_DNS_SERVERS, &quot;192.168.1.100:53,192.168.1.101&quot;);
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">This option requires that libcurl was built with a resolver backend that supports this operation. The c-ares backend is the only such one. </p>
+<p class="level0">Added in 7.24.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, CURLE_UNKNOWN_OPTION if not, CURLE_NOT_BUILT_IN if support was disabled at compile-time, CURLE_BAD_FUNCTION_ARGUMENT when given an invalid server list, or CURLE_OUT_OF_MEMORY if there was insufficient heap space. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_DNS_LOCAL_IP4</span>(3), <span Class="bold">CURLOPT_DNS_CACHE_TIMEOUT</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

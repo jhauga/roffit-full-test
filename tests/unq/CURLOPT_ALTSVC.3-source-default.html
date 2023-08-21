@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_ALTSVC man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_ALTSVC - alt-svc cache file name </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_ALTSVC, char *filename);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass in a pointer to a <span Class="emphasis">filename</span> to instruct libcurl to use that file as the Alt-Svc cache to read existing cache contents from and possibly also write it back to after a transfer, unless <span Class="bold">CURLALTSVC_READONLYFILE</span> is set in <span Class="emphasis">CURLOPT_ALTSVC_CTRL(3)</span>. </p>
+<p class="level0">Specify a blank file name (&quot;&quot;) to make libcurl not load from a file at all. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL. The alt-svc cache is not read nor written to file. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTPS </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_ALTSVC_CTRL, CURLALTSVC_H1);
+&nbsp; curl_easy_setopt(curl, CURLOPT_ALTSVC, &quot;altsvc-cache.txt&quot;);
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="FILE"></a><h2 class="nroffsh">File format</h2>
+<p class="level0">A text based file with one line per alt-svc entry and each line consists of nine space-separated fields. </p>
+<p class="level0">An example line could look like </p>
+<p class="level0">&nbsp;h2 www.example 8443 h3 second.example 443 &quot;20190808 06:18:37&quot; 1 0 </p>
+<p class="level0">The fields of that line are: </p>
+<p class="level0"><a name="h2"></a><span class="nroffip">h2</span> </p>
+<p class="level1">ALPN id for the source origin </p>
+<p class="level0"><a name="wwwexample"></a><span class="nroffip">www.example</span> </p>
+<p class="level1">Host name for the source origin </p>
+<p class="level0"><a name="8443"></a><span class="nroffip">8443</span> </p>
+<p class="level1">Port number for the source origin </p>
+<p class="level0"><a name="h3"></a><span class="nroffip">h3</span> </p>
+<p class="level1">ALPN id for the destination host </p>
+<p class="level0"><a name="secondexample"></a><span class="nroffip">second.example</span> </p>
+<p class="level1">Host name for the destination host </p>
+<p class="level0"><a name="443"></a><span class="nroffip">443</span> </p>
+<p class="level1">Port number for the destination host </p>
+<p class="level0"><a name="2019"></a><span class="nroffip">2019*</span> </p>
+<p class="level1">Expiration date and time of this entry within double quotes. The date format is &quot;YYYYMMDD HH:MM:SS&quot; and the time zone is GMT. </p>
+<p class="level0"><a name="1"></a><span class="nroffip">1</span> </p>
+<p class="level1">Boolean (1 or 0) if &quot;persist&quot; was set for this entry </p>
+<p class="level0"><a name="0"></a><span class="nroffip">0</span> </p>
+<p class="level1">Integer priority value (not currently used) </p><a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.64.1 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_ALTSVC_CTRL</span>(3), <span Class="bold">CURLOPT_CONNECT_TO</span>(3), <span Class="bold">CURLOPT_RESOLVE</span>(3),  <span Class="bold">CURLOPT_COOKIEFILE</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

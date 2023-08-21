@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_UNRESTRICTED_AUTH man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_UNRESTRICTED_AUTH - send credentials to other hosts too </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_UNRESTRICTED_AUTH,
+&nbsp;                         long goahead);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Set the long <span Class="emphasis">gohead</span> parameter to 1L to make libcurl continue to send authentication (user+password) credentials when following locations, even when hostname changed. This option is meaningful only when setting <span Class="emphasis">CURLOPT_FOLLOWLOCATION(3)</span>. </p>
+<p class="level0">Further, when this option is not used or set to <span Class="bold">0L</span>, libcurl will not send custom set nor internally generated Authentication: headers on requests done to other hosts than the one used for the initial URL. </p>
+<p class="level0">By default, libcurl will only send credentials and Authentication headers to the initial host name as given in the original URL, to avoid leaking username + password to other sites. </p>
+<p class="level0">This option should be used with caution: when curl follows redirects it blindly fetches the next URL as instructed by the server. Setting <span Class="emphasis">CURLOPT_UNRESTRICTED_AUTH(3)</span> to 1L will therefore also make curl trust the server and send possibly sensitive credentials to a host the server points out. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">0 </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+&nbsp; curl_easy_setopt(curl, CURLOPT_UNRESTRICTED_AUTH, 1L);
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Along with HTTP </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if HTTP is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_FOLLOWLOCATION</span>(3), <span Class="bold">CURLOPT_USERPWD</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

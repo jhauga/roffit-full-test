@@ -1,0 +1,32 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_RANGE - byte range to request </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_RANGE, char *range);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a char * as parameter, which should contain the specified range you want to retrieve. It should be in the format &quot;X-Y&quot;, where either X or Y may be left out and X and Y are byte indexes. </p>
+<p class="level0">HTTP transfers also support several intervals, separated with commas as in <span Class="emphasis">&quot;X-Y,N-M&quot;</span>. Using this kind of multiple intervals will cause the HTTP server to send the response document in pieces (using standard MIME separation techniques). Unfortunately, the HTTP standard (<a href="http://www.ietf.org/rfc/rfc7233.txt">RFC 7233</a> section 3.1) allows servers to ignore range requests so even when you set <span Class="emphasis">CURLOPT_RANGE(3)</span> for a request, you may end up getting the full response sent back. </p>
+<p class="level0">For RTSP, the formatting of a range should follow <a href="http://www.ietf.org/rfc/rfc2326.txt">RFC 2326</a> Section 12.29. For RTSP, byte ranges are <span Class="bold">not</span> permitted. Instead, ranges should be given in <span Class="bold">npt</span>, <span Class="bold">utc</span>, or <span Class="bold">smpte</span> formats. </p>
+<p class="level0">For HTTP PUT uploads this option should not be used, since it may conflict with other options. </p>
+<p class="level0">Pass a NULL to this option to disable the use of ranges. </p>
+<p class="level0">The application does not have to keep the string around after setting this option. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP, FTP, FILE, RTSP and SFTP. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp;
+&nbsp; /* get the first 200 bytes */
+&nbsp; curl_easy_setopt(curl, CURLOPT_RANGE, &quot;0-199&quot;);
+&nbsp;
+&nbsp; /* Perform the request */
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">FILE since 7.18.0, RTSP since 7.20.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK on success or CURLE_OUT_OF_MEMORY if there was insufficient heap space. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_RESUME_FROM</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

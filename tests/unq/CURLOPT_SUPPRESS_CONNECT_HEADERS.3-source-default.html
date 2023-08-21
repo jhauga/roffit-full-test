@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_SUPPRESS_CONNECT_HEADERS man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_SUPPRESS_CONNECT_HEADERS - suppress proxy CONNECT response headers from user callbacks </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_SUPPRESS_CONNECT_HEADERS, long onoff);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">When <span Class="emphasis">CURLOPT_HTTPPROXYTUNNEL(3)</span> is used and a CONNECT request is made, suppress proxy CONNECT response headers from the user callback functions <span Class="emphasis">CURLOPT_HEADERFUNCTION(3)</span> and <span Class="emphasis">CURLOPT_WRITEFUNCTION(3)</span>. </p>
+<p class="level0">Proxy CONNECT response headers can complicate header processing since it&#39;s essentially a separate set of headers. You can enable this option to suppress those headers. </p>
+<p class="level0">For example let&#39;s assume an HTTPS URL is to be retrieved via CONNECT. On success there would normally be two sets of headers, and each header line sent to the header function and/or the write function. The data given to the callbacks would look like this: </p><pre class="level0">
+HTTP/1.1 200 Connection established
+{headers}...
+&nbsp;
+HTTP/1.1 200 OK
+Content-Type: application/json
+{headers}...
+&nbsp;
+{body}...
+</pre>
+
+<p class="level0">However by enabling this option the CONNECT response headers are suppressed, so the data given to the callbacks would look like this: </p><pre class="level0">
+HTTP/1.1 200 OK
+Content-Type: application/json
+{headers}...
+&nbsp;
+{body}...
+</pre>
+<a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">0 </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp;
+&nbsp; curl_easy_setopt(curl, CURLOPT_HEADER, 1L);
+&nbsp; curl_easy_setopt(curl, CURLOPT_PROXY, &quot;http://foo:3128&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_HTTPPROXYTUNNEL, 1L);
+&nbsp; curl_easy_setopt(curl, CURLOPT_SUPPRESS_CONNECT_HEADERS, 1L);
+&nbsp;
+&nbsp; curl_easy_perform(curl);
+&nbsp;
+&nbsp; /* always cleanup */
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.54.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">CURLE_OK or an error such as CURLE_UNKNOWN_OPTION. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_HEADER</span>(3), <span Class="bold">CURLOPT_PROXY</span>(3),  <span Class="bold">CURLOPT_HTTPPROXYTUNNEL</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

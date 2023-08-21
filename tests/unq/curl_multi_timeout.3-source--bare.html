@@ -1,0 +1,34 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_multi_timeout - how long to wait for action before proceeding </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLMcode curl_multi_timeout(CURLM *multi_handle, long *timeout);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">An application using the libcurl multi interface should call <span Class="emphasis">curl_multi_timeout(3)</span> to figure out how long it should wait for socket actions - at most - before proceeding. </p>
+<p class="level0">Proceeding means either doing the socket-style timeout action: call the <span Class="emphasis">curl_multi_socket_action(3)</span> function with the <span Class="bold">sockfd</span> argument set to CURL_SOCKET_TIMEOUT, or call <span Class="emphasis">curl_multi_perform(3)</span> if you are using the simpler and older multi interface approach. </p>
+<p class="level0">The timeout value returned in the long <span Class="bold">timeout</span> points to, is in number of milliseconds at this moment. If 0, it means you should proceed immediately without waiting for anything. If it returns -1, there&#39;s no timeout at all set. </p>
+<p class="level0">An application that uses the multi_socket API SHOULD NOT use this function, but SHOULD instead use the <span Class="emphasis">CURLMOPT_TIMERFUNCTION(3)</span> option for proper and desired behavior. </p>
+<p class="level0">Note: if libcurl returns a -1 timeout here, it just means that libcurl currently has no stored timeout value. You must not wait too long (more than a few seconds perhaps) before you call curl_multi_perform() again. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+struct timeval timeout;
+long timeo;
+&nbsp;
+curl_multi_timeout(multi_handle, &amp;timeo);
+if(timeo &lt; 0)
+&nbsp; /* no set timeout, use a default */
+&nbsp; timeo = 980;
+&nbsp;
+timeout.tv_sec = timeo / 1000;
+timeout.tv_usec = (timeo % 1000) * 1000;
+&nbsp;
+/* wait for activities no longer than the set timeout */
+select(maxfd+1, &amp;fdread, &amp;fdwrite, &amp;fdexcep, &amp;timeout);
+</pre>
+<a name="TYPICAL"></a><h2 class="nroffsh">Typical usage</h2>
+<p class="level0">Call <span Class="emphasis">curl_multi_timeout(3)</span>, then wait for action on the sockets. Figure out which sockets to wait for by calling <span Class="emphasis">curl_multi_fdset(3)</span>. </p>
+<p class="level0">When there is activity or timeout, call <span Class="emphasis">curl_multi_perform(3)</span> and then loop - until all transfers are complete. </p><a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">This function was added in libcurl 7.15.4. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">The standard CURLMcode for multi interface error codes. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_multi_fdset</span>(3), <span Class="bold">curl_multi_info_read</span>(3),  <span Class="bold">curl_multi_socket</span>(3), <span Class="bold">curl_multi_setopt</span>(3)  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

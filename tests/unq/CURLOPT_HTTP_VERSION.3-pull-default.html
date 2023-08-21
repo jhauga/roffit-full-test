@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_HTTP_VERSION man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_HTTP_VERSION - HTTP protocol version to use </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_HTTP_VERSION, long version);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass <span Class="emphasis">version</span> a long, set to one of the values described below. They ask libcurl to use the specific HTTP versions. </p>
+<p class="level0">Note that the HTTP version is just a request. libcurl will still prioritize to re-use an existing connection so it might then re-use a connection using a HTTP version you have not asked for. </p>
+<p class="level0"><a name="CURLHTTPVERSIONNONE"></a><span class="nroffip">CURL_HTTP_VERSION_NONE</span> </p>
+<p class="level1">We do not care about what version the library uses. libcurl will use whatever it thinks fit. </p>
+<p class="level0"><a name="CURLHTTPVERSION10"></a><span class="nroffip">CURL_HTTP_VERSION_1_0</span> </p>
+<p class="level1">Enforce HTTP 1.0 requests. </p>
+<p class="level0"><a name="CURLHTTPVERSION11"></a><span class="nroffip">CURL_HTTP_VERSION_1_1</span> </p>
+<p class="level1">Enforce HTTP 1.1 requests. </p>
+<p class="level0"><a name="CURLHTTPVERSION20"></a><span class="nroffip">CURL_HTTP_VERSION_2_0</span> </p>
+<p class="level1">Attempt HTTP 2 requests. libcurl will fall back to HTTP 1.1 if HTTP 2 cannot be negotiated with the server. (Added in 7.33.0) </p>
+<p class="level1">When libcurl uses HTTP/2 over HTTPS, it does not itself insist on TLS 1.2 or higher even though that is required by the specification. A user can add this version requirement with <span Class="emphasis">CURLOPT_SSLVERSION(3)</span>. </p>
+<p class="level1">The alias <span Class="emphasis">CURL_HTTP_VERSION_2</span> was added in 7.43.0 to better reflect the actual protocol name. </p>
+<p class="level0"><a name="CURLHTTPVERSION2TLS"></a><span class="nroffip">CURL_HTTP_VERSION_2TLS</span> </p>
+<p class="level1">Attempt HTTP 2 over TLS (HTTPS) only. libcurl will fall back to HTTP 1.1 if HTTP 2 cannot be negotiated with the HTTPS server. For clear text HTTP servers, libcurl will use 1.1. (Added in 7.47.0) </p>
+<p class="level0"><a name="CURLHTTPVERSION2PRIORKNOWLEDGE"></a><span class="nroffip">CURL_HTTP_VERSION_2_PRIOR_KNOWLEDGE</span> </p>
+<p class="level1">Issue non-TLS HTTP requests using HTTP/2 without HTTP/1.1 Upgrade. It requires prior knowledge that the server supports HTTP/2 straight away. HTTPS requests will still do HTTP/2 the standard way with negotiated protocol version in the TLS handshake. (Added in 7.49.0) </p>
+<p class="level0"><a name="CURLHTTPVERSION3"></a><span class="nroffip">CURL_HTTP_VERSION_3</span> </p>
+<p class="level1">(Added in 7.66.0) This option makes libcurl attempt to use HTTP/3 to the host given in the URL, with fallback to earlier HTTP versions if needed. </p>
+<p class="level0"><a name="CURLHTTPVERSION3ONLY"></a><span class="nroffip">CURL_HTTP_VERSION_3ONLY</span> </p>
+<p class="level1">(Added in 7.88.0) Setting this value will make libcurl attempt to use HTTP/3 directly to server given in the URL but will not downgrade to earlier HTTP version if the server does not support HTTP/3. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">Since curl 7.62.0: CURL_HTTP_VERSION_2TLS </p>
+<p class="level0">Before that: CURL_HTTP_VERSION_1_1 </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; CURLcode ret;
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com/&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_HTTP_VERSION,
+&nbsp;                  (long)CURL_HTTP_VERSION_2TLS);
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp; if(ret == CURLE_HTTP_RETURNED_ERROR) {
+&nbsp;   /* an HTTP response error problem */
+&nbsp; }
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Along with HTTP </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if HTTP is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_SSLVERSION</span>(3), <span Class="bold">CURLOPT_HTTP200ALIASES</span>(3),  <span Class="bold">CURLOPT_HTTP09_ALLOWED</span>(3), <span Class="bold">CURLOPT_ALTSVC</span>(3)  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

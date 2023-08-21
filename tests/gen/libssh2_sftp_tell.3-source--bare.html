@@ -1,0 +1,15 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_sftp_tell - get the current read/write position indicator for a file </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&#35;include &lt;libssh2_sftp.h&gt;
+&nbsp;
+size_t
+libssh2_sftp_tell(LIBSSH2_SFTP_HANDLE *handle);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="emphasis">handle</span> - SFTP File Handle as returned by <span Class="bold">libssh2_sftp_open_ex(3)</span>. </p>
+<p class="level0">Returns the current offset of the file handle&#39;s internal pointer. Note that this is now deprecated. Use the newer <span Class="bold">libssh2_sftp_tell64(3)</span> instead! </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Current offset from beginning of file in bytes. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">libssh2_sftp_open_ex(3),</span> <span Class="bold">libssh2_sftp_tell64(3)</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

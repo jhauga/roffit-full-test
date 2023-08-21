@@ -1,0 +1,20 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_agent_get_identity - get a public key off the collection of public keys managed by ssh-agent </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&nbsp;
+int
+libssh2_agent_get_identity(LIBSSH2_AGENT *agent,
+&nbsp;                          struct libssh2_agent_publickey **store,
+&nbsp;                          struct libssh2_agent_publickey *prev);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="emphasis">libssh2_agent_get_identity(3)</span> allows an application to iterate over all public keys in the collection managed by ssh-agent. </p>
+<p class="level0"><span Class="emphasis">store</span> should point to a pointer that gets filled in to point to the public key data. </p>
+<p class="level0"><span Class="emphasis">prev</span> is a pointer to a previous &#39;struct libssh2_agent_publickey&#39; as returned by a previous invoke of this function, or NULL to get the first entry in the internal collection. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns 0 if everything is fine and information about a host was stored in the <span Class="emphasis">store</span> struct. </p>
+<p class="level0">Returns 1 if it reached the end of public keys. </p>
+<p class="level0">Returns negative values for error </p><a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in libssh2 1.2 </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">libssh2_agent_list_identities(3)</span> <span Class="bold">libssh2_agent_userauth(3)</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

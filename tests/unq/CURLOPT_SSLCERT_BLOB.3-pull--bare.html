@@ -1,0 +1,33 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_SSLCERT_BLOB - SSL client certificate from memory blob </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_SSLCERT_BLOB,
+&nbsp;                         struct curl_blob *stblob);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to a curl_blob structure, which contains (pointer and size) a client certificate. The format must be &quot;P12&quot; on Secure Transport or Schannel. The format must be &quot;P12&quot; or &quot;PEM&quot; on OpenSSL. The format must be &quot;DER&quot; or &quot;PEM&quot; on mbedTLS. The format must be specified with <span Class="emphasis">CURLOPT_SSLCERTTYPE(3)</span>. </p>
+<p class="level0">If the blob is initialized with the flags member of struct curl_blob set to CURL_BLOB_COPY, the application does not have to keep the buffer around after setting this. </p>
+<p class="level0">This option is an alternative to <span Class="emphasis">CURLOPT_SSLCERT(3)</span> which instead expects a file name as input. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All TLS based protocols: HTTPS, FTPS, IMAPS, POP3S, SMTPS etc. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; struct curl_blob stblob;
+&nbsp; stblob.data = certificateData;
+&nbsp; stblob.len = filesize;
+&nbsp; stblob.flags = CURL_BLOB_COPY;
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com/&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_SSLCERT_BLOB, &amp;stblob);
+&nbsp; curl_easy_setopt(curl, CURLOPT_SSLCERTTYPE, &quot;P12&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_KEYPASSWD, &quot;s3cret&quot;);
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.71.0. This option is supported by the OpenSSL, Secure Transport, Schannel and mbedTLS (since 7.78.0) backends. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if TLS enabled, CURLE_UNKNOWN_OPTION if not, or CURLE_OUT_OF_MEMORY if there was insufficient heap space. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_SSLCERTTYPE</span>(3), <span Class="bold">CURLOPT_SSLKEY</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

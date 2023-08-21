@@ -1,0 +1,40 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_slist_append - add a string to an slist </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+struct curl_slist *curl_slist_append(struct curl_slist *list,
+&nbsp;                                    const char *string);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="emphasis">curl_slist_append(3)</span> appends a string to a linked list of strings. The existing <span Class="bold">list</span> should be passed as the first argument and the new list is returned from this function. Pass in NULL in the <span Class="bold">list</span> argument to create a new list. The specified <span Class="bold">string</span> has been appended when this function returns. <span Class="emphasis">curl_slist_append(3)</span> copies the string. </p>
+<p class="level0">The list should be freed again (after usage) with <span Class="emphasis">curl_slist_free_all(3)</span>. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *handle;
+struct curl_slist *slist=NULL;
+struct curl_slist *temp=NULL;
+&nbsp;
+slist = curl_slist_append(slist, &quot;pragma:&quot;);
+&nbsp;
+if (slist == NULL)
+&nbsp; return -1;
+&nbsp;
+temp = curl_slist_append(slist, &quot;Accept:&quot;)
+&nbsp;
+if (temp == NULL) {
+&nbsp; curl_slist_free_all(slist);
+&nbsp; return -1;
+}
+&nbsp;
+slist = temp;
+&nbsp;
+curl_easy_setopt(handle, CURLOPT_HTTPHEADER, slist);
+&nbsp;
+curl_easy_perform(handle);
+&nbsp;
+curl_slist_free_all(slist); /* free the list again */
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Always </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">A null pointer is returned if anything went wrong, otherwise the new list pointer is returned. To avoid overwriting an existing non-empty list on failure, the new list should be returned to a temporary variable which can be tested for NULL before updating the original list pointer. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_slist_free_all</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

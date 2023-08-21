@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>ZLIB man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">zlib - compression/decompression library </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2>
+<p class="level0">[see <span Class="emphasis">zlib.h</span> for full description] </p><a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">The <span Class="emphasis">zlib</span> library is a general purpose data compression library. The code is thread safe, assuming that the standard library functions used are thread safe, such as memory allocation routines. It provides in-memory compression and decompression functions, including integrity checks of the uncompressed data. This version of the library supports only one compression method (deflation) but other algorithms may be added later with the same stream interface. </p>
+<p class="level0">Compression can be done in a single step if the buffers are large enough or can be done by repeated calls of the compression function. In the latter case, the application must provide more input and/or consume the output (providing more output space) before each call. </p>
+<p class="level0">The library also supports reading and writing files in <span Class="emphasis">gzip</span>(1) (.gz) format with an interface similar to that of stdio. </p>
+<p class="level0">The library does not install any signal handler. The decoder checks the consistency of the compressed data, so the library should never crash even in the case of corrupted input. </p>
+<p class="level0">All functions of the compression library are documented in the file <span Class="emphasis">zlib.h</span>. The distribution source includes examples of use of the library in the files <span Class="emphasis">test/example.c</span> and <span Class="emphasis">test/minigzip.c,</span> as well as other examples in the <span Class="emphasis">examples/</span> directory. </p>
+<p class="level0">Changes to this version are documented in the file <span Class="emphasis">ChangeLog</span> that accompanies the source. </p>
+<p class="level0"><span Class="emphasis">zlib</span> is built in to many languages and operating systems, including but not limited to Java, Python, .NET, PHP, Perl, Ruby, Swift, and Go. </p>
+<p class="level0">An experimental package to read and write files in the .zip format, written on top of <span Class="emphasis">zlib</span> by Gilles Vollant (info@winimage.com), is available at: </p>
+<p class="level0"><a name=""></a><span class="nroffip"></span> </p>
+<p class="level1"><a href="http://www.winimage.com/zLibDll/minizip.html">http://www.winimage.com/zLibDll/minizip.html</a> and also in the <span Class="emphasis">contrib/minizip</span> directory of the main <span Class="emphasis">zlib</span> source distribution. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0">The <span Class="emphasis">zlib</span> web site can be found at: </p>
+<p class="level0"><a name=""></a><span class="nroffip"></span> </p>
+<p class="level1"><a href="http://zlib.net/">http://zlib.net/</a> </p>
+<p class="level1">The data format used by the <span Class="emphasis">zlib</span> library is described by RFC (Request for Comments) 1950 to 1952 in the files: </p>
+<p class="level0"><a name=""></a><span class="nroffip"></span> </p>
+<p class="level1"><a href="http://tools.ietf.org/html/rfc1950">http://tools.ietf.org/html/rfc1950</a> (for the zlib header and trailer format) <br><a href="http://tools.ietf.org/html/rfc1951">http://tools.ietf.org/html/rfc1951</a> (for the deflate compressed data format) <br><a href="http://tools.ietf.org/html/rfc1952">http://tools.ietf.org/html/rfc1952</a> (for the gzip header and trailer format) </p>
+<p class="level1">Mark Nelson wrote an article about <span Class="emphasis">zlib</span> for the Jan. 1997 issue of  Dr. Dobb&#39;s Journal; a copy of the article is available at: </p>
+<p class="level0"><a name=""></a><span class="nroffip"></span> </p>
+<p class="level1"><a href="http://marknelson.us/1997/01/01/zlib-engine/">http://marknelson.us/1997/01/01/zlib-engine/</a> </p><a name="REPORTING"></a><h2 class="nroffsh">Reporting problems</h2>
+<p class="level0">Before reporting a problem, please check the <span Class="emphasis">zlib</span> web site to verify that you have the latest version of <span Class="emphasis">zlib</span>; otherwise, obtain the latest version and see if the problem still exists. Please read the <span Class="emphasis">zlib</span> FAQ at: </p>
+<p class="level0"><a name=""></a><span class="nroffip"></span> </p>
+<p class="level1"><a href="http://zlib.net/zlib_faq.html">http://zlib.net/zlib_faq.html</a> </p>
+<p class="level1">before asking for help. Send questions and/or comments to zlib@gzip.org, or (for the Windows DLL version) to Gilles Vollant (info@winimage.com). </p><a name="AUTHORS"></a><h2 class="nroffsh">Authors and license</h2>
+<p class="level0">Version 1.2.13 </p>
+<p class="level0">Copyright (C) 1995-2022 Jean-loup Gailly and Mark Adler </p>
+<p class="level0">This software is provided &#39;as-is&#39;, without any express or implied warranty.  In no event will the authors be held liable for any damages arising from the use of this software. </p>
+<p class="level0">Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions: </p>
+<p class="level0"><a name="nstep"></a><span class="nroffip">\n[step]. 3</span> </p>
+<p class="level1">The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required. </p>
+<p class="level0"><a name="nstep"></a><span class="nroffip">\n+[step].</span> </p>
+<p class="level1">Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software. </p>
+<p class="level0"><a name="nstep"></a><span class="nroffip">\n+[step].</span> </p>
+<p class="level1">This notice may not be removed or altered from any source distribution. </p>
+<p class="level1">Jean-loup Gailly        Mark Adler <br>jloup@gzip.org          madler@alumni.caltech.edu </p>
+<p class="level1">The deflate format used by <span Class="emphasis">zlib</span> was defined by Phil Katz. The deflate and <span Class="emphasis">zlib</span> specifications were written by L. Peter Deutsch. Thanks to all the people who reported problems and suggested various improvements in <span Class="emphasis">zlib</span>; who are too numerous to cite here. </p>
+<p class="level1">UNIX manual page by R. P. C. Rodgers, U.S. National Library of Medicine (rodgers@nlm.nih.gov). </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

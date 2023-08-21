@@ -1,0 +1,15 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">miniunzip - uncompress and examine ZIP archives </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2>
+<p class="level0"><span Class="bold">miniunzip</span> [<span Class="emphasis">-exvlo</span>] zipfile [ files_to_extract ] [-d tempdir] </p><a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="bold">minizip</span> is a simple tool which allows the extraction of compressed file archives in the ZIP format used by the MS-DOS utility PKZIP.  It was written as a demonstration of the <span Class="emphasis">zlib</span>(3) library and therefore lack many of the features of the <span Class="emphasis">unzip</span>(1) program. </p><a name="OPTIONS"></a><h2 class="nroffsh">Options</h2>
+<p class="level0">A number of options are supported.  With the exception of <span Class="bold">-d\</span><span Class="emphasis">tempdir</span> these must be supplied before any other arguments and are: </p>
+<p class="level0"><span Class="bold">-l\</span><span Class="emphasis">,\</span><span Class="bold">--v</span> List the files in the archive without extracting them. </p>
+<p class="level0"><span Class="bold">-o</span> Overwrite files without prompting for confirmation. </p>
+<p class="level0"><span Class="bold">-x</span> Extract files (default). </p>
+<p class="level0">The <span Class="emphasis">zipfile</span> argument is the name of the archive to process. The next argument can be used to specify a single file to extract from the archive. </p>
+<p class="level0">Lastly, the following option can be specified at the end of the command-line: </p>
+<p class="level0"><span Class="bold">-d\</span><span Class="emphasis">tempdir</span> Extract the archive in the directory <span Class="emphasis">tempdir</span> rather than the current directory. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">minizip</span>(1), <span Class="bold">zlib</span>(3), <span Class="bold">unzip</span>(1). </p><a name="AUTHOR"></a><h2 class="nroffsh">Author</h2>
+<p class="level0">This program was written by Gilles Vollant.  This manual page was written by Mark Brown &lt;broonie@sirena.org.uk&gt;. The -d tempdir option was added by Dirk Eddelbuettel &lt;edd@debian.org&gt;. </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

@@ -1,0 +1,25 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_version - return the libssh2 version number </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&nbsp;
+const char *
+libssh2_version(int required_version);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">If <span Class="emphasis">required_version</span> is lower than or equal to the version number of the libssh2 in use, the version number of libssh2 is returned as a pointer to a zero terminated string. </p>
+<p class="level0">The <span Class="emphasis">required_version</span> should be the version number as constructed by the LIBSSH2_VERSION_NUM define in the libssh2.h public header file, which is a 24 bit number in the 0xMMmmpp format. MM for major, mm for minor and pp for patch number. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">The version number of libssh2 is returned as a pointer to a zero terminated string or NULL if the <span Class="emphasis">required_version</span> is not fulfilled. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2>
+<p class="level0">To make sure you run with the correct libssh2 version: </p><pre class="level0">
+if(!libssh2_version(LIBSSH2_VERSION_NUM)) {
+&nbsp; fprintf(stderr, &quot;Runtime libssh2 version too old.&quot;);
+&nbsp; exit(1);
+}
+</pre>
+
+<p class="level0">Unconditionally get the version number: </p><pre class="level0">
+printf(&quot;libssh2 version: %s&quot;, libssh2_version(0));
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">This function was added in libssh2 1.1, in previous versions there way no way to extract this info in run-time. </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

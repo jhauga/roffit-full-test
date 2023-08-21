@@ -1,0 +1,45 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_ws_send - send WebSocket data </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/easy.h&gt;
+&nbsp;
+CURLcode curl_ws_send(CURL *curl, const void *buffer, size_t buflen,
+&nbsp;                     size_t *sent, curl_off_t fragsize,
+&nbsp;                     unsigned int flags);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">This function call is EXPERIMENTAL. </p>
+<p class="level0">Send the specific message fragment over an established WebSocket connection. The <span Class="emphasis">buffer</span> holds the data to send and it is <span Class="emphasis">buflen</span> number of payload bytes in that memory area. </p>
+<p class="level0"><span Class="emphasis">sent</span> is returned as the number of payload bytes actually sent. </p>
+<p class="level0">To send a (huge) fragment using multiple calls with partial content per invoke, set the <a class="emphasis" href="#CURLWSOFFSET">CURLWS_OFFSET</a> bit and the <span Class="emphasis">fragsize</span> argument as the total expected size for the first part, then set the <a class="emphasis" href="#CURLWSOFFSET">CURLWS_OFFSET</a> with a zero <span Class="emphasis">fragsize</span> for the following parts. </p>
+<p class="level0">If not sending a partial fragment or if this is raw mode, <span Class="emphasis">fragsize</span> should be set to zero. </p>
+<p class="level0">If <span Class="bold">CURLWS_RAW_MODE</span> is enabled in <span Class="emphasis">CURLOPT_WS_OPTIONS(3)</span>, the <span Class="bold">flags</span> argument should be set to 0. </p>
+<p class="level0">To send a message consisting of multiple frames, set the <a class="emphasis" href="#CURLWSCONT">CURLWS_CONT</a> bit in all frames except the final one. </p><a name="FLAGS"></a><h2 class="nroffsh">Flags</h2>
+<p class="level0"><a name="CURLWSTEXT"></a><span class="nroffip">CURLWS_TEXT</span> </p>
+<p class="level1">The buffer contains text data. Note that this makes a difference to WebSocket but libcurl itself will not make any verification of the content or precautions that you actually send valid UTF-8 content. </p>
+<p class="level0"><a name="CURLWSBINARY"></a><span class="nroffip">CURLWS_BINARY</span> </p>
+<p class="level1">This is binary data. </p>
+<p class="level0"><a name="CURLWSCONT"></a><span class="nroffip">CURLWS_CONT</span> </p>
+<p class="level1">This is not the final fragment of the message, which implies that there will be another fragment coming as part of the same message where this bit is not set. </p>
+<p class="level0"><a name="CURLWSCLOSE"></a><span class="nroffip">CURLWS_CLOSE</span> </p>
+<p class="level1">Close this transfer. </p>
+<p class="level0"><a name="CURLWSPING"></a><span class="nroffip">CURLWS_PING</span> </p>
+<p class="level1">This is a ping. </p>
+<p class="level0"><a name="CURLWSPONG"></a><span class="nroffip">CURLWS_PONG</span> </p>
+<p class="level1">This is a pong. </p>
+<p class="level0"><a name="CURLWSOFFSET"></a><span class="nroffip">CURLWS_OFFSET</span> </p>
+<p class="level1">The provided data is only a partial fragment and there will be more in a following call to <span Class="emphasis">curl_ws_send()</span>. When sending only a piece of the fragment like this, the <span Class="emphasis">fragsize</span> must be provided with the total expected fragment size in the first call and it needs to be zero in subsequent calls. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+int ping(CURL *curl, const char *send_payload)
+{
+&nbsp; size_t sent;
+&nbsp; CURLcode result =
+&nbsp;   curl_ws_send(curl, send_payload, strlen(send_payload), &amp;sent, 0,
+&nbsp;                CURLWS_PING);
+&nbsp; return (int)result;
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.86.0. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0"><span Class="emphasis">CURLE_OK</span> (zero) means that the data was sent properly, non-zero means an error occurred as <span Class="emphasis">&lt;curl/curl.h&gt;</span> defines. See the <span Class="emphasis">libcurl-errors(3)</span> man page for the full list with descriptions. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_easy_setopt</span>(3), <span Class="bold">curl_easy_perform</span>(3),  <span Class="bold">curl_easy_getinfo</span>(3),  <span Class="bold">curl_ws_recv</span>(3), <span Class="bold">libcurl-ws</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

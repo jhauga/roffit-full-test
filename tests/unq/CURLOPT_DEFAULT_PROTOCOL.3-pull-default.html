@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_DEFAULT_PROTOCOL man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_DEFAULT_PROTOCOL - default protocol to use if the URL is missing a scheme name </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_DEFAULT_PROTOCOL,
+&nbsp;                         char *protocol);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">This option tells libcurl to use <span Class="emphasis">protocol</span> if the URL is missing a scheme name. </p>
+<p class="level0">Use one of these protocol (scheme) names: </p>
+<p class="level0">dict, file, ftp, ftps, gopher, http, https, imap, imaps, ldap, ldaps, pop3, pop3s, rtsp, scp, sftp, smb, smbs, smtp, smtps, telnet, tftp </p>
+<p class="level0">An unknown or unsupported protocol causes error <span Class="emphasis">CURLE_UNSUPPORTED_PROTOCOL</span> when libcurl parses a URL without a scheme. Parsing happens when <span Class="emphasis">curl_easy_perform(3)</span> or <span Class="emphasis">curl_multi_perform(3)</span> is called. The protocols supported by libcurl will vary depending on how it was built. Use <span Class="emphasis">curl_version_info(3)</span> if you need a list of protocol names supported by the build of libcurl that you are using. </p>
+<p class="level0">This option does not change the default proxy protocol (http). </p>
+<p class="level0">Without this option libcurl would make a guess based on the host, see <span Class="emphasis">CURLOPT_URL(3)</span> for details. </p>
+<p class="level0">The application does not have to keep the string around after setting this option. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL (make a guess based on the host) </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+curl = curl_easy_init();
+if(curl) {
+&nbsp; /* set a URL without a scheme */
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;example.com&quot;);
+&nbsp;
+&nbsp; /* set the default protocol (scheme) for schemeless URLs */
+&nbsp; curl_easy_setopt(curl, CURLOPT_DEFAULT_PROTOCOL, &quot;https&quot;);
+&nbsp;
+&nbsp; /* Perform the request */
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.45.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">CURLE_OK if the option is supported. </p>
+<p class="level0">CURLE_OUT_OF_MEMORY if there was insufficient heap space. </p>
+<p class="level0">CURLE_UNKNOWN_OPTION if the option is not supported. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_URL</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

@@ -1,0 +1,65 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLMOPT_SOCKETFUNCTION - callback informed about what to wait for </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+int socket_callback(CURL *easy,      /* easy handle */
+&nbsp;                   curl_socket_t s, /* socket */
+&nbsp;                   int what,        /* describes the socket */
+&nbsp;                   void *clientp,   /* private callback pointer */
+&nbsp;                   void *socketp);  /* private socket pointer */
+&nbsp;
+CURLMcode curl_multi_setopt(CURLM *handle, CURLMOPT_SOCKETFUNCTION, socket_callback);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to your callback function, which should match the prototype shown above. </p>
+<p class="level0">When the <span Class="emphasis">curl_multi_socket_action(3)</span> function is called, it uses this callback to inform the application about updates in the socket (file descriptor) status by doing none, one, or multiple calls to the <span Class="bold">socket_callback</span>. The callback function gets status updates with changes since the previous time the callback was called. If the given callback pointer is set to NULL, no callback will be called. </p>
+<p class="level0">libcurl then expects the application to monitor the sockets for the specific activities and tell libcurl again when something happens on one of them. Tell libcurl by calling <span Class="emphasis">curl_multi_socket_action(3)</span>. </p><a name="CALLBACK"></a><h2 class="nroffsh">Callback arguments</h2>
+<p class="level0"><span Class="emphasis">easy</span> identifies the specific transfer for which this update is related. </p>
+<p class="level0"><span Class="emphasis">s</span> is the specific socket this function invocation concerns. If the <span Class="bold">what</span> argument is not CURL_POLL_REMOVE then it holds information about what activity on this socket the application is supposed to monitor. Subsequent calls to this callback might update the <span Class="bold">what</span> bits for a socket that is already monitored. </p>
+<p class="level0">The socket callback should return 0 on success, and -1 on error. If this callback returns error, <span Class="bold">all</span> transfers currently in progress in this multi handle will be aborted and fail. </p>
+<p class="level0"><span Class="bold">clientp</span> is set with <span Class="emphasis">CURLMOPT_SOCKETDATA(3)</span>. </p>
+<p class="level0"><span Class="bold">socketp</span> is set with <span Class="emphasis">curl_multi_assign(3)</span> or will be NULL. </p>
+<p class="level0">The <span Class="bold">what</span> parameter informs the callback on the status of the given socket. It can hold one of these values: </p>
+<p class="level0"><a name="CURLPOLLIN"></a><span class="nroffip">CURL_POLL_IN</span> </p>
+<p class="level1">Wait for incoming data. For the socket to become readable. </p>
+<p class="level0"><a name="CURLPOLLOUT"></a><span class="nroffip">CURL_POLL_OUT</span> </p>
+<p class="level1">Wait for outgoing data. For the socket to become writable. </p>
+<p class="level0"><a name="CURLPOLLINOUT"></a><span class="nroffip">CURL_POLL_INOUT</span> </p>
+<p class="level1">Wait for incoming and outgoing data. For the socket to become readable or writable. </p>
+<p class="level0"><a name="CURLPOLLREMOVE"></a><span class="nroffip">CURL_POLL_REMOVE</span> </p>
+<p class="level1">The specified socket/file descriptor is no longer used by libcurl for any active transfer. It might soon be added again. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL (no callback) </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+static int sock_cb(CURL *e, curl_socket_t s, int what, void *cbp, void *sockp)
+{
+&nbsp; GlobalInfo *g = cbp;
+&nbsp; SockInfo *fdp = sockp;
+&nbsp;
+&nbsp; if(what == CURL_POLL_REMOVE) {
+&nbsp;   remsock(fdp);
+&nbsp; }
+&nbsp; else {
+&nbsp;   if(!fdp) {
+&nbsp;     addsock(s, e, what, g);
+&nbsp;   }
+&nbsp;   else {
+&nbsp;     setsock(fdp, s, e, what, g);
+&nbsp;   }
+&nbsp; }
+&nbsp; return 0;
+}
+&nbsp;
+main()
+{
+&nbsp; GlobalInfo setup;
+&nbsp; /* ... use socket callback and custom pointer */
+&nbsp; curl_multi_setopt(multi, CURLMOPT_SOCKETFUNCTION, sock_cb);
+&nbsp; curl_multi_setopt(multi, CURLMOPT_SOCKETDATA, &amp;setup);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.15.4 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLM_OK. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLMOPT_SOCKETDATA</span>(3), <span Class="bold">curl_multi_socket_action</span>(3),  <span Class="bold">CURLMOPT_TIMERFUNCTION</span>(3)  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

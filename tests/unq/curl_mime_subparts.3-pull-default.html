@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>curl_mime_subparts man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_mime_subparts - set sub-parts of a multipart mime part </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_mime_subparts(curl_mimepart *part, curl_mime *subparts);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="emphasis">curl_mime_subparts(3)</span> sets a multipart mime part&#39;s content from a mime structure. </p>
+<p class="level0"><span Class="emphasis">part</span> is a handle to the multipart part. </p>
+<p class="level0"><span Class="emphasis">subparts</span> is a mime structure handle holding the sub-parts. After <span Class="emphasis">curl_mime_subparts</span> succeeds, the mime structure handle belongs to the multipart part and must not be freed explicitly. It may however be updated by subsequent calls to mime API functions. </p>
+<p class="level0">Setting a part&#39;s contents multiple times is valid: only the value set by the last call is retained. It is possible to unassign previous part&#39;s contents by setting <span Class="emphasis">subparts</span> to NULL. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&nbsp;/* The inline part is an alternative proposing the html and the text
+&nbsp;   versions of the email. */
+&nbsp;alt = curl_mime_init(curl);
+&nbsp;
+&nbsp;/* HTML message. */
+&nbsp;part = curl_mime_addpart(alt);
+&nbsp;curl_mime_data(part, inline_html, CURL_ZERO_TERMINATED);
+&nbsp;curl_mime_type(part, &quot;text/html&quot;);
+&nbsp;
+&nbsp;/* Text message. */
+&nbsp;part = curl_mime_addpart(alt);
+&nbsp;curl_mime_data(part, inline_text, CURL_ZERO_TERMINATED);
+&nbsp;
+&nbsp;/* Create the inline part. */
+&nbsp;part = curl_mime_addpart(mime);
+&nbsp;curl_mime_subparts(part, alt);
+&nbsp;curl_mime_type(part, &quot;multipart/alternative&quot;);
+&nbsp;slist = curl_slist_append(NULL, &quot;Content-Disposition: inline&quot;);
+&nbsp;curl_mime_headers(part, slist, 1);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">As long as at least one of HTTP, SMTP or IMAP is enabled. Added in 7.56.0. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">CURLE_OK or a CURL error code upon failure. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_mime_addpart</span>(3), <span Class="bold">curl_mime_init</span>(3) </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

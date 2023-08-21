@@ -1,0 +1,37 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_HEADEROPT - send HTTP headers to both proxy and host or separately </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_HEADEROPT, long bitmask);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a long that is a bitmask of options of how to deal with headers. The two mutually exclusive options are: </p>
+<p class="level0"><span Class="bold">CURLHEADER_UNIFIED</span> - the headers specified in <span Class="emphasis">CURLOPT_HTTPHEADER(3)</span> will be used in requests both to servers and proxies. With this option enabled, <span Class="emphasis">CURLOPT_PROXYHEADER(3)</span> will not have any effect. </p>
+<p class="level0"><span Class="bold">CURLHEADER_SEPARATE</span> - makes <span Class="emphasis">CURLOPT_HTTPHEADER(3)</span> headers only get sent to a server and not to a proxy. Proxy headers must be set with <span Class="emphasis">CURLOPT_PROXYHEADER(3)</span> to get used. Note that if a non-CONNECT request is sent to a proxy, libcurl will send both server headers and proxy headers. When doing CONNECT, libcurl will send <span Class="emphasis">CURLOPT_PROXYHEADER(3)</span> headers only to the proxy and then <span Class="emphasis">CURLOPT_HTTPHEADER(3)</span> headers only to the server. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">CURLHEADER_SEPARATE (changed in 7.42.1, used CURLHEADER_UNIFIED before then) </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; CURLcode ret;
+&nbsp; struct curl_slist *list;
+&nbsp; list = curl_slist_append(NULL, &quot;Shoesize: 10&quot;);
+&nbsp; list = curl_slist_append(list, &quot;Accept:&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com/&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_PROXY, &quot;http://localhost:8080&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
+&nbsp;
+&nbsp; /* HTTPS over a proxy makes a separate CONNECT to the proxy, so tell
+&nbsp;    libcurl to not send the custom headers to the proxy. Keep them
+&nbsp;    separate! */
+&nbsp; curl_easy_setopt(curl, CURLOPT_HEADEROPT, CURLHEADER_SEPARATE);
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp; curl_slist_free_all(list);
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.37.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_HTTPHEADER</span>(3), <span Class="bold">CURLOPT_PROXYHEADER</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

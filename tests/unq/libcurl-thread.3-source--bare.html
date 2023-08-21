@@ -1,0 +1,37 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libcurl-thread - libcurl thread safety </p><a name="Multi-threading"></a><h2 class="nroffsh">Multi-threading with libcurl</h2>
+<p class="level0">libcurl is thread safe but has no internal thread synchronization. You may have to provide your own locking should you meet any of the thread safety exceptions below. </p><a name="Handles"></a><h2 class="nroffsh">Handles</h2>
+<p class="level0">You must <span Class="bold">never</span> share the same handle in multiple threads.  You can pass the handles around among threads, but you must never use a single handle from more than one thread at any given time. </p><a name="Shared"></a><h2 class="nroffsh">Shared objects</h2>
+<p class="level0">You can share certain data between multiple handles by using the share interface but you must provide your own locking and set <span Class="emphasis">curl_share_setopt(3)</span> CURLSHOPT_LOCKFUNC and CURLSHOPT_UNLOCKFUNC. </p>
+<p class="level0">Note that some items are specifically documented as not thread-safe in the share API (the connection pool and HSTS cache for example). </p><a name="TLS"></a><h2 class="nroffsh">Tls</h2>
+<p class="level0">If you are accessing HTTPS or FTPS URLs in a multi-threaded manner, you are then of course using the underlying SSL library multi-threaded and those libs might have their own requirements on this issue. You may need to provide one or two functions to allow it to function properly: </p>
+<p class="level0"><a name="OpenSSL"></a><span class="nroffip">OpenSSL</span> </p>
+<p class="level1">OpenSSL 1.1.0+ &quot;can be safely used in multi-threaded applications provided that support for the underlying OS threading API is built-in.&quot; In that case the engine is used by libcurl in a way that is fully thread-safe. </p>
+<p class="level1"><a href="https://www.openssl.org/docs/man1.1.0/man3/CRYPTO_THREAD_run_once.html&#35;DESCRIPTION">https://www.openssl.org/docs/man1.1.0/man3/CRYPTO_THREAD_run_once.html&#35;DESCRIPTION</a> </p>
+<p class="level1">OpenSSL &lt;= 1.0.2 the user must set callbacks. </p>
+<p class="level1"><a href="https://www.openssl.org/docs/man1.0.2/man3/CRYPTO_set_locking_callback.html&#35;DESCRIPTION">https://www.openssl.org/docs/man1.0.2/man3/CRYPTO_set_locking_callback.html&#35;DESCRIPTION</a> </p>
+<p class="level1"><a href="https://curl.se/libcurl/c/opensslthreadlock.html">https://curl.se/libcurl/c/opensslthreadlock.html</a> </p>
+<p class="level0"><a name="GnuTLS"></a><span class="nroffip">GnuTLS</span> </p>
+<p class="level1"><a href="https://gnutls.org/manual/html_node/Thread-safety.html">https://gnutls.org/manual/html_node/Thread-safety.html</a> </p>
+<p class="level0"><a name="NSS"></a><span class="nroffip">NSS</span> </p>
+<p class="level1">thread-safe already without anything required. </p>
+<p class="level0"><a name="Secure-Transport"></a><span class="nroffip">Secure-Transport</span> </p>
+<p class="level1">The engine is used by libcurl in a way that is fully thread-safe. </p>
+<p class="level0"><a name="Schannel"></a><span class="nroffip">Schannel</span> </p>
+<p class="level1">The engine is used by libcurl in a way that is fully thread-safe. </p>
+<p class="level0"><a name="wolfSSL"></a><span class="nroffip">wolfSSL</span> </p>
+<p class="level1">The engine is used by libcurl in a way that is fully thread-safe. </p>
+<p class="level0"><a name="BoringSSL"></a><span class="nroffip">BoringSSL</span> </p>
+<p class="level1">The engine is used by libcurl in a way that is fully thread-safe. </p>
+<p class="level0"><a name="AWS-LC"></a><span class="nroffip">AWS-LC</span> </p>
+<p class="level1">The engine is used by libcurl in a way that is fully thread-safe. </p><a name="Signals"></a><h2 class="nroffsh">Signals</h2>
+<p class="level0">Signals are used for timing out name resolves (during DNS lookup) - when built without using either the c-ares or threaded resolver backends. When using multiple threads you should set the <span Class="emphasis">CURLOPT_NOSIGNAL(3)</span> option to 1L for all handles. Everything will or might work fine except that timeouts are not honored during the DNS lookup - which you can work around by building libcurl with c-ares or threaded-resolver support. c-ares is a library that provides asynchronous name resolves. On some platforms, libcurl simply will not function properly multi-threaded unless the <span Class="emphasis">CURLOPT_NOSIGNAL(3)</span> option is set. </p>
+<p class="level0">When <span Class="emphasis">CURLOPT_NOSIGNAL(3)</span> is set to 1L, your application needs to deal with the risk of a SIGPIPE (that at least the OpenSSL backend can trigger). Note that setting <span Class="emphasis">CURLOPT_NOSIGNAL(3)</span> to 0L will not work in a threaded situation as there will be race where libcurl risks restoring the former signal handler while another thread should still ignore it. </p><a name="Name"></a><h2 class="nroffsh">Name resolving</h2>
+<p class="level0">The <span Class="bold">gethostbyname</span> or <span Class="bold">getaddrinfo</span> and other name resolving system calls used by libcurl are provided by your operating system and must be thread safe. It is important that libcurl can find and use thread safe versions of these and other system calls, as otherwise it cannot function fully thread safe. Some operating systems are known to have faulty thread implementations. We have previously received problem reports on *BSD (at least in the past, they may be working fine these days). Some operating systems that are known to have solid and working thread support are Linux, Solaris and Windows. </p><a name="curlglobal"></a><h2 class="nroffsh">Curl_global_* functions</h2>
+<p class="level0">These functions are thread-safe since libcurl 7.84.0 if <span Class="emphasis">curl_version_info(3)</span> has the <span Class="bold">CURL_VERSION_THREADSAFE</span> feature bit set (most platforms). </p>
+<p class="level0">If these functions are not thread-safe and you are using libcurl with multiple threads it is especially important that before use you call <span Class="emphasis">curl_global_init(3)</span> or <span Class="emphasis">curl_global_init_mem(3)</span> to explicitly initialize the library and its dependents, rather than rely on the &quot;lazy&quot; fail-safe initialization that takes place the first time <span Class="emphasis">curl_easy_init(3)</span> is called. For an in-depth explanation refer to <span Class="emphasis">libcurl(3)</span> section <span Class="bold">GLOBAL CONSTANTS</span>. </p><a name="Memory"></a><h2 class="nroffsh">Memory functions</h2>
+<p class="level0">These functions, provided either by your operating system or your own replacements, must be thread safe. You can use <span Class="emphasis">curl_global_init_mem(3)</span> to set your own replacement memory functions. </p><a name="Non-safe"></a><h2 class="nroffsh">Non-safe functions</h2>
+<p class="level0"><span Class="emphasis">CURLOPT_DNS_USE_GLOBAL_CACHE(3)</span> is not thread-safe. </p>
+<p class="level0"><span Class="emphasis">curl_version_info(3)</span> is not thread-safe before libcurl initialization. </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

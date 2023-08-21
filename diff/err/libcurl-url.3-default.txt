@@ -1,0 +1,8 @@
+114c114
+< <p class="level0">Imagine a handle that holds the URL &quot;<a href="https://example.com/?shoes=2&quot;.">https://example.com/?shoes=2&quot;.</a> An application can then add the string &quot;hat=1&quot; to the query part like this: </p><pre class="level0">
+---
+> <p class="level0">Imagine a handle that holds the URL &quot;<a href="https://example.com/?shoes=2">https://example.com/?shoes=2</a>&quot;. An application can then add the string &quot;hat=1&quot; to the query part like this: </p><pre class="level0">
+118c118
+< <p class="level0">It will even notice the lack of an ampersand (&amp;) separator so it will inject one too, and the handle&#39;s full URL will then equal &quot;<a href="https://example.com/?shoes=2&amp;hat=1&quot;.">https://example.com/?shoes=2&amp;hat=1&quot;.</a> </p>
+---
+> <p class="level0">It will even notice the lack of an ampersand (&amp;) separator so it will inject one too, and the handle&#39;s full URL will then equal &quot;<a href="https://example.com/?shoes=2&amp;hat=1">https://example.com/?shoes=2&amp;hat=1</a>&quot;. </p>

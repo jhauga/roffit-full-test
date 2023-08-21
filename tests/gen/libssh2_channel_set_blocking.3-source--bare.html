@@ -1,0 +1,15 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_channel_set_blocking - set or clear blocking mode on channel </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&nbsp;
+void
+libssh2_channel_set_blocking(LIBSSH2_CHANNEL *channel, int blocking);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="emphasis">channel</span> - channel stream to set or clean blocking status on. </p>
+<p class="level0"><span Class="emphasis">blocking</span> - Set to a non-zero value to make the channel block, or zero to make it non-blocking. </p>
+<p class="level0">Currently this is a short cut call to <span Class="bold">libssh2_session_set_blocking(3)</span> and therefore will affect the session and all channels. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">None </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">libssh2_session_set_blocking(3)</span> <span Class="bold">libssh2_channel_read_ex(3)</span> <span Class="bold">libssh2_channel_write_ex(3)</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

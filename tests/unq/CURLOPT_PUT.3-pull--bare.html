@@ -1,0 +1,38 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_PUT - make an HTTP PUT request </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_PUT, long put);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">A parameter set to 1 tells the library to use HTTP PUT to transfer data. The data should be set with <span Class="emphasis">CURLOPT_READDATA(3)</span> and <span Class="emphasis">CURLOPT_INFILESIZE(3)</span>. </p>
+<p class="level0">This option is <span Class="bold">deprecated</span> since version 7.12.1. Use <span Class="emphasis">CURLOPT_UPLOAD(3)</span>! </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">0, disabled </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; /* we want to use our own read function */
+&nbsp; curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback);
+&nbsp;
+&nbsp; /* enable PUT */
+&nbsp; curl_easy_setopt(curl, CURLOPT_PUT, 1L);
+&nbsp;
+&nbsp; /* specify target */
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;ftp://example.com/dir/to/newfile&quot;);
+&nbsp;
+&nbsp; /* now specify which pointer to pass to our callback */
+&nbsp; curl_easy_setopt(curl, CURLOPT_READDATA, hd_src);
+&nbsp;
+&nbsp; /* Set the size of the file to upload */
+&nbsp; curl_easy_setopt(curl, CURLOPT_INFILESIZE_LARGE, (curl_off_t)fsize);
+&nbsp;
+&nbsp; /* Now run off and do what you have been told! */
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Deprecated since 7.12.1. Do not use. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if HTTP is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_UPLOAD</span>(3), <span Class="bold">CURLOPT_HTTPGET</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

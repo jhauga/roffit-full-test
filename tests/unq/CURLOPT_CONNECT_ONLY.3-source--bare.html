@@ -1,0 +1,31 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_CONNECT_ONLY - stop when connected to target server </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_CONNECT_ONLY, long only);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a long. If the parameter equals 1, it tells the library to perform all the required proxy authentication and connection setup, but no data transfer, and then return. </p>
+<p class="level0">The option can be used to simply test a connection to a server, but is more useful when used with the <span Class="emphasis">CURLINFO_ACTIVESOCKET(3)</span> option to <span Class="emphasis">curl_easy_getinfo(3)</span> as the library can set up the connection and then the application can obtain the most recently used socket for special data transfers. </p>
+<p class="level0">Since 7.86.0, this option can be set to &#39;2&#39; and if HTTP or WebSocket are used, libcurl will do the request and read all response headers before handing over control to the application. </p>
+<p class="level0">Transfers marked connect only will not reuse any existing connections and connections marked connect only will not be allowed to get reused. </p>
+<p class="level0">If the connect only transfer is done using the multi interface, the particular easy handle must remain added to the multi handle for as long as the application wants to use it. Once it has been removed with <span Class="emphasis">curl_multi_remove_handle(3)</span>, <span Class="emphasis">curl_easy_send(3)</span> and <span Class="emphasis">curl_easy_recv(3)</span> do not function. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">0 </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP, SMTP, POP3 and IMAP. For WS and WSS starting in 7.86.0. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; CURLcode ret;
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com/&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_CONNECT_ONLY, 1L);
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp; if(ret == CURLE_OK) {
+&nbsp;   /* only connected! */
+&nbsp; }
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.15.2 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_VERBOSE</span>(3), <span Class="bold">CURLOPT_HTTPPROXYTUNNEL</span>(3),  <span Class="bold">curl_easy_recv</span>(3), <span Class="bold">curl_easy_send</span>(3)  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

@@ -1,0 +1,39 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_ALTSVC_CTRL - control alt-svc behavior </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+&#35;define CURLALTSVC_READONLYFILE (1&lt;&lt;2)
+&#35;define CURLALTSVC_H1           (1&lt;&lt;3)
+&#35;define CURLALTSVC_H2           (1&lt;&lt;4)
+&#35;define CURLALTSVC_H3           (1&lt;&lt;5)
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_ALTSVC_CTRL, long bitmask);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Populate the long <span Class="emphasis">bitmask</span> with the correct set of features to instruct libcurl how to handle Alt-Svc for the transfers using this handle. </p>
+<p class="level0">libcurl only accepts Alt-Svc headers over a secure transport, meaning HTTPS. It will also only complete a request to an alternative origin if that origin is properly hosted over HTTPS. These requirements are there to make sure both the source and the destination are legitimate. </p>
+<p class="level0">Alternative services are only used when setting up new connections. If there exists an existing connection to the host in the connection pool, then that will be preferred. </p>
+<p class="level0">Setting any bit will enable the alt-svc engine. </p>
+<p class="level0"><a name="CURLALTSVCREADONLYFILE"></a><span class="nroffip">CURLALTSVC_READONLYFILE</span> </p>
+<p class="level1">Do not write the alt-svc cache back to the file specified with <span Class="emphasis">CURLOPT_ALTSVC(3)</span> even if it gets updated. By default a file specified with that option will be read and written to as deemed necessary. </p>
+<p class="level0"><a name="CURLALTSVCH1"></a><span class="nroffip">CURLALTSVC_H1</span> </p>
+<p class="level1">Accept alternative services offered over HTTP/1.1. </p>
+<p class="level0"><a name="CURLALTSVCH2"></a><span class="nroffip">CURLALTSVC_H2</span> </p>
+<p class="level1">Accept alternative services offered over HTTP/2. This will only be used if libcurl was also built to actually support HTTP/2, otherwise this bit will be ignored. </p>
+<p class="level0"><a name="CURLALTSVCH3"></a><span class="nroffip">CURLALTSVC_H3</span> </p>
+<p class="level1">Accept alternative services offered over HTTP/3. This will only be used if libcurl was also built to actually support HTTP/3, otherwise this bit will be ignored. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">Alt-Svc handling is disabled by default. If <span Class="emphasis">CURLOPT_ALTSVC(3)</span> is set, <span Class="emphasis">CURLOPT_ALTSVC_CTRL(3)</span> has a default value corresponding to CURLALTSVC_H1 | CURLALTSVC_H2 | CURLALTSVC_H3 - the HTTP/2 and HTTP/3 bits are only set if libcurl was built with support for those versions. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTPS </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_ALTSVC_CTRL, (long)CURLALTSVC_H1);
+&nbsp; curl_easy_setopt(curl, CURLOPT_ALTSVC, &quot;altsvc-cache.txt&quot;);
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.64.1 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_ALTSVC</span>(3), <span Class="bold">CURLOPT_CONNECT_TO</span>(3), <span Class="bold">CURLOPT_RESOLVE</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

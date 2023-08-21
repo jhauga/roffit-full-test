@@ -1,0 +1,4 @@
+494c494
+< <p class="level1">Cette option est seulement un alias pour --stylesheet <a href="https://nmap.org/data/nmap.xsl.">https://nmap.org/data/nmap.xsl.</a> </p>
+---
+> <p class="level1">Cette option est seulement un alias pour --stylesheet <a href="https://nmap.org/data/nmap.xsl">https://nmap.org/data/nmap.xsl</a>. </p>

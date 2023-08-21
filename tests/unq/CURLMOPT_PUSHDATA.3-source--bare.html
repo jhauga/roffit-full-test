@@ -1,0 +1,46 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLMOPT_PUSHDATA - pointer to pass to push callback </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLMcode curl_multi_setopt(CURLM *handle, CURLMOPT_PUSHDATA, void *pointer);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Set <span Class="emphasis">pointer</span> to pass as the last argument to the <span Class="emphasis">CURLMOPT_PUSHFUNCTION(3)</span> callback. The pointer will not be touched or used by libcurl itself, only passed on to the callback function. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP(S) </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+/* only allow pushes for file names starting with &quot;push-&quot; */
+int push_callback(CURL *parent,
+&nbsp;                 CURL *easy,
+&nbsp;                 size_t num_headers,
+&nbsp;                 struct curl_pushheaders *headers,
+&nbsp;                 void *clientp)
+{
+&nbsp; char *headp;
+&nbsp; int *transfers = (int *)clientp;
+&nbsp; FILE *out;
+&nbsp; headp = curl_pushheader_byname(headers, &quot;:path&quot;);
+&nbsp; if(headp &amp;&amp; !strncmp(headp, &quot;/push-&quot;, 6)) {
+&nbsp;   fprintf(stderr, &quot;The PATH is %s&bsol;n&quot;, headp);
+&nbsp;
+&nbsp;   /* save the push here */
+&nbsp;   out = fopen(&quot;pushed-stream&quot;, &quot;wb&quot;);
+&nbsp;
+&nbsp;   /* write to this file */
+&nbsp;   curl_easy_setopt(easy, CURLOPT_WRITEDATA, out);
+&nbsp;
+&nbsp;   (*transfers)++; /* one more */
+&nbsp;
+&nbsp;   return CURL_PUSH_OK;
+&nbsp; }
+&nbsp; return CURL_PUSH_DENY;
+}
+&nbsp;
+curl_multi_setopt(multi, CURLMOPT_PUSHFUNCTION, push_callback);
+curl_multi_setopt(multi, CURLMOPT_PUSHDATA, &amp;counter);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.44.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLM_OK if the option is supported, and CURLM_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLMOPT_PUSHFUNCTION</span>(3), <span Class="bold">CURLMOPT_PIPELINING</span>(3),  <span Class="bold">CURLOPT_PIPEWAIT</span>(3),  <span Class="bold">RFC</span>7540 </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

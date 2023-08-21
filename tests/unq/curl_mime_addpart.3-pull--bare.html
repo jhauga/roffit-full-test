@@ -1,0 +1,28 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_mime_addpart - append a new empty part to a mime structure </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+curl_mimepart *curl_mime_addpart(curl_mime *mime);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="emphasis">curl_mime_addpart(3)</span> creates and appends a new empty part to the given mime structure and returns a handle to it. The returned part handle can subsequently be populated using functions from the mime API. </p>
+<p class="level0"><span Class="emphasis">mime</span> is the handle of the mime structure in which the new part must be appended. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&nbsp;curl_mime *mime;
+&nbsp;curl_mimepart *part;
+&nbsp;
+&nbsp;/* create a mime handle */
+&nbsp;mime = curl_mime_init(easy);
+&nbsp;
+&nbsp;/* add a part */
+&nbsp;part = curl_mime_addpart(mime);
+&nbsp;
+&nbsp;/* continue and set name + data to the part */
+&nbsp;curl_mime_data(part, &quot;This is the field data&quot;, CURL_ZERO_TERMINATED);
+&nbsp;curl_mime_name(part, &quot;data&quot;);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">As long as at least one of HTTP, SMTP or IMAP is enabled. Added in 7.56.0. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">A mime part structure handle, or NULL upon failure. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_mime_init</span>(3), <span Class="bold">curl_mime_name</span>(3), <span Class="bold">curl_mime_data</span>(3), <span Class="bold">curl_mime_data_cb</span>(3), <span Class="bold">curl_mime_filedata</span>(3), <span Class="bold">curl_mime_filename</span>(3), <span Class="bold">curl_mime_subparts</span>(3), <span Class="bold">curl_mime_type</span>(3), <span Class="bold">curl_mime_headers</span>(3), <span Class="bold">curl_mime_encoder</span>(3) </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

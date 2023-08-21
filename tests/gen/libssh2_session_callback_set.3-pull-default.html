@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>libssh2_session_callback_set man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_session_callback_set - set a callback function </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&nbsp;
+void *
+libssh2_session_callback_set(LIBSSH2_SESSION *session,
+&nbsp;                            int cbtype, void *callback);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Sets a custom callback handler for a previously initialized session object. Callbacks are triggered by the receipt of special packets at the Transport layer. To disable a callback, set it to NULL. </p>
+<p class="level0"><span Class="emphasis">session</span> - Session instance as returned by <span Class="bold">libssh2_session_init_ex(3)</span> </p>
+<p class="level0"><span Class="emphasis">cbtype</span> - Callback type. One of the types listed in Callback Types. </p>
+<p class="level0"><span Class="emphasis">callback</span> - Pointer to custom callback function. The prototype for this function must match the associated callback declaration macro. </p><a name="CALLBACK"></a><h2 class="nroffsh">Callback types</h2>
+<p class="level0"><a name="LIBSSH2CALLBACKIGNORE"></a><span class="nroffip">LIBSSH2_CALLBACK_IGNORE</span> </p>
+<p class="level1">Called when a SSH_MSG_IGNORE message is received </p>
+<p class="level0"><a name="LIBSSH2CALLBACKDEBUG"></a><span class="nroffip">LIBSSH2_CALLBACK_DEBUG</span> </p>
+<p class="level1">Called when a SSH_MSG_DEBUG message is received </p>
+<p class="level0"><a name="LIBSSH2CALLBACKDISCONNECT"></a><span class="nroffip">LIBSSH2_CALLBACK_DISCONNECT</span> </p>
+<p class="level1">Called when a SSH_MSG_DISCONNECT message is received </p>
+<p class="level0"><a name="LIBSSH2CALLBACKMACERROR"></a><span class="nroffip">LIBSSH2_CALLBACK_MACERROR</span> </p>
+<p class="level1">Called when a mismatched MAC has been detected in the transport layer. If the function returns 0, the packet will be accepted nonetheless. </p>
+<p class="level0"><a name="LIBSSH2CALLBACKX11"></a><span class="nroffip">LIBSSH2_CALLBACK_X11</span> </p>
+<p class="level1">Called when an X11 connection has been accepted </p>
+<p class="level0"><a name="LIBSSH2CALLBACKSEND"></a><span class="nroffip">LIBSSH2_CALLBACK_SEND</span> </p>
+<p class="level1">Called when libssh2 wants to send data on the connection.  Can be set to a custom function to handle I/O your own way. </p>
+<p class="level1">The prototype of the callback: </p><pre class="level1">
+ssize_t sendcb(libssh2_socket_t sockfd, const void *buffer,
+&nbsp;              size_t length, int flags, void **abstract);
+</pre>
+
+<p class="level1"><span Class="bold">sockfd</span> is the socket to write to, <span Class="bold">buffer</span> points to the data to send, <span Class="bold">length</span> is the size of the data, <span Class="bold">flags</span> is the flags that would have been used to a <span Class="emphasis">send()</span> call and <span Class="bold">abstract</span> is a pointer to the abstract pointer set in the <span Class="emphasis">libssh2_session_init_ex(3)</span> call. </p>
+<p class="level1">The callback returns the number of bytes sent, or -1 for error. The special return code <span Class="bold">-EAGAIN</span> can be returned to signal that the send was aborted to prevent getting blocked and it needs to be called again. </p>
+<p class="level0"><a name="LIBSSH2CALLBACKRECV"></a><span class="nroffip">LIBSSH2_CALLBACK_RECV</span> </p>
+<p class="level1">Called when libssh2 wants to read data from the connection. Can be set to a custom function to handle I/O your own way. </p>
+<p class="level1">The prototype of the callback: </p><pre class="level1">
+ssize_t recvcb(libssh2_socket_t sockfd, void *buffer,
+&nbsp;              size_t length, int flags, void **abstract);
+</pre>
+
+<p class="level1"><span Class="bold">sockfd</span> is the socket to read from, <span Class="bold">buffer</span> where to store received data into, <span Class="bold">length</span> is the size of the buffer, <span Class="bold">flags</span> is the flags that would have been used to a <span Class="emphasis">recv()</span> call and <span Class="bold">abstract</span> is a pointer to the abstract pointer set in the <span Class="emphasis">libssh2_session_init_ex(3)</span> call. </p>
+<p class="level1">The callback returns the number of bytes read, or -1 for error. The special return code <span Class="bold">-EAGAIN</span> can be returned to signal that the read was aborted to prevent getting blocked and it needs to be called again. </p>
+<p class="level0"><a name="LIBSSH2CALLBACKAUTHAGENT"></a><span class="nroffip">LIBSSH2_CALLBACK_AUTHAGENT</span> </p>
+<p class="level1">Called during authentication process to allow the client to connect to the ssh-agent and perform any setup, such as configuring the agent or adding keys. </p>
+<p class="level1">The prototype of the callback: </p><pre class="level1">
+void authagent(LIBSSH2_SESSION* session, LIBSSH2_CHANNEL *channel,
+&nbsp;              void **abstract);
+</pre>
+
+<p class="level0"><a name="LIBSSH2CALLBACKAUTHAGENTIDENTITIES"></a><span class="nroffip">LIBSSH2_CALLBACK_AUTHAGENT_IDENTITIES</span> </p>
+<p class="level1">Not called by libssh2. The client is responsible for calling this method when a SSH2_AGENTC_REQUEST_IDENTITIES message has been received. </p>
+<p class="level1">The prototype of the callback: </p><pre class="level1">
+void identities(LIBSSH2_SESSION* session, void *buffer,
+&nbsp;               const char *agent_path,
+&nbsp;               void **abstract)
+</pre>
+
+<p class="level1"><span Class="bold">buffer</span> must be filled in by the callback. Different clients may implement this differently. For example, one client may pass in an unsigned char ** for this parameter, while another may pass in a pointer to a struct. </p>
+<p class="level1">Regardless of the type of buffer used, the client will need to send back a list of identities in the following format. </p>
+<p class="level1">uint32 buffer length uint32 number of entries entries </p>
+<p class="level1">Where each entry in the entries list is of the format: </p>
+<p class="level1">string data cstring comment </p>
+<p class="level1"><span Class="bold">agent_path</span> The path to a running ssh-agent on the client machine, from which identities can be listed. </p>
+<p class="level0"><a name="LIBSSH2CALLBACKAUTHAGENTSIGN"></a><span class="nroffip">LIBSSH2_CALLBACK_AUTHAGENT_SIGN</span> </p>
+<p class="level1">Not called by libssh2. The client is responsible for calling this method when a SSH2_AGENTC_SIGN_REQUEST message has been received. </p>
+<p class="level1">The prototype of the callback: </p><pre class="level1">
+void sign(LIBSSH2_SESSION* session,
+&nbsp;         unsigned char *blob, unsigned int blen,
+&nbsp;         const unsigned char *data, unsigned int dlen,
+&nbsp;         unsigned char **sig, unsigned int *sig_len,
+&nbsp;         const char *agent_path,
+&nbsp;         void **abstract);
+</pre>
+
+<p class="level1">When interfacing with an ssh-agent installed on the client system, this method can call libssh2_agent_sign(3) to perform signing. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Pointer to previous callback handler. Returns NULL if no prior callback handler was set or the callback type was unknown. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">libssh2_session_init_ex(3)</span> <span Class="bold">libssh2_agent_sign(3)</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

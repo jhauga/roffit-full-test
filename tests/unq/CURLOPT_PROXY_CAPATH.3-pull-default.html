@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_PROXY_CAPATH man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_PROXY_CAPATH - directory holding HTTPS proxy CA certificates </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_PROXY_CAPATH, char *capath);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a char * to a null-terminated string naming a directory holding multiple CA certificates to verify the HTTPS proxy with. If libcurl is built against OpenSSL, the certificate directory must be prepared using the OpenSSL <span Class="bold">c_rehash</span> utility. This makes sense only when <span Class="emphasis">CURLOPT_PROXY_SSL_VERIFYPEER(3)</span> is enabled (which it is by default). </p>
+<p class="level0">The application does not have to keep the string around after setting this option. </p>
+<p class="level0">The default value for this can be figured out with <span Class="emphasis">CURLINFO_CAPATH(3)</span>. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">Everything used over an HTTPS proxy </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com/&quot;);
+&nbsp; /* using an HTTPS proxy */
+&nbsp; curl_easy_setopt(curl, CURLOPT_PROXY, &quot;https://localhost:443&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_PROXY_CAPATH, &quot;/etc/cert-dir&quot;);
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.52.0 </p>
+<p class="level0">This option is supported by the OpenSSL, GnuTLS, and mbedTLS (since 7.56.0) backends. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">CURLE_OK if supported; or an error such as: </p>
+<p class="level0">CURLE_NOT_BUILT_IN - Not supported by the SSL backend </p>
+<p class="level0">CURLE_UNKNOWN_OPTION </p>
+<p class="level0">CURLE_OUT_OF_MEMORY </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_PROXY_CAINFO</span>(3),  <span Class="bold">CURLOPT_CAINFO</span>(3), <span Class="bold">CURLOPT_PROXY_SSL_VERIFYHOST</span>(3),  <span Class="bold">CURLOPT_STDERR</span>(3), <span Class="bold">CURLOPT_DEBUGFUNCTION</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

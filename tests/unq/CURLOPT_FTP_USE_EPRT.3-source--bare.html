@@ -1,0 +1,30 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_FTP_USE_EPRT - use EPRT for FTP </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_FTP_USE_EPRT, long enabled);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a long. If the value is 1, it tells curl to use the EPRT command when doing active FTP downloads (which is enabled by <span Class="emphasis">CURLOPT_FTPPORT(3)</span>). Using EPRT means that it will first attempt to use EPRT before using PORT, but if you pass zero to this option, it will not try using EPRT, only plain PORT. </p>
+<p class="level0">If the server is an IPv6 host, this option will have no effect as EPRT is necessary then. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;ftp://example.com/file.txt&quot;);
+&nbsp;
+&nbsp; /* contact us back, aka &quot;active&quot; FTP */
+&nbsp; curl_easy_setopt(curl, CURLOPT_FTPPORT, &quot;-&quot;);
+&nbsp;
+&nbsp; /* FTP the way the neanderthals did it */
+&nbsp; curl_easy_setopt(curl, CURLOPT_FTP_USE_EPRT, 0L);
+&nbsp;
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp;
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.10.5 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_FTP_USE_EPSV</span>(3), <span Class="bold">CURLOPT_FTPPORT</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

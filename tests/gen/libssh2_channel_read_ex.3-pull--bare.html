@@ -1,0 +1,30 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_channel_read_ex - read data from a channel stream </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&nbsp;
+ssize_t
+libssh2_channel_read_ex(LIBSSH2_CHANNEL *channel, int stream_id,
+&nbsp;                       char *buf, size_t buflen);
+&nbsp;
+ssize_t
+libssh2_channel_read(LIBSSH2_CHANNEL *channel,
+&nbsp;                    char *buf, size_t buflen);
+&nbsp;
+ssize_t
+libssh2_channel_read_stderr(LIBSSH2_CHANNEL *channel,
+&nbsp;                           char *buf, size_t buflen);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Attempt to read data from an active channel stream. All channel streams have one standard I/O substream (stream_id == 0), and may have up to 2^32 extended data streams as identified by the selected <span Class="emphasis">stream_id</span>. The SSH2 protocol currently defines a stream ID of 1 to be the stderr substream. </p>
+<p class="level0"><span Class="emphasis">channel</span> - active channel stream to read from. </p>
+<p class="level0"><span Class="emphasis">stream_id</span> - substream ID number (e.g. 0 or SSH_EXTENDED_DATA_STDERR) </p>
+<p class="level0"><span Class="emphasis">buf</span> - pointer to storage buffer to read data into </p>
+<p class="level0"><span Class="emphasis">buflen</span> - size of the buf storage </p>
+<p class="level0"><span Class="emphasis">libssh2_channel_read(3)</span> and <span Class="emphasis">libssh2_channel_read_stderr(3)</span> are macros. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Actual number of bytes read or negative on failure. It returns LIBSSH2_ERROR_EAGAIN when it would otherwise block. While LIBSSH2_ERROR_EAGAIN is a negative number, it is not really a failure per se. </p>
+<p class="level0">Note that a return value of zero (0) can in fact be a legitimate value and only signals that no payload data was read. It is not an error. </p><a name="ERRORS"></a><h2 class="nroffsh">Errors</h2>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_SOCKET_SEND</span> - Unable to send data on socket. </p>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_CHANNEL_CLOSED</span> - The channel has been closed. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">libssh2_poll_channel_read(3)</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

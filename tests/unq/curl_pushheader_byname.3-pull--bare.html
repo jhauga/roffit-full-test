@@ -1,0 +1,44 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_pushheader_byname - get a push header by name </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+char *curl_pushheader_byname(struct curl_pushheaders *h, const char *name);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">This is a function that is only functional within a <span Class="emphasis">CURLMOPT_PUSHFUNCTION(3)</span> callback. It makes no sense to try to use it elsewhere and it has no function then. </p>
+<p class="level0">It returns the value for the given header field name (or NULL) for the incoming server push request. This is a shortcut so that the application does not have to loop through all headers to find the one it is interested in. The data this function points to will be freed when this callback returns. If more than one header field use the same name, this returns only the first one. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+int curl_push_callback(CURL *parent,
+&nbsp;                      CURL *easy,
+&nbsp;                      size_t num_headers,
+&nbsp;                      struct curl_pushheaders *headers,
+&nbsp;                      void *clientp)
+{
+&nbsp; char *headp;
+&nbsp; int *transfers = (int *)clientp;
+&nbsp; FILE *out;
+&nbsp; headp = curl_pushheader_byname(headers, &quot;:path&quot;);
+&nbsp; if(headp &amp;&amp; !strncmp(headp, &quot;/push-&quot;, 6)) {
+&nbsp;   fprintf(stderr, &quot;The PATH is %s&bsol;n&quot;, headp);
+&nbsp;
+&nbsp;   /* save the push here */
+&nbsp;   out = fopen(&quot;pushed-stream&quot;, &quot;wb&quot;);
+&nbsp;
+&nbsp;   /* write to this file */
+&nbsp;   curl_easy_setopt(easy, CURLOPT_WRITEDATA, out);
+&nbsp;
+&nbsp;   (*transfers)++; /* one more */
+&nbsp;
+&nbsp;   return CURL_PUSH_OK;
+&nbsp; }
+&nbsp; return CURL_PUSH_DENY;
+}
+&nbsp;
+curl_multi_setopt(multi, CURLMOPT_PUSHFUNCTION, curl_push_callback);
+curl_multi_setopt(multi, CURLMOPT_PUSHDATA, &amp;counter);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.44.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns a pointer to the header field content or NULL. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLMOPT_PUSHFUNCTION</span>(3),<span Class="bold">curl_pushheader_bynum</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

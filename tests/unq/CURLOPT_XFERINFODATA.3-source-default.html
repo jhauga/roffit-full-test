@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_XFERINFODATA man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_XFERINFODATA - pointer passed to the progress callback </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_XFERINFODATA, void *pointer);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a <span Class="emphasis">pointer</span> that will be untouched by libcurl and passed as the first argument in the progress callback set with <span Class="emphasis">CURLOPT_XFERINFOFUNCTION(3)</span>. </p>
+<p class="level0">This is an alias for <span Class="emphasis">CURLOPT_PROGRESSDATA(3)</span>. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">The default value of this parameter is NULL. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&nbsp;struct progress {
+&nbsp;  char *private;
+&nbsp;  size_t size;
+&nbsp;};
+&nbsp;
+&nbsp;static size_t progress_callback(void *clientp,
+&nbsp;                                curl_off_t dltotal,
+&nbsp;                                curl_off_t dlnow,
+&nbsp;                                curl_off_t ultotal,
+&nbsp;                                curl_off_t ulnow)
+&nbsp;{
+&nbsp;  struct memory *progress = (struct progress *)clientp;
+&nbsp;
+&nbsp;  /* use the values */
+&nbsp;
+&nbsp;  return 0; /* all is good */
+&nbsp;}
+&nbsp;
+&nbsp;struct progress data;
+&nbsp;
+&nbsp;/* pass struct to callback  */
+&nbsp;curl_easy_setopt(curl_handle, CURLOPT_XFERINFODATA, &amp;data);
+&nbsp;
+&nbsp;curl_easy_setopt(curl_handle, CURLOPT_XFERINFOFUNCTION, progress_callback);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.32.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_XFERINFOFUNCTION</span>(3), <span Class="bold">CURLOPT_VERBOSE</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

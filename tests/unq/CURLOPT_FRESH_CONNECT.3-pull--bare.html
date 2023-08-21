@@ -1,0 +1,25 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_FRESH_CONNECT - force a new connection to be used </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_FRESH_CONNECT, long fresh);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a long. Set to 1 to make the next transfer use a new (fresh) connection by force instead of trying to re-use an existing one.  This option should be used with caution and only if you understand what it does as it may seriously impact performance. </p>
+<p class="level0">Related functionality is <span Class="emphasis">CURLOPT_FORBID_REUSE(3)</span> which makes sure the connection is closed after use so that it will not be re-used. </p>
+<p class="level0">Set <span Class="emphasis">fresh</span> to 0 to have libcurl attempt re-using an existing connection (default behavior). </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">0 </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">Most </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+{
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com/&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_FRESH_CONNECT, 1L);
+&nbsp; /* this transfer must use a new connection, not reuse an existing */
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Always </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_FORBID_REUSE</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

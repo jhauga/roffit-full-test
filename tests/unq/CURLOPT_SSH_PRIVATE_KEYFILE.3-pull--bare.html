@@ -1,0 +1,29 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_SSH_PRIVATE_KEYFILE - private key file for SSH auth </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_SSH_PRIVATE_KEYFILE,
+&nbsp;                         char *filename);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a char * pointing to a <span Class="emphasis">filename</span> for your private key. If not used, libcurl defaults to <span Class="bold">$HOME/.ssh/id_rsa</span> or <span Class="bold">$HOME/.ssh/id_dsa</span> if the HOME environment variable is set, and just <span Class="bold">&quot;id_rsa&quot;</span> or <span Class="bold">&quot;id_dsa&quot;</span> in the current directory if HOME is not set. </p>
+<p class="level0">If the file is password-protected, set the password with <span Class="emphasis">CURLOPT_KEYPASSWD(3)</span>. </p>
+<p class="level0">The application does not have to keep the string around after setting this option. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">As explained above </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">SFTP and SCP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;sftp://example.com/file&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_SSH_PRIVATE_KEYFILE,
+&nbsp;                  &quot;/home/clarkkent/.ssh/id_rsa&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_KEYPASSWD, &quot;password&quot;);
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.16.1 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, CURLE_UNKNOWN_OPTION if not, or CURLE_OUT_OF_MEMORY if there was insufficient heap space. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_SSH_PUBLIC_KEYFILE</span>(3), <span Class="bold">CURLOPT_SSH_AUTH_TYPES</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

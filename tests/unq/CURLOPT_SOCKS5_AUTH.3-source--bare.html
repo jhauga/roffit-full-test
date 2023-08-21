@@ -1,0 +1,30 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_SOCKS5_AUTH - methods for SOCKS5 proxy authentication </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_SOCKS5_AUTH, long bitmask);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a long as parameter, which is set to a bitmask, to tell libcurl which authentication method(s) are allowed for SOCKS5 proxy authentication.  The only supported flags are <span Class="emphasis">CURLAUTH_BASIC</span>, which allows username/password authentication, <span Class="emphasis">CURLAUTH_GSSAPI</span>, which allows GSS-API authentication, and <span Class="emphasis">CURLAUTH_NONE</span>, which allows no authentication.  Set the actual user name and password with the <span Class="emphasis">CURLOPT_PROXYUSERPWD(3)</span> option. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">CURLAUTH_BASIC|CURLAUTH_GSSAPI </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp;
+&nbsp; /* request to use a SOCKS5 proxy */
+&nbsp; curl_easy_setopt(curl, CURLOPT_PROXY, &quot;socks5://user:pass@myproxy.com&quot;);
+&nbsp;
+&nbsp; /* enable username/password authentication only */
+&nbsp; curl_easy_setopt(curl, CURLOPT_SOCKS5_AUTH, (long)CURLAUTH_BASIC);
+&nbsp;
+&nbsp; /* Perform the request */
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.55.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, CURLE_UNKNOWN_OPTION if not, or CURLE_NOT_BUILT_IN if the bitmask contains unsupported flags. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_PROXY</span>(3), <span Class="bold">CURLOPT_PROXYTYPE</span>(3) </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

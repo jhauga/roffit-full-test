@@ -1,0 +1,28 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_LOGIN_OPTIONS - login options </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_LOGIN_OPTIONS, char *options);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a char * as parameter, which should be pointing to the null-terminated <span Class="emphasis">options</span> string to use for the transfer. </p>
+<p class="level0">For more information about the login options please see <a href="http://www.ietf.org/rfc/rfc2384.txt">RFC 2384</a>, <a href="http://www.ietf.org/rfc/rfc5092.txt">RFC 5092</a> and the IETF draft <span Class="bold">draft-earhart-url-smtp-00.txt</span>. </p>
+<p class="level0"><span Class="emphasis">CURLOPT_LOGIN_OPTIONS(3)</span> can be used to set protocol specific login options, such as the preferred authentication mechanism via &quot;AUTH=NTLM&quot; or &quot;AUTH=*&quot;, and should be used in conjunction with the <span Class="emphasis">CURLOPT_USERNAME(3)</span> option. </p>
+<p class="level0">Since 8.2.0, IMAP supports the login option &quot;AUTH=+LOGIN&quot;. With this option, curl uses the plain (not SASL) LOGIN IMAP command even if the server advertises SASL authentication. Care should be taken in using this option, as it will send out your password in plain text. This will not work if the IMAP server disables the plain LOGIN (e.g. to prevent password snooping). </p>
+<p class="level0">The application does not have to keep the string around after setting this option. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">Only IMAP, LDAP, POP3 and SMTP support login options. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;smtp://example.com/&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_LOGIN_OPTIONS, &quot;AUTH=*&quot;);
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.34.0. Support for OpenLDAP added in 7.82.0. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, CURLE_UNKNOWN_OPTION if not, or CURLE_OUT_OF_MEMORY if there was insufficient heap space. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_USERNAME</span>(3), <span Class="bold">CURLOPT_PASSWORD</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

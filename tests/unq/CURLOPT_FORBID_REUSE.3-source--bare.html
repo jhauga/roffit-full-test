@@ -1,0 +1,26 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_FORBID_REUSE - make connection get closed at once after use </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_FORBID_REUSE, long close);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a long. Set <span Class="emphasis">close</span> to 1 to make libcurl explicitly close the connection when done with the transfer. Normally, libcurl keeps all connections alive when done with one transfer in case a succeeding one follows that can re-use them.  This option should be used with caution and only if you understand what it does as it can seriously impact performance. </p>
+<p class="level0">Set to 0 to have libcurl keep the connection open for possible later re-use (default behavior). </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">0 </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">Most </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+{
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com/&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_FORBID_REUSE, 1L);
+&nbsp; curl_easy_perform(curl);
+&nbsp;
+&nbsp; /* this second transfer may not reuse the same connection */
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Always </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_FRESH_CONNECT</span>(3), <span Class="bold">CURLOPT_MAXCONNECTS</span>(3),  <span Class="bold">CURLOPT_MAXLIFETIME_CONN</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

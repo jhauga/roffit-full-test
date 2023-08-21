@@ -1,0 +1,61 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_CHUNK_DATA - pointer passed to the FTP chunk callbacks </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_CHUNK_DATA, void *pointer);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a <span Class="emphasis">pointer</span> that will be untouched by libcurl and passed as the ptr argument to the <span Class="emphasis">CURLOPT_CHUNK_BGN_FUNCTION(3)</span> and <span Class="emphasis">CURLOPT_CHUNK_END_FUNCTION(3)</span>. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">FTP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+static long file_is_coming(struct curl_fileinfo *finfo,
+&nbsp;                          struct callback_data *data,
+&nbsp;                          int remains)
+{
+&nbsp; printf(&quot;%3d %40s %10luB &quot;, remains, finfo-&gt;filename,
+&nbsp;        (unsigned long)finfo-&gt;size);
+&nbsp;
+&nbsp; switch(finfo-&gt;filetype) {
+&nbsp; case CURLFILETYPE_DIRECTORY:
+&nbsp;   printf(&quot; DIR&bsol;n&quot;);
+&nbsp;   break;
+&nbsp; case CURLFILETYPE_FILE:
+&nbsp;   printf(&quot;FILE &quot;);
+&nbsp;   break;
+&nbsp; default:
+&nbsp;   printf(&quot;OTHER&bsol;n&quot;);
+&nbsp;   break;
+&nbsp; }
+&nbsp;
+&nbsp; if(finfo-&gt;filetype == CURLFILETYPE_FILE) {
+&nbsp;   /* do not transfer files &gt;= 50B */
+&nbsp;   if(finfo-&gt;size &gt; 50) {
+&nbsp;     printf(&quot;SKIPPED&bsol;n&quot;);
+&nbsp;     return CURL_CHUNK_BGN_FUNC_SKIP;
+&nbsp;   }
+&nbsp;
+&nbsp;   data-&gt;output = fopen(finfo-&gt;filename, &quot;wb&quot;);
+&nbsp;   if(!data-&gt;output) {
+&nbsp;     return CURL_CHUNK_BGN_FUNC_FAIL;
+&nbsp;   }
+&nbsp; }
+&nbsp;
+&nbsp; return CURL_CHUNK_BGN_FUNC_OK;
+}
+&nbsp;
+int main()
+{
+&nbsp; /* data for callback */
+&nbsp; struct callback_data callback_info;
+&nbsp;
+&nbsp; /* callback is called before download of concrete file started */
+&nbsp; curl_easy_setopt(curl, CURLOPT_CHUNK_BGN_FUNCTION, file_is_coming);
+&nbsp; curl_easy_setopt(curl, CURLOPT_CHUNK_DATA, &amp;callback_info);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.21.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_CHUNK_BGN_FUNCTION</span>(3), <span Class="bold">CURLOPT_WILDCARDMATCH</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

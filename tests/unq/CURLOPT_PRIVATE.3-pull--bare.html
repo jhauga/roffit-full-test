@@ -1,0 +1,31 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_PRIVATE - store a private pointer </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_PRIVATE, void *pointer);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a void * as parameter, pointing to data that should be associated with this curl handle.  The pointer can subsequently be retrieved using <span Class="emphasis">curl_easy_getinfo(3)</span> with the <span Class="emphasis">CURLINFO_PRIVATE(3)</span> option. libcurl itself never does anything with this data. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+struct private secrets;
+if(curl) {
+&nbsp; struct private *extracted;
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp;
+&nbsp; /* store a pointer to our private struct */
+&nbsp; curl_easy_setopt(curl, CURLOPT_PRIVATE, &amp;secrets);
+&nbsp;
+&nbsp; curl_easy_perform(curl);
+&nbsp;
+&nbsp; /* we can extract the private pointer again too */
+&nbsp; curl_easy_getinfo(curl, CURLINFO_PRIVATE, &amp;extracted);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.10.3 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_VERBOSE</span>(3), <span Class="bold">CURLOPT_STDERR</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

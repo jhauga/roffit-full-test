@@ -1,0 +1,16 @@
+tests/err/CURLOPT_DOH_URL.3-COMMAND_USED--bare.html
+tests/err/CURLOPT_DOH_URL.3-COMMAND_USED-default.html
+tests/err/CURLOPT_PROXY.3-COMMAND_USED--bare.html
+tests/err/CURLOPT_PROXY.3-COMMAND_USED-default.html
+tests/err/CURLOPT_TRAILERFUNCTION.3-COMMAND_USED--bare.html
+tests/err/CURLOPT_TRAILERFUNCTION.3-COMMAND_USED-default.html
+tests/err/CURLOPT_URL.3-COMMAND_USED--bare.html
+tests/err/CURLOPT_URL.3-COMMAND_USED-default.html
+tests/err/libcurl-env.3-COMMAND_USED--bare.html
+tests/err/libcurl-env.3-COMMAND_USED-default.html
+tests/err/libcurl-security.3-COMMAND_USED--bare.html
+tests/err/libcurl-security.3-COMMAND_USED-default.html
+tests/err/libcurl-url.3-COMMAND_USED--bare.html
+tests/err/libcurl-url.3-COMMAND_USED-default.html
+tests/err/nmap-fr.1-COMMAND_USED--bare.html
+tests/err/nmap-fr.1-COMMAND_USED-default.html

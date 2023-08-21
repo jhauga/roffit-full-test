@@ -1,0 +1,31 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLINFO_SPEED_UPLOAD - get upload speed </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_getinfo(CURL *handle, CURLINFO_SPEED_UPLOAD, double *speed);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to a double to receive the average upload speed that curl measured for the complete upload. Measured in bytes/second. </p>
+<p class="level0"><span Class="emphasis">CURLINFO_SPEED_UPLOAD_T(3)</span> is a newer replacement that returns a more sensible variable type. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp;
+&nbsp; /* Perform the request */
+&nbsp; res = curl_easy_perform(curl);
+&nbsp;
+&nbsp; if(!res) {
+&nbsp;   double speed;
+&nbsp;   res = curl_easy_getinfo(curl, CURLINFO_SPEED_UPLOAD, &amp;speed);
+&nbsp;   if(!res) {
+&nbsp;     printf(&quot;Upload speed %.0f bytes/sec&bsol;n&quot;, speed);
+&nbsp;   }
+&nbsp; }
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.4.1. Deprecated since 7.55.0. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_easy_getinfo</span>(3), <span Class="bold">curl_easy_setopt</span>(3),  <span Class="bold">CURLINFO_SPEED_DOWNLOAD</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

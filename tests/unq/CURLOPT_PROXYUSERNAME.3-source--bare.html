@@ -1,0 +1,30 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_PROXYUSERNAME - user name to use for proxy authentication </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_PROXYUSERNAME,
+&nbsp;                         char *username);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a char * as parameter, which should be pointing to the null-terminated user name to use for the transfer. </p>
+<p class="level0"><span Class="emphasis">CURLOPT_PROXYUSERNAME(3)</span> sets the user name to be used in protocol authentication with the proxy. </p>
+<p class="level0">To specify the proxy password use the <span Class="emphasis">CURLOPT_PROXYPASSWORD(3)</span>. </p>
+<p class="level0">The application does not have to keep the string around after setting this option. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">blank </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">Most </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com/foo.bin&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_PROXY, &quot;http://localhost:8080&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_PROXYUSERNAME, &quot;mrsmith&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_PROXYPASSWORD, &quot;qwerty&quot;);
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.19.1 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, CURLE_UNKNOWN_OPTION if not, or CURLE_OUT_OF_MEMORY if there was insufficient heap space. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_PROXYPASSWORD</span>(3), <span Class="bold">CURLOPT_USERNAME</span>(3),  <span Class="bold">CURLOPT_HTTPAUTH</span>(3), <span Class="bold">CURLOPT_PROXYAUTH</span>(3) </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>curl_global_trace man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_global_trace - Global libcurl logging configuration </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_global_trace(const char *config);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">This function configures the logging behavior, allowing to make some parts of curl more verbose or silent than others. </p>
+<p class="level0">This function may be called during the initialization phase of a program. It does not have to be. It can be called several times even, possibly overwriting settings of previous calls. </p>
+<p class="level0">Calling this function after transfers have been started is undefined. On some platforms/architectures it might take effect, on others not. </p>
+<p class="level0">This function is thread-safe since libcurl 8.3.0 if <span Class="emphasis">curl_version_info(3)</span> has the CURL_VERSION_THREADSAFE feature bit set (most platforms). </p>
+<p class="level0">If this is not thread-safe, you must not call this function when any other thread in the program (i.e. a thread sharing the same memory) is running. This does not just mean no other thread that is using libcurl. Because <span Class="emphasis">curl_global_init(3)</span> may call functions of other libraries that are similarly thread unsafe, it could conflict with any other thread that uses these other libraries. </p>
+<p class="level0">If you are initializing libcurl from a Windows DLL you should not initialize it from <span Class="emphasis">DllMain</span> or a static initializer because Windows holds the loader lock during that time and it could cause a deadlock. </p>
+<p class="level0">The <span Class="emphasis">config</span> string is a list of comma-separated component names. Names are case-insensitive and unknown names are ignored. The special name &quot;all&quot; applies to all components. Names may be prefixed with &#39;+&#39; or &#39;-&#39; to enable or disable detailed logging for a component. </p>
+<p class="level0">The list of component names is not part of curl&#39;s public API. Names may be added or disappear in future versions of libcurl. Since unknown names are silently ignored, outdated log configurations will not error when upgrading libcurl. Given that, some names can be expected to be fairly stable and are listed below for easy reference. </p>
+<p class="level0">Note that log configuration applies only to transfers where debug logging is enabled. See <span Class="emphasis">CURLOPT_VERBOSE(3)</span> or <span Class="emphasis">CURLOPT_DEBUGFUNCTION(3)</span> on how to control that. </p><a name="TRACE"></a><h2 class="nroffsh">Trace components</h2>
+<p class="level0"><a name="tcp"></a><span class="nroffip">tcp</span> </p>
+<p class="level1">Tracing of TCP socket handling: connect, reads, writes. </p>
+<p class="level0"><a name="ssl"></a><span class="nroffip">ssl</span> </p>
+<p class="level1">Tracing of SSL/TLS operations, whichever SSL backend is used in your build. </p>
+<p class="level0"><a name="http2"></a><span class="nroffip">http/2</span> </p>
+<p class="level1">Details about HTTP/2 handling: frames, events, I/O, etc. </p>
+<p class="level0"><a name="http3"></a><span class="nroffip">http/3</span> </p>
+<p class="level1">Details about HTTP/3 handling: connect, frames, events, I/O etc. </p>
+<p class="level0"><a name="http-proxy"></a><span class="nroffip">http-proxy</span> </p>
+<p class="level1">Involved when transfers are tunneled through a HTTP proxy. &quot;h1-proxy&quot; or &quot;h2-proxy&quot; are also involved, depending on the HTTP version negotiated with the proxy. </p>
+<p class="level1">In order to find out all components involved in a transfer, run it with &quot;all&quot; configured. You will then see all names involved in your libcurl version in the trace. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&nbsp;/* log details of HTTP/2 and SSL handling */
+&nbsp;curl_global_trace(&quot;http/2,ssl&quot;);
+&nbsp;
+&nbsp;/* log all details, except SSL handling */
+&nbsp;curl_global_trace(&quot;all,-ssl&quot;);
+</pre>
+
+<p class="level0">Below is a trace sample where &quot;http/2&quot; was configured. The trace output of an enabled component appears at the beginning in brackets. </p><pre class="level0">
+* [HTTP/2] [h2sid=1] cf_send(len=96) submit https://example.com/
+* [HTTP/2] [h2sid=1] FRAME[HEADERS]
+* [HTTP/2] [h2sid=1] 249 header bytes
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 8.3 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">If this function returns non-zero, something went wrong and the configuration may not have any effects or may only been applied partially. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_global_init</span>(3),  <span Class="bold">libcurl</span>(3)  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

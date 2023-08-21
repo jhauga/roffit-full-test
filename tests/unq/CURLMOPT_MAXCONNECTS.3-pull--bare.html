@@ -1,0 +1,24 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLMOPT_MAXCONNECTS - size of connection cache </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLMcode curl_multi_setopt(CURLM *handle, CURLMOPT_MAXCONNECTS, long max);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a long indicating the <span Class="bold">max</span>. The set number will be used as the maximum amount of simultaneously open connections that libcurl may keep in its connection cache after completed use. By default libcurl will enlarge the size for each added easy handle to make it fit 4 times the number of added easy handles. </p>
+<p class="level0">By setting this option, you can prevent the cache size from growing beyond the limit set by you. </p>
+<p class="level0">When the cache is full, curl closes the oldest one in the cache to prevent the number of open connections from increasing. </p>
+<p class="level0">This option is for the multi handle&#39;s use only, when using the easy interface you should instead use the <span Class="emphasis">CURLOPT_MAXCONNECTS(3)</span> option. </p>
+<p class="level0">See <span Class="emphasis">CURLMOPT_MAX_TOTAL_CONNECTIONS(3)</span> for limiting the number of active connections. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">See DESCRIPTION </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURLM *m = curl_multi_init();
+/* only keep 10 connections in the cache */
+curl_multi_setopt(m, CURLMOPT_MAXCONNECTS, 10L);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.16.3 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLM_OK if the option is supported, and CURLM_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLMOPT_MAX_HOST_CONNECTIONS</span>(3),  <span Class="bold">CURLOPT_MAXCONNECTS</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

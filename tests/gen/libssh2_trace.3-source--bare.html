@@ -1,0 +1,30 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_trace - enable debug info from inside libssh2 </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&nbsp;
+void
+libssh2_trace(LIBSSH2_SESSION *session, int bitmask);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">This is a function present in the library that can be used to get debug info from within libssh2 when it is running. Helpful when trying to trace or debug behaviors. Note that this function has no effect unless libssh2 was built to support tracing! It is usually disabled in release builds. </p>
+<p class="level0"><span Class="bold">bitmask</span> can be set to the logical OR of none, one or more of these: </p>
+<p class="level0"><a name="LIBSSH2TRACESOCKET"></a><span class="nroffip">LIBSSH2_TRACE_SOCKET</span> </p>
+<p class="level1">Socket low-level debugging </p>
+<p class="level0"><a name="LIBSSH2TRACETRANS"></a><span class="nroffip">LIBSSH2_TRACE_TRANS</span> </p>
+<p class="level1">Transport layer debugging </p>
+<p class="level0"><a name="LIBSSH2TRACEKEX"></a><span class="nroffip">LIBSSH2_TRACE_KEX</span> </p>
+<p class="level1">Key exchange debugging </p>
+<p class="level0"><a name="LIBSSH2TRACEAUTH"></a><span class="nroffip">LIBSSH2_TRACE_AUTH</span> </p>
+<p class="level1">Authentication debugging </p>
+<p class="level0"><a name="LIBSSH2TRACECONN"></a><span class="nroffip">LIBSSH2_TRACE_CONN</span> </p>
+<p class="level1">Connection layer debugging </p>
+<p class="level0"><a name="LIBSSH2TRACESCP"></a><span class="nroffip">LIBSSH2_TRACE_SCP</span> </p>
+<p class="level1">SCP debugging </p>
+<p class="level0"><a name="LIBSSH2TRACESFTP"></a><span class="nroffip">LIBSSH2_TRACE_SFTP</span> </p>
+<p class="level1">SFTP debugging </p>
+<p class="level0"><a name="LIBSSH2TRACEERROR"></a><span class="nroffip">LIBSSH2_TRACE_ERROR</span> </p>
+<p class="level1">Error debugging </p>
+<p class="level0"><a name="LIBSSH2TRACEPUBLICKEY"></a><span class="nroffip">LIBSSH2_TRACE_PUBLICKEY</span> </p>
+<p class="level1">Public Key debugging </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

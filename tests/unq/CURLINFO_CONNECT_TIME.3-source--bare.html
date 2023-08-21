@@ -1,0 +1,32 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLINFO_CONNECT_TIME - get the time until connect </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_getinfo(CURL *handle, CURLINFO_CONNECT_TIME, double *timep);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to a double to receive the total time in seconds from the start until the connection to the remote host (or proxy) was completed. </p>
+<p class="level0">When a redirect is followed, the time from each request is added together. </p>
+<p class="level0">See also the TIMES overview in the <span Class="emphasis">curl_easy_getinfo(3)</span> man page. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+curl = curl_easy_init();
+if(curl) {
+&nbsp; double connect;
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, url);
+&nbsp; res = curl_easy_perform(curl);
+&nbsp; if(CURLE_OK == res) {
+&nbsp;   res = curl_easy_getinfo(curl, CURLINFO_CONNECT_TIME, &amp;connect);
+&nbsp;   if(CURLE_OK == res) {
+&nbsp;     printf(&quot;Time: %.1f&quot;, connect);
+&nbsp;   }
+&nbsp; }
+&nbsp; /* always cleanup */
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.4.1 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_easy_getinfo</span>(3), <span Class="bold">curl_easy_setopt</span>(3), <span Class="bold">CURLINFO_CONNECT_TIME_T</span>(3) </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

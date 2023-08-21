@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>curl_easy_duphandle man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_easy_duphandle - Clone a libcurl session handle </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURL *curl_easy_duphandle(CURL *handle);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">This function will return a new curl handle, a duplicate, using all the options previously set in the input curl <span Class="emphasis">handle</span>. Both handles can subsequently be used independently and they must both be freed with <span Class="emphasis">curl_easy_cleanup(3)</span>. </p>
+<p class="level0">All strings that the input handle has been told to point to (as opposed to copy) with previous calls to <span Class="emphasis">curl_easy_setopt(3)</span> using char * inputs, will be pointed to by the new handle as well. You must therefore make sure to keep the data around until both handles have been cleaned up. </p>
+<p class="level0">The new handle will <span Class="bold">not</span> inherit any state information, no connections, no SSL sessions and no cookies. It also will not inherit any share object states or options (it will be made as if <span Class="emphasis">CURLOPT_SHARE(3)</span> was set to NULL). </p>
+<p class="level0">In multi-threaded programs, this function must be called in a synchronous way, the input handle may not be in use when cloned. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+CURL *nother;
+if(curl) {
+&nbsp; CURLcode res;
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp; nother = curl_easy_duphandle(curl);
+&nbsp; res = curl_easy_perform(nother);
+&nbsp; curl_easy_cleanup(nother);
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.9 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">If this function returns NULL, something went wrong and no valid handle was returned. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_easy_init</span>(3),<span Class="bold">curl_easy_cleanup</span>(3),<span Class="bold">curl_easy_reset</span>(3), <span Class="bold">curl_global_init</span>(3) </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

@@ -1,0 +1,24 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_session_disconnect_ex - terminate transport layer </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&nbsp;
+int
+libssh2_session_disconnect_ex(LIBSSH2_SESSION *session, int reason,
+&nbsp;                             const char *description,
+&nbsp;                             const char *lang);
+&nbsp;
+int
+libssh2_session_disconnect(LIBSSH2_SESSION *session,
+&nbsp;                          const char *description);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="emphasis">session</span> - Session instance as returned by <span Class="bold">libssh2_session_init_ex(3)</span> </p>
+<p class="level0"><span Class="emphasis">reason</span> - One of the Disconnect Reason constants. </p>
+<p class="level0"><span Class="emphasis">description</span> - Human readable reason for disconnection. </p>
+<p class="level0"><span Class="emphasis">lang</span> - Localization string describing the language/encoding of the description provided. </p>
+<p class="level0">Send a disconnect message to the remote host associated with <span Class="emphasis">session</span>, along with a <span Class="emphasis">reason</span> symbol and a verbose <span Class="emphasis">description</span>. </p>
+<p class="level0">As a convenience, the macro <span Class="bold">libssh2_session_disconnect(3)</span> is provided. It calls <span Class="bold">libssh2_session_disconnect_ex(3)</span> with <span Class="emphasis">reason</span> set to SSH_DISCONNECT_BY_APPLICATION and <span Class="emphasis">lang</span> set to an empty string. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Return 0 on success or negative on failure.  It returns LIBSSH2_ERROR_EAGAIN when it would otherwise block. While LIBSSH2_ERROR_EAGAIN is a negative number, it is not really a failure per se. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">libssh2_session_init_ex(3)</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

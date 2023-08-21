@@ -1,0 +1,33 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_FTP_SSL_CCC - switch off SSL again with FTP after auth </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_FTP_SSL_CCC,
+&nbsp;                         long how);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">If enabled, this option makes libcurl use CCC (Clear Command Channel). It shuts down the SSL/TLS layer after authenticating. The rest of the control channel communication will be unencrypted. This allows NAT routers to follow the FTP transaction. Pass a long using one of the values below </p>
+<p class="level0"><a name="CURLFTPSSLCCCNONE"></a><span class="nroffip">CURLFTPSSL_CCC_NONE</span> </p>
+<p class="level1">do not attempt to use CCC. </p>
+<p class="level0"><a name="CURLFTPSSLCCCPASSIVE"></a><span class="nroffip">CURLFTPSSL_CCC_PASSIVE</span> </p>
+<p class="level1">Do not initiate the shutdown, but wait for the server to do it. Do not send a reply. </p>
+<p class="level0"><a name="CURLFTPSSLCCCACTIVE"></a><span class="nroffip">CURLFTPSSL_CCC_ACTIVE</span> </p>
+<p class="level1">Initiate the shutdown and wait for a reply. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">CURLFTPSSL_CCC_NONE </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">FTP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;ftp://example.com/file.txt&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_USE_SSL, CURLUSESSL_CONTROL);
+&nbsp; /* go back to clear-text FTP after authenticating */
+&nbsp; curl_easy_setopt(curl, CURLOPT_FTP_SSL_CCC, (long)CURLFTPSSL_CCC_ACTIVE);
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.16.1 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_USE_SSL</span>(3), <span Class="bold">CURLOPT_FTPSSLAUTH</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

@@ -1,0 +1,81 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libcurl-url - URL interface overview </p><a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">The URL interface provides functions for parsing and generating URLs. </p><a name="INCLUDE"></a><h2 class="nroffsh">Include</h2>
+<p class="level0">You still only include &lt;curl/curl.h&gt; in your code. </p><a name="CREATE"></a><h2 class="nroffsh">Create</h2>
+<p class="level0">Create a handle that holds URL info and resources with <span Class="emphasis">curl_url(3)</span>: </p><pre class="level0">
+&nbsp; CURLU *h = curl_url();
+</pre>
+<a name="CLEANUP"></a><h2 class="nroffsh">Cleanup</h2>
+<p class="level0">When done with it, clean it up with <span Class="emphasis">curl_url_cleanup(3)</span> </p><pre class="level0">
+&nbsp; curl_url_cleanup(h);
+</pre>
+<a name="DUPLICATE"></a><h2 class="nroffsh">Duplicate</h2>
+<p class="level0">When you need a copy of a handle, just duplicate it with <span Class="emphasis">curl_url_dup(3)</span>: </p><pre class="level0">
+&nbsp; CURLU *nh = curl_url_dup(h);
+</pre>
+<a name="PARSING"></a><h2 class="nroffsh">Parsing</h2>
+<p class="level0">By setting a URL to the handle with <span Class="emphasis">curl_url_set(3)</span>, the URL is parsed and stored in the handle. If the URL is not syntactically correct it will return an error instead. </p><pre class="level0">
+&nbsp; rc = curl_url_set(h, CURLUPART_URL,
+&nbsp;                   &quot;https://example.com:449/foo/bar?name=moo&quot;, 0);
+</pre>
+
+<p class="level0">The zero in the fourth argument is a bitmask for changing specific features. </p>
+<p class="level0">If successful, this stores the URL in its individual parts within the handle. </p><a name="REDIRECT"></a><h2 class="nroffsh">Redirect</h2>
+<p class="level0">When a handle already contains info about a URL, setting a relative URL will make it &quot;redirect&quot; to adapt to it. </p><pre class="level0">
+&nbsp; rc = curl_url_set(h, CURLUPART_URL, &quot;../test?another&quot;, 0);
+</pre>
+<a name="GET"></a><h2 class="nroffsh">Get url</h2>
+<p class="level0">The <span Class="bold">CURLU</span> handle represents a URL and you can easily extract that with <span Class="emphasis">curl_url_get(3)</span>: </p><pre class="level0">
+&nbsp; char *url;
+&nbsp; rc = curl_url_get(h, CURLUPART_URL, &amp;url, 0);
+&nbsp; curl_free(url);
+</pre>
+
+<p class="level0">The zero in the fourth argument is a bitmask for changing specific features. </p><a name="GET"></a><h2 class="nroffsh">Get parts</h2>
+<p class="level0">When a URL has been parsed or parts have been set, you can extract those pieces from the handle at any time. </p><pre class="level0">
+&nbsp; rc = curl_url_get(h, CURLUPART_FRAGMENT, &amp;fragment, 0);
+&nbsp; rc = curl_url_get(h, CURLUPART_HOST, &amp;host, 0);
+&nbsp; rc = curl_url_get(h, CURLUPART_PASSWORD, &amp;password, 0);
+&nbsp; rc = curl_url_get(h, CURLUPART_PATH, &amp;path, 0);
+&nbsp; rc = curl_url_get(h, CURLUPART_PORT, &amp;port, 0);
+&nbsp; rc = curl_url_get(h, CURLUPART_QUERY, &amp;query, 0);
+&nbsp; rc = curl_url_get(h, CURLUPART_SCHEME, &amp;scheme, 0);
+&nbsp; rc = curl_url_get(h, CURLUPART_USER, &amp;user, 0);
+&nbsp; rc = curl_url_get(h, CURLUPART_ZONEID, &amp;zoneid, 0);
+</pre>
+
+<p class="level0">Extracted parts are not URL decoded unless the user also asks for it with the <span Class="emphasis">CURLU_URLDECODE</span> flag set in the fourth bitmask argument. </p>
+<p class="level0">Remember to free the returned string with <span Class="emphasis">curl_free(3)</span> when you are done with it! </p><a name="SET"></a><h2 class="nroffsh">Set parts</h2>
+<p class="level0">A user set individual URL parts, either after having parsed a full URL or instead of parsing such. </p><pre class="level0">
+&nbsp; rc = curl_url_set(urlp, CURLUPART_FRAGMENT, &quot;anchor&quot;, 0);
+&nbsp; rc = curl_url_set(urlp, CURLUPART_HOST, &quot;www.example.com&quot;, 0);
+&nbsp; rc = curl_url_set(urlp, CURLUPART_PASSWORD, &quot;doe&quot;, 0);
+&nbsp; rc = curl_url_set(urlp, CURLUPART_PATH, &quot;/index.html&quot;, 0);
+&nbsp; rc = curl_url_set(urlp, CURLUPART_PORT, &quot;443&quot;, 0);
+&nbsp; rc = curl_url_set(urlp, CURLUPART_QUERY, &quot;name=john&quot;, 0);
+&nbsp; rc = curl_url_set(urlp, CURLUPART_SCHEME, &quot;https&quot;, 0);
+&nbsp; rc = curl_url_set(urlp, CURLUPART_USER, &quot;john&quot;, 0);
+&nbsp; rc = curl_url_set(urlp, CURLUPART_ZONEID, &quot;eth0&quot;, 0);
+</pre>
+
+<p class="level0">Set parts are not URL encoded unless the user asks for it with the <span Class="emphasis">CURLU_URLENCODE</span> flag. </p><a name="CURLUAPPENDQUERY"></a><h2 class="nroffsh">Curlu_appendquery</h2>
+<p class="level0">An application can append a string to the right end of the query part with the <a class="emphasis" href="#CURLUAPPENDQUERY">CURLU_APPENDQUERY</a> flag to <span Class="emphasis">curl_url_set(3)</span>. </p>
+<p class="level0">Imagine a handle that holds the URL &quot;<a href="https://example.com/?shoes=2">https://example.com/?shoes=2</a>&quot;. An application can then add the string &quot;hat=1&quot; to the query part like this: </p><pre class="level0">
+&nbsp; rc = curl_url_set(urlp, CURLUPART_QUERY, &quot;hat=1&quot;, CURLU_APPENDQUERY);
+</pre>
+
+<p class="level0">It will even notice the lack of an ampersand (&amp;) separator so it will inject one too, and the handle&#39;s full URL will then equal &quot;<a href="https://example.com/?shoes=2&amp;hat=1">https://example.com/?shoes=2&amp;hat=1</a>&quot;. </p>
+<p class="level0">The appended string can of course also get URL encoded on add, and if asked to URL encode, the encoding process will skip the &#39;=&#39; character. For example, append &quot;candy=N&amp;N&quot; to what we already have, and URL encode it to deal with the ampersand in the data: </p><pre class="level0">
+&nbsp; rc = curl_url_set(urlp, CURLUPART_QUERY, &quot;candy=N&amp;N&quot;,
+&nbsp;                   CURLU_APPENDQUERY | CURLU_URLENCODE);
+</pre>
+
+<p class="level0">Now the URL looks like </p><pre class="level0">
+&nbsp; https://example.com/?shoes=2&amp;hat=1&amp;candy=N%26N
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">The URL API was introduced in libcurl 7.62.0. </p>
+<p class="level0">A URL with a literal IPv6 address can be parsed even when IPv6 support is not enabled. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_url</span>(3), <span Class="bold">curl_url_cleanup</span>(3), <span Class="bold">curl_url_get</span>(3),  <span Class="bold">curl_url_dup</span>(3), <span Class="bold">curl_url_set</span>(3), <span Class="bold">curl_url_strerror</span>(3),  <span Class="bold">CURLOPT_URL</span>(3) </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_PROGRESSFUNCTION man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_PROGRESSFUNCTION - progress meter callback </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+int progress_callback(void *clientp,
+&nbsp;                     double dltotal,
+&nbsp;                     double dlnow,
+&nbsp;                     double ultotal,
+&nbsp;                     double ulnow);
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_PROGRESSFUNCTION,
+&nbsp;                         progress_callback);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to your callback function, which should match the prototype shown above. </p>
+<p class="level0">This option is deprecated and we encourage users to use the newer <span Class="emphasis">CURLOPT_XFERINFOFUNCTION(3)</span> instead, if you can. </p>
+<p class="level0">This function gets called by libcurl instead of its internal equivalent with a frequent interval. While data is being transferred it will be called frequently, and during slow periods like when nothing is being transferred it can slow down to about one call per second. </p>
+<p class="level0"><span Class="emphasis">clientp</span> is the pointer set with <span Class="emphasis">CURLOPT_PROGRESSDATA(3)</span>, it is not used by libcurl but is only passed along from the application to the callback. </p>
+<p class="level0">The callback gets told how much data libcurl will transfer and has transferred, in number of bytes. <span Class="emphasis">dltotal</span> is the total number of bytes libcurl expects to download in this transfer. <span Class="emphasis">dlnow</span> is the number of bytes downloaded so far. <span Class="emphasis">ultotal</span> is the total number of bytes libcurl expects to upload in this transfer. <span Class="emphasis">ulnow</span> is the number of bytes uploaded so far. </p>
+<p class="level0">Unknown/unused argument values passed to the callback will be set to zero (like if you only download data, the upload size will remain 0). Many times the callback will be called one or more times first, before it knows the data sizes so a program must be made to handle that. </p>
+<p class="level0">If your callback function returns CURL_PROGRESSFUNC_CONTINUE it will cause libcurl to continue executing the default progress function. </p>
+<p class="level0">Returning any other non-zero value from this callback will cause libcurl to abort the transfer and return <span Class="emphasis">CURLE_ABORTED_BY_CALLBACK</span>. </p>
+<p class="level0">If you transfer data with the multi interface, this function will not be called during periods of idleness unless you call the appropriate libcurl function that performs transfers. </p>
+<p class="level0"><span Class="emphasis">CURLOPT_NOPROGRESS(3)</span> must be set to 0 to make this function actually get called. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">By default, libcurl has an internal progress meter. That is rarely wanted by users. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&nbsp;struct progress {
+&nbsp;  char *private;
+&nbsp;  size_t size;
+&nbsp;};
+&nbsp;
+&nbsp;static size_t progress_callback(void *clientp,
+&nbsp;                                double dltotal,
+&nbsp;                                double dlnow,
+&nbsp;                                double ultotal,
+&nbsp;                                double ulnow)
+&nbsp;{
+&nbsp;  struct progress *memory = (struct progress *)clientp;
+&nbsp;
+&nbsp;  /* use the values */
+&nbsp;
+&nbsp;  return 0; /* all is good */
+&nbsp;}
+&nbsp;
+&nbsp;struct progress data;
+&nbsp;
+&nbsp;/* pass struct to callback  */
+&nbsp;curl_easy_setopt(curl_handle, CURLOPT_PROGRESSDATA, &amp;data);
+&nbsp;
+&nbsp;curl_easy_setopt(curl_handle, CURLOPT_PROGRESSFUNCTION, progress_callback);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Deprecated since 7.32.0. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_VERBOSE</span>(3), <span Class="bold">CURLOPT_NOPROGRESS</span>(3),  <span Class="bold">CURLOPT_XFERINFOFUNCTION</span>(3) </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

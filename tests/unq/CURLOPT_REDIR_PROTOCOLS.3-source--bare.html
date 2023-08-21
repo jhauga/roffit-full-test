@@ -1,0 +1,64 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_REDIR_PROTOCOLS - protocols allowed to redirect to </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_REDIR_PROTOCOLS, long bitmask);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">This option is deprecated. We strongly recommend using <span Class="emphasis">CURLOPT_REDIR_PROTOCOLS_STR(3)</span> instead because this option cannot control all available protocols! </p>
+<p class="level0">Pass a long that holds a bitmask of CURLPROTO_* defines. If used, this bitmask limits what protocols libcurl may use in a transfer that it follows to in a redirect when <span Class="emphasis">CURLOPT_FOLLOWLOCATION(3)</span> is enabled. This allows you to limit specific transfers to only be allowed to use a subset of protocols in redirections. </p>
+<p class="level0">Protocols denied by <span Class="emphasis">CURLOPT_PROTOCOLS(3)</span> are not overridden by this option. </p>
+<p class="level0">By default libcurl will allow HTTP, HTTPS, FTP and FTPS on redirect (7.65.2). Older versions of libcurl allowed all protocols on redirect except several disabled for security reasons: Since 7.19.4 FILE and SCP are disabled, and since 7.40.0 SMB and SMBS are also disabled. <span Class="emphasis">CURLPROTO_ALL</span> enables all protocols on redirect, including those disabled for security. </p>
+<p class="level0">These are the available protocol defines: </p><pre class="level0">
+CURLPROTO_DICT
+CURLPROTO_FILE
+CURLPROTO_FTP
+CURLPROTO_FTPS
+CURLPROTO_GOPHER
+CURLPROTO_HTTP
+CURLPROTO_HTTPS
+CURLPROTO_IMAP
+CURLPROTO_IMAPS
+CURLPROTO_LDAP
+CURLPROTO_LDAPS
+CURLPROTO_POP3
+CURLPROTO_POP3S
+CURLPROTO_RTMP
+CURLPROTO_RTMPE
+CURLPROTO_RTMPS
+CURLPROTO_RTMPT
+CURLPROTO_RTMPTE
+CURLPROTO_RTMPTS
+CURLPROTO_RTSP
+CURLPROTO_SCP
+CURLPROTO_SFTP
+CURLPROTO_SMB
+CURLPROTO_SMBS
+CURLPROTO_SMTP
+CURLPROTO_SMTPS
+CURLPROTO_TELNET
+CURLPROTO_TFTP
+</pre>
+<a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">HTTP, HTTPS, FTP and FTPS (Added in 7.65.2). </p>
+<p class="level0">Older versions defaulted to all protocols except FILE, SCP and since 7.40.0 SMB and SMBS. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+curl = curl_easy_init();
+if(curl) {
+&nbsp; /* pass in the URL from an external source */
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, argv[1]);
+&nbsp;
+&nbsp; /* only allow redirects to HTTP and HTTPS URLs */
+&nbsp; curl_easy_setopt(curl, CURLOPT_REDIR_PROTOCOLS,
+&nbsp;                  CURLPROTO_HTTP | CURLPROTO_HTTPS);
+&nbsp;
+&nbsp; /* Perform the request */
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.19.4, before then it would follow all protocols. Deprecated since 7.85.0. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_PROTOCOLS</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

@@ -1,0 +1,19 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_scp_recv2 - request a remote file via SCP </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&nbsp;
+LIBSSH2_CHANNEL *
+libssh2_scp_recv2(LIBSSH2_SESSION *session, const char *path, struct_stat *sb);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="emphasis">session</span> - Session instance as returned by <span Class="bold">libssh2_session_init_ex(3)</span> </p>
+<p class="level0"><span Class="emphasis">path</span> - Full path and filename of file to transfer. That is the remote file name. </p>
+<p class="level0"><span Class="emphasis">sb</span> - Populated with remote file&#39;s size, mode, mtime, and atime </p>
+<p class="level0">Request a file from the remote host via SCP. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Pointer to a newly allocated LIBSSH2_CHANNEL instance, or NULL on errors. </p><a name="ERRORS"></a><h2 class="nroffsh">Errors</h2>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_ALLOC</span> -  An internal memory allocation call failed. </p>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_SCP_PROTOCOL</span> - </p>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_EAGAIN</span> - Marked for non-blocking I/O but the call would block. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">libssh2_session_init_ex(3)</span> <span Class="bold">libssh2_channel_open_ex(3)</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

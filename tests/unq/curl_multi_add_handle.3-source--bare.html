@@ -1,0 +1,30 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_multi_add_handle - add an easy handle to a multi session </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLMcode curl_multi_add_handle(CURLM *multi_handle, CURL *easy_handle);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Adds a standard easy handle to the multi stack. This function call will make this <span Class="emphasis">multi_handle</span> control the specified <span Class="emphasis">easy_handle</span>. </p>
+<p class="level0">While an easy handle is added to a multi stack, you cannot and you must not use <span Class="emphasis">curl_easy_perform(3)</span> on that handle. After having removed the easy handle from the multi stack again, it is perfectly fine to use it with the easy interface again. </p>
+<p class="level0">If the easy handle is not set to use a shared (<span Class="emphasis">CURLOPT_SHARE(3)</span>) or global DNS cache (<span Class="emphasis">CURLOPT_DNS_USE_GLOBAL_CACHE(3)</span>), it will be made to use the DNS cache that is shared between all easy handles within the multi handle when <span Class="emphasis">curl_multi_add_handle(3)</span> is called. </p>
+<p class="level0">When an easy interface is added to a multi handle, it will use a shared connection cache owned by the multi handle. Removing and adding new easy handles will not affect the pool of connections or the ability to do connection re-use. </p>
+<p class="level0">If you have <span Class="emphasis">CURLMOPT_TIMERFUNCTION(3)</span> set in the multi handle (and you really should if you are working event-based with <span Class="emphasis">curl_multi_socket_action(3)</span> and friends), that callback will be called from within this function to ask for an updated timer so that your main event loop will get the activity on this handle to get started. </p>
+<p class="level0">The easy handle will remain added to the multi handle until you remove it again with <span Class="emphasis">curl_multi_remove_handle(3)</span> - even when a transfer with that specific easy handle is completed. </p>
+<p class="level0">You should remove the easy handle from the multi stack before you terminate first the easy handle and then the multi handle: </p>
+<p class="level0">1 - <span Class="emphasis">curl_multi_remove_handle(3)</span> </p>
+<p class="level0">2 - <span Class="emphasis">curl_easy_cleanup(3)</span> </p>
+<p class="level0">3 - <span Class="emphasis">curl_multi_cleanup(3)</span> </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&nbsp; /* init a multi stack */
+&nbsp; multi_handle = curl_multi_init();
+&nbsp;
+&nbsp; /* add individual transfers */
+&nbsp; curl_multi_add_handle(multi_handle, http_handle);
+&nbsp; curl_multi_add_handle(multi_handle, http_handle2);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.9.6 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">CURLMcode type, general libcurl multi interface error code. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_multi_cleanup</span>(3),<span Class="bold">curl_multi_init</span>(3),  <span Class="bold">curl_multi_setopt</span>(3), <span Class="bold">curl_multi_socket_action</span>(3)  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

@@ -1,0 +1,33 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLINFO_CONN_ID - get the ID of the last connection used by the handle </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_getinfo(CURL *handle, CURLINFO_CONN_ID,
+&nbsp;                          curl_off_t *conn_id);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to a <span Class="emphasis">curl_off_t</span> to receive the connection identifier last used by the handle. Stores -1 if there was no connection used. </p>
+<p class="level0">The connection id is unique among all connections using the same connection cache. This is implicitly the case for all connections in the same multi handle. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp;
+&nbsp; /* Perform the request */
+&nbsp; res = curl_easy_perform(curl);
+&nbsp;
+&nbsp; if(!res) {
+&nbsp;   curl_off_t conn_id;
+&nbsp;   res = curl_easy_getinfo(curl, CURLINFO_CONN_ID, &amp;conn_id);
+&nbsp;   if(!res) {
+&nbsp;     printf(&quot;Connection used: %&quot; CURL_FORMAT_CURL_OFF_T &quot;&bsol;n&quot;, conn_id);
+&nbsp;   }
+&nbsp; }
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 8.2.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_easy_getinfo</span>(3), <span Class="bold">curl_easy_setopt</span>(3),  <span Class="bold">CURLINFO_XFER_ID</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

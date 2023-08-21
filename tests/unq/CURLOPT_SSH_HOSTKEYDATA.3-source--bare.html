@@ -1,0 +1,33 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_SSH_HOSTKEYDATA - pointer to pass to the SSH host key callback </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_SSH_HOSTKEYDATA, void *pointer);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a void * as parameter. This <span Class="emphasis">pointer</span> will be passed along verbatim to the callback set with <span Class="emphasis">CURLOPT_SSH_HOSTKEYFUNCTION(3)</span>. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">SCP and SFTP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+int hostkeycb(void *clientp,    /* passed with CURLOPT_SSH_HOSTKEYDATA */
+&nbsp;             int keytype,      /* CURLKHTYPE */
+&nbsp;             const char * key, /* host key to check */
+&nbsp;             size_t keylen);   /* length of the key */
+{
+&nbsp; /* &#39;clientp&#39; points to the callback_data struct */
+&nbsp; /* investigate the situation and return the correct value */
+&nbsp; return CURLKHMATCH_OK;
+}
+{
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;sftp://example.com/thisfile.txt&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_SSH_HOSTKEYFUNCTION, hostkeycb);
+&nbsp; curl_easy_setopt(curl, CURLOPT_SSH_HOSTKEYDATA, &amp;callback_data);
+&nbsp;
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.84.0, works only with libssh2 backend. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_SSH_HOSTKEYFUNCTION</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

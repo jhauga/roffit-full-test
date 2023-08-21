@@ -1,0 +1,30 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_SSLCERT - SSL client certificate </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_SSLCERT, char *cert);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to a null-terminated string as parameter. The string should be the file name of your client certificate. The default format is &quot;P12&quot; on Secure Transport and &quot;PEM&quot; on other engines, and can be changed with <span Class="emphasis">CURLOPT_SSLCERTTYPE(3)</span>. </p>
+<p class="level0">With Secure Transport, this can also be the nickname of the certificate you wish to authenticate with as it is named in the security database. If you want to use a file from the current directory, please precede it with &quot;./&quot; prefix, in order to avoid confusion with a nickname. </p>
+<p class="level0">(Schannel only) Client certificates can be specified by a path expression to a certificate store. (You can import <span Class="emphasis">PFX</span> to a store first). You can use &quot;&lt;store location&gt;&bsol;&lt;store name&gt;&bsol;&lt;thumbprint&gt;&quot; to refer to a certificate in the system certificates store, for example, <span Class="bold">&quot;CurrentUser&bsol;MY&bsol;934a7ac6f8a5d579285a74fa&quot;</span>. The thumbprint is usually a SHA-1 hex string which you can see in certificate details. Following store locations are supported: <span Class="bold">CurrentUser</span>, <span Class="bold">LocalMachine</span>, <span Class="bold">CurrentService</span>, <span Class="bold">Services</span>, <span Class="bold">CurrentUserGroupPolicy</span>, <span Class="bold">LocalMachineGroupPolicy</span>, <span Class="bold">LocalMachineEnterprise</span>.  Schannel also support P12 certificate file, with the string &quot;P12&quot; specified with <span Class="emphasis">CURLOPT_SSLCERTTYPE(3)</span>. </p>
+<p class="level0">When using a client certificate, you most likely also need to provide a private key with <span Class="emphasis">CURLOPT_SSLKEY(3)</span>. </p>
+<p class="level0">The application does not have to keep the string around after setting this option. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All TLS based protocols: HTTPS, FTPS, IMAPS, POP3S, SMTPS etc. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com/&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_SSLCERT, &quot;client.pem&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_SSLKEY, &quot;key.pem&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_KEYPASSWD, &quot;s3cret&quot;);
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">If built TLS enabled. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if TLS enabled, CURLE_UNKNOWN_OPTION if not, or CURLE_OUT_OF_MEMORY if there was insufficient heap space. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_SSLCERTTYPE</span>(3), <span Class="bold">CURLOPT_SSLKEY</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

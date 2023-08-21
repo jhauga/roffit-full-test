@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_READDATA man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_READDATA - pointer passed to the read callback </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_READDATA, void *pointer);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Data <span Class="emphasis">pointer</span> to pass to the file read function. If you use the <span Class="emphasis">CURLOPT_READFUNCTION(3)</span> option, this is the pointer you will get as input in the fourth argument to the callback. </p>
+<p class="level0">If you do not specify a read callback but instead rely on the default internal read function, this data must be a valid readable FILE * (cast to &#39;void *&#39;). </p>
+<p class="level0">If you are using libcurl as a win32 DLL, you <span Class="bold">MUST</span> use a <span Class="emphasis">CURLOPT_READFUNCTION(3)</span> if you set this option or you will experience crashes. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">By default, this is a FILE * to stdin. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">This is used for all protocols when sending data. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+struct MyData this;
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp;
+&nbsp; /* pass pointer that gets passed in to the
+&nbsp;    CURLOPT_READFUNCTION callback */
+&nbsp; curl_easy_setopt(curl, CURLOPT_READDATA, &amp;this);
+&nbsp;
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">This option was once known by the older name CURLOPT_INFILE, the name <span Class="emphasis">CURLOPT_READDATA(3)</span> was introduced in 7.9.7. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">This will return CURLE_OK. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_READFUNCTION</span>(3), <span Class="bold">CURLOPT_WRITEDATA</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

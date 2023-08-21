@@ -1,6 +1,6 @@
 # Template to test pull to data-conversion tool
 
-Ctrl + click [test results](https://jhauga.github.io/htmlpreview.github.com/?https://github.com/CHANGE_USER/CHANGE_REPO/blob/main/index.html).
+Ctrl + click [test results](https://jhauga.github.io/htmlpreview.github.com/?https://github.com/jhauga/roffit-full-test/blob/main/index.html).
 
 This can be used to make tests for/before making pull requests to
 a data conversion tool repository. Download zip or clone the repo
@@ -72,6 +72,6 @@ large amounts of data so be mindful of possible build sizes for test.
 
 ### View resulte
 1. If final test repo is uploaded to Github:
-   - To see outputs from test [click here](https://jhauga.github.io/htmlpreview.github.com/?https://github.com/CHANGE_USER/CHANGE_REPO/blob/main/index.html).
+   - To see outputs from test [click here](https://jhauga.github.io/htmlpreview.github.com/?https://github.com/jhauga/roffit-full-test/blob/main/index.html).
 2. If final test remains local use method for localhost:
    - For example - ```php -S localhost:8000```

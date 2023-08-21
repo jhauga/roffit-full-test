@@ -1,0 +1,29 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_slist_free_all - free an entire curl_slist list </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+void curl_slist_free_all(struct curl_slist *list);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">curl_slist_free_all() removes all traces of a previously built curl_slist linked list. </p>
+<p class="level0">Passing in a NULL pointer in <span Class="emphasis">list</span> will make this function return immediately with no action. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *handle;
+struct curl_slist *slist=NULL;
+&nbsp;
+slist = curl_slist_append(slist, &quot;X-libcurl: coolness&quot;);
+&nbsp;
+if (slist == NULL)
+&nbsp; return -1;
+&nbsp;
+curl_easy_setopt(handle, CURLOPT_HTTPHEADER, slist);
+&nbsp;
+curl_easy_perform(handle);
+&nbsp;
+curl_slist_free_all(slist); /* free the list again */
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Always </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Nothing. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_slist_append</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

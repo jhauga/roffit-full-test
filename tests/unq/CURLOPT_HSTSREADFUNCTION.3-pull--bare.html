@@ -1,0 +1,40 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_HSTSREADFUNCTION - read callback for HSTS hosts </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+struct curl_hstsentry {
+&nbsp; char *name;
+&nbsp; size_t namelen;
+&nbsp; unsigned int includeSubDomains:1;
+&nbsp; char expire[18]; /* YYYYMMDD HH:MM:SS [null-terminated] */
+};
+&nbsp;
+CURLSTScode hstsread(CURL *easy, struct curl_hstsentry *sts, void *clientp);
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_HSTSREADFUNCTION, hstsread);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to your callback function, as the prototype shows above. </p>
+<p class="level0">This callback function gets called by libcurl repeatedly when it populates the in-memory HSTS cache. </p>
+<p class="level0">Set the <span Class="emphasis">clientp</span> argument with the <span Class="emphasis">CURLOPT_HSTSREADDATA(3)</span> option or it will be NULL. </p>
+<p class="level0">When this callback is invoked, the <span Class="emphasis">sts</span> pointer points to a populated struct: Copy the host name to <span Class="emphasis">name</span> (no longer than <span Class="emphasis">namelen</span> bytes). Make it null-terminated. Set <span Class="emphasis">includeSubDomains</span> to TRUE or FALSE. Set <span Class="emphasis">expire</span> to a date stamp or a zero length string for *forever* (wrong date stamp format might cause the name to not get accepted) </p>
+<p class="level0">The callback should return <span Class="emphasis">CURLSTS_OK</span> if it returns a name and is prepared to be called again (for another host) or <span Class="emphasis">CURLSTS_DONE</span> if it has no entry to return. It can also return <span Class="emphasis">CURLSTS_FAIL</span> to signal error. Returning <span Class="emphasis">CURLSTS_FAIL</span> will stop the transfer from being performed and make <span Class="emphasis">CURLE_ABORTED_BY_CALLBACK</span> get returned. </p>
+<p class="level0">This option does not enable HSTS, you need to use <span Class="emphasis">CURLOPT_HSTS_CTRL(3)</span> to do that. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL - no callback. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">This feature is only used for HTTP(S) transfer. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+{
+&nbsp; /* set HSTS read callback */
+&nbsp; curl_easy_setopt(curl, CURLOPT_HSTSREADFUNCTION, hstsread);
+&nbsp;
+&nbsp; /* pass in suitable argument to the callback */
+&nbsp; curl_easy_setopt(curl, CURLOPT_HSTSREADDATA, &amp;hstspreload[0]);
+&nbsp;
+&nbsp; result = curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.74.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">This will return CURLE_OK. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_HSTSREADDATA</span>(3), <span Class="bold">CURLOPT_HSTSWRITEFUNCTION</span>(3),  <span Class="bold">CURLOPT_HSTS</span>(3), <span Class="bold">CURLOPT_HSTS_CTRL</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

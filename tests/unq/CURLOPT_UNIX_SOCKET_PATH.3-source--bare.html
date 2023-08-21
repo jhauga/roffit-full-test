@@ -1,0 +1,32 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_UNIX_SOCKET_PATH - Unix domain socket </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_UNIX_SOCKET_PATH, char *path);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Enables the use of Unix domain sockets as connection endpoint and sets the path to <span Class="emphasis">path</span>. If <span Class="emphasis">path</span> is NULL, then Unix domain sockets are disabled. An empty string will result in an error at some point, it will not disable use of Unix domain sockets. </p>
+<p class="level0">When enabled, curl will connect to the Unix domain socket instead of establishing a TCP connection to a host. Since no TCP connection is created, curl does not need to resolve the DNS hostname in the URL. </p>
+<p class="level0">The maximum path length on Cygwin, Linux and Solaris is 107. On other platforms it might be even less. </p>
+<p class="level0">Proxy and TCP options such as <span Class="emphasis">CURLOPT_TCP_NODELAY(3)</span> are not supported. Proxy options such as <span Class="emphasis">CURLOPT_PROXY(3)</span> have no effect either as these are TCP-oriented, and asking a proxy server to connect to a certain Unix domain socket is not possible. </p>
+<p class="level0">The application does not have to keep the string around after setting this option. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">Default is NULL, meaning that no Unix domain sockets are used. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All protocols except for FILE and FTP are supported in theory. HTTP, IMAP, POP3 and SMTP should in particular work (including their SSL/TLS variants). </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2>
+<p class="level0">Given that you have an HTTP server running listening on /tmp/httpd.sock, you can request an HTTP resource with: </p><pre class="level0">
+&nbsp; curl_easy_setopt(curl_handle, CURLOPT_UNIX_SOCKET_PATH, &quot;/tmp/httpd.sock&quot;);
+&nbsp; curl_easy_setopt(curl_handle, CURLOPT_URL, &quot;http://localhost/&quot;);
+</pre>
+
+<p class="level0">If you are on Linux and somehow have a need for paths larger than 107 bytes, you could use the proc filesystem to bypass the limitation: </p><pre class="level0">
+&nbsp; int dirfd = open(long_directory_path_to_socket, O_DIRECTORY | O_RDONLY);
+&nbsp; char path[108];
+&nbsp; snprintf(path, sizeof(path), &quot;/proc/self/fd/%d/httpd.sock&quot;, dirfd);
+&nbsp; curl_easy_setopt(curl_handle, CURLOPT_UNIX_SOCKET_PATH, path);
+&nbsp; /* Be sure to keep dirfd valid until you discard the handle */
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.40.0. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_ABSTRACT_UNIX_SOCKET</span>(3),  <span Class="bold">CURLOPT_OPENSOCKETFUNCTION</span>(3), <span Class="bold">unix</span>(7),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

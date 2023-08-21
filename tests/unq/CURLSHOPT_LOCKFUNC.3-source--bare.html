@@ -1,0 +1,29 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLSHOPT_LOCKFUNC - mutex lock callback </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+void lockcb(CURL *handle, curl_lock_data data, curl_lock_access access,
+&nbsp;           void *clientp);
+&nbsp;
+CURLSHcode curl_share_setopt(CURLSH *share, CURLSHOPT_LOCKFUNC, lockcb);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Set a mutex lock callback for the share object, to allow it to get used by multiple threads concurrently. There&#39;s a corresponding <span Class="emphasis">CURLSHOPT_UNLOCKFUNC(3)</span> callback called when the mutex is again released. </p>
+<p class="level0">The <span Class="emphasis">lockcb</span> argument must be a pointer to a function matching the prototype shown above. The arguments to the callback are: </p>
+<p class="level0"><span Class="emphasis">handle</span> is the currently active easy handle in use when the share object is intended to get used. </p>
+<p class="level0">The <span Class="emphasis">data</span> argument tells what kind of data libcurl wants to lock. Make sure that the callback uses a different lock for each kind of data. </p>
+<p class="level0"><span Class="emphasis">access</span> defines what access type libcurl wants, shared or single. </p>
+<p class="level0"><span Class="emphasis">clientp</span> is the private pointer you set with <span Class="emphasis">CURLSHOPT_USERDATA</span>. This pointer is not used by libcurl itself. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&nbsp; CURLSHcode sh;
+&nbsp; share = curl_share_init();
+&nbsp; sh = curl_share_setopt(share, CURLSHOPT_LOCKFUNC, mutex_lock);
+&nbsp; if(sh)
+&nbsp;   printf(&quot;Error: %s&bsol;n&quot;, curl_share_strerror(sh));
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.10 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">CURLSHE_OK (zero) means that the option was set properly, non-zero means an error occurred. See <span Class="emphasis">libcurl-errors(3)</span> for the full list with descriptions. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLSHOPT_UNLOCKFUNC</span>(3),  <span Class="bold">curl_share_setopt</span>(3), <span Class="bold">curl_share_cleanup</span>(3), <span Class="bold">curl_share_init</span>(3) </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

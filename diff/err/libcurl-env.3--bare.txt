@@ -1,0 +1,4 @@
+6c6
+< <p class="level1">When libcurl is given a URL to use in a transfer, it first extracts the &quot;scheme&quot; part from the URL and checks if there is a given proxy set for that in its corresponding environment variable. A URL like &quot;<a href="https://example.com&quot;">https://example.com&quot;</a> will hence use the &quot;http_proxy&quot; variable, while a URL like &quot;<a href="ftp://example.com&quot;">ftp://example.com&quot;</a> will use the &quot;ftp_proxy&quot; variable. </p>
+---
+> <p class="level1">When libcurl is given a URL to use in a transfer, it first extracts the &quot;scheme&quot; part from the URL and checks if there is a given proxy set for that in its corresponding environment variable. A URL like &quot;<a href="https://example.com">https://example.com</a>&quot; will hence use the &quot;http_proxy&quot; variable, while a URL like &quot;<a href="ftp://example.com">ftp://example.com</a>&quot; will use the &quot;ftp_proxy&quot; variable. </p>

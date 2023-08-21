@@ -1,0 +1,32 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_SSL_CIPHER_LIST - ciphers to use for TLS </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_SSL_CIPHER_LIST, char *list);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a char *, pointing to a null-terminated string holding the list of ciphers to use for the SSL connection. The list must be syntactically correct, it consists of one or more cipher strings separated by colons. Commas or spaces are also acceptable separators but colons are normally used, !, - and + can be used as operators. </p>
+<p class="level0">For OpenSSL and GnuTLS valid examples of cipher lists include <span Class="bold">RC4-SHA</span>, <span Class="bold">SHA1+DES</span>, <span Class="bold">TLSv1</span> and <a class="bold" href="#DEFAULT">DEFAULT</a>. The default list is normally set when you compile OpenSSL. </p>
+<p class="level0">For WolfSSL, valid examples of cipher lists include <span Class="bold">ECDHE-RSA-RC4-SHA</span>, <span Class="bold">AES256-SHA:AES256-SHA256</span>, etc. </p>
+<p class="level0">For BearSSL, valid examples of cipher lists include <span Class="bold">ECDHE-RSA-CHACHA20-POLY1305:ECDHE-RSA-AES128-GCM-SHA256</span>, or when using IANA names <span Class="bold">TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256:TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256</span>, etc. With BearSSL you do not add/remove ciphers. If one uses this option then all known ciphers are disabled and only those passed in are enabled. </p>
+<p class="level0">For Schannel, you can use this option to set algorithms but not specific cipher suites. Refer to the ciphers lists document for algorithms. </p>
+<p class="level0">You will find more details about cipher lists on this URL: </p>
+<p class="level0">&nbsp;<a href="https://curl.se/docs/ssl-ciphers.html">https://curl.se/docs/ssl-ciphers.html</a> </p>
+<p class="level0">The application does not have to keep the string around after setting this option. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL, use internal default </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All TLS based protocols: HTTPS, FTPS, IMAPS, POP3S, SMTPS etc. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com/&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_SSL_CIPHER_LIST, &quot;TLSv1&quot;);
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.9, in 7.83.0 for BearSSL </p>
+<p class="level0">If built TLS enabled. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if TLS is supported, CURLE_UNKNOWN_OPTION if not, or CURLE_OUT_OF_MEMORY if there was insufficient heap space. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_TLS13_CIPHERS</span>(3), <span Class="bold">CURLOPT_SSLVERSION</span>(3),  <span Class="bold">CURLOPT_PROXY_SSL_CIPHER_LIST</span>(3), <span Class="bold">CURLOPT_PROXY_TLS13_CIPHERS</span>(3),  <span Class="bold">CURLOPT_USE_SSL</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

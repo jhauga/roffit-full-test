@@ -1,0 +1,15 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_sftp_last_error - return the last SFTP-specific error code </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&#35;include &lt;libssh2_sftp.h&gt;
+&nbsp;
+unsigned long
+libssh2_sftp_last_error(LIBSSH2_SFTP *sftp);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="emphasis">sftp</span> - SFTP instance as returned by <span Class="bold">libssh2_sftp_init(3)</span> </p>
+<p class="level0">Returns the last error code produced by the SFTP layer. Note that this only returns a sensible error code if libssh2 returned LIBSSH2_ERROR_SFTP_PROTOCOL in a previous call. Using <span Class="bold">libssh2_sftp_last_error(3)</span> without a preceding SFTP protocol error, it will return an unspecified value. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Current error code state of the SFTP instance. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">libssh2_sftp_init(3)</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

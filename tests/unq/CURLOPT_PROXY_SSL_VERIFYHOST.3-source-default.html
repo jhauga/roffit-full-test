@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_PROXY_SSL_VERIFYHOST man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_PROXY_SSL_VERIFYHOST - verify the proxy certificate&#39;s name against host </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_PROXY_SSL_VERIFYHOST,
+&nbsp;                         long verify);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a long set to 2L as asking curl to <span Class="emphasis">verify</span> in the HTTPS proxy&#39;s certificate name fields against the proxy name. </p>
+<p class="level0">This option determines whether libcurl verifies that the proxy cert contains the correct name for the name it is known as. </p>
+<p class="level0">When <span Class="emphasis">CURLOPT_PROXY_SSL_VERIFYHOST(3)</span> is 2, the proxy certificate must indicate that the server is the proxy to which you meant to connect to, or the connection fails. </p>
+<p class="level0">Curl considers the proxy the intended one when the Common Name field or a Subject Alternate Name field in the certificate matches the host name in the proxy string which you told curl to use. </p>
+<p class="level0">If <span Class="emphasis">verify</span> value is set to 1: </p>
+<p class="level0">In 7.28.0 and earlier: treated as a debug option of some sorts, not supported anymore due to frequently leading to programmer mistakes. </p>
+<p class="level0">From 7.28.1 to 7.65.3: setting it to 1 made curl_easy_setopt() return an error and leaving the flag untouched. </p>
+<p class="level0">From 7.66.0: treats 1 and 2 the same. </p>
+<p class="level0">When the <span Class="emphasis">verify</span> value is 0L, the connection succeeds regardless of the names used in the certificate. Use that ability with caution! </p>
+<p class="level0">See also <span Class="emphasis">CURLOPT_PROXY_SSL_VERIFYPEER(3)</span> to verify the digital signature of the proxy certificate. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">2 </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All protocols when used over an HTTPS proxy. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp;
+&nbsp; /* Set the default value: strict name check please */
+&nbsp; curl_easy_setopt(curl, CURLOPT_PROXY_SSL_VERIFYHOST, 2L);
+&nbsp;
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.52.0. </p>
+<p class="level0">If built TLS enabled. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if TLS is supported, and CURLE_UNKNOWN_OPTION if not. </p>
+<p class="level0">If 1 is set as argument, <span Class="emphasis">CURLE_BAD_FUNCTION_ARGUMENT</span> is returned. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_PROXY_SSL_VERIFYPEER</span>(3), <span Class="bold">CURLOPT_PROXY_CAINFO</span>(3),  <span Class="bold">CURLOPT_SSL_VERIFYPEER</span>(3), <span Class="bold">CURLOPT_CAINFO</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

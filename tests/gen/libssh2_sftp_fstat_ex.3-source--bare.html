@@ -1,0 +1,69 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_sftp_fstat_ex - get or set attributes on an SFTP file handle </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&#35;include &lt;libssh2_sftp.h&gt;
+&nbsp;
+int
+libssh2_sftp_fstat_ex(LIBSSH2_SFTP_HANDLE *handle,
+&nbsp;                     LIBSSH2_SFTP_ATTRIBUTES *attrs, int setstat)
+&nbsp;
+&#35;define libssh2_sftp_fstat(handle, attrs) &bsol;
+&nbsp;   libssh2_sftp_fstat_ex((handle), (attrs), 0)
+&#35;define libssh2_sftp_fsetstat(handle, attrs) &bsol;
+&nbsp;   libssh2_sftp_fstat_ex((handle), (attrs), 1)
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="emphasis">handle</span> - SFTP File Handle as returned by <span Class="bold">libssh2_sftp_open_ex(3)</span> </p>
+<p class="level0"><span Class="emphasis">attrs</span> - Pointer to an LIBSSH2_SFTP_ATTRIBUTES structure to set file metadata from or into depending on the value of setstat. </p>
+<p class="level0"><span Class="emphasis">setstat</span> - When non-zero, the file&#39;s metadata will be updated with the data found in attrs according to the values of attrs-&gt;flags and other relevant member attributes. </p>
+<p class="level0">Get or Set statbuf type data for a given LIBSSH2_SFTP_HANDLE instance. </p><a name="DATA"></a><h2 class="nroffsh">Data types</h2>
+<p class="level0">LIBSSH2_SFTP_ATTRIBUTES is a typedefed struct that is defined as below </p><pre class="level0">
+struct _LIBSSH2_SFTP_ATTRIBUTES {
+&nbsp;
+&nbsp;   /* If flags &amp; ATTR_* bit is set, then the value in this
+&nbsp;    * struct will be meaningful Otherwise it should be ignored
+&nbsp;    */
+&nbsp;   unsigned long flags;
+&nbsp;
+&nbsp;   /* size of file, in bytes */
+&nbsp;   libssh2_uint64_t filesize;
+&nbsp;
+&nbsp;   /* numerical representation of the user and group owner of
+&nbsp;    * the file
+&nbsp;    */
+&nbsp;   unsigned long uid, gid;
+&nbsp;
+&nbsp;   /* bitmask of permissions */
+&nbsp;   unsigned long permissions;
+&nbsp;
+&nbsp;   /* access time and modified time of file */
+&nbsp;   unsigned long atime, mtime;
+};
+</pre>
+
+<p class="level0">You will find a full set of defines and macros to identify flags and permissions on the <span Class="bold">libssh2_sftp.h</span> header file, but some of the most common ones are: </p>
+<p class="level0">To check for specific user permissions, the set of defines are in the pattern LIBSSH2_SFTP_S_I&lt;action&gt;&lt;who&gt; where &lt;action&gt; is R, W or X for read, write and executable and &lt;who&gt; is USR, GRP and OTH for user, group and other. So, you check for a user readable file, use the bit <span Class="emphasis">LIBSSH2_SFTP_S_IRUSR</span> while you want to see if it is executable for other, you use <span Class="emphasis">LIBSSH2_SFTP_S_IXOTH</span> and so on. </p>
+<p class="level0">To check for specific file types, you would previously (before libssh2 1.2.5) use the standard posix S_IS***() macros, but since 1.2.5 libssh2 offers its own set of macros for this functionality: </p>
+<p class="level0"><a name="LIBSSH2SFTPSISLNK"></a><span class="nroffip">LIBSSH2_SFTP_S_ISLNK</span> </p>
+<p class="level1">Test for a symbolic link </p>
+<p class="level0"><a name="LIBSSH2SFTPSISREG"></a><span class="nroffip">LIBSSH2_SFTP_S_ISREG</span> </p>
+<p class="level1">Test for a regular file </p>
+<p class="level0"><a name="LIBSSH2SFTPSISDIR"></a><span class="nroffip">LIBSSH2_SFTP_S_ISDIR</span> </p>
+<p class="level1">Test for a directory </p>
+<p class="level0"><a name="LIBSSH2SFTPSISCHR"></a><span class="nroffip">LIBSSH2_SFTP_S_ISCHR</span> </p>
+<p class="level1">Test for a character special file </p>
+<p class="level0"><a name="LIBSSH2SFTPSISBLK"></a><span class="nroffip">LIBSSH2_SFTP_S_ISBLK</span> </p>
+<p class="level1">Test for a block special file </p>
+<p class="level0"><a name="LIBSSH2SFTPSISFIFO"></a><span class="nroffip">LIBSSH2_SFTP_S_ISFIFO</span> </p>
+<p class="level1">Test for a pipe or FIFO special file </p>
+<p class="level0"><a name="LIBSSH2SFTPSISSOCK"></a><span class="nroffip">LIBSSH2_SFTP_S_ISSOCK</span> </p>
+<p class="level1">Test for a socket </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Return 0 on success or negative on failure.  It returns LIBSSH2_ERROR_EAGAIN when it would otherwise block. While LIBSSH2_ERROR_EAGAIN is a negative number, it is not really a failure per se. </p><a name="ERRORS"></a><h2 class="nroffsh">Errors</h2>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_ALLOC</span> -  An internal memory allocation call failed. </p>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_SOCKET_SEND</span> - Unable to send data on socket. </p>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_SOCKET_TIMEOUT</span> - </p>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_SFTP_PROTOCOL</span> - An invalid SFTP protocol response was received on the socket, or an SFTP operation caused an errorcode to be returned by the server. </p><a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">This function has been around since forever, but most of the LIBSSH2_SFTP_S_* defines were introduced in libssh2 0.14 and the LIBSSH2_SFTP_S_IS***() macros were introduced in libssh2 1.2.5. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">libssh2_sftp_open_ex(3)</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

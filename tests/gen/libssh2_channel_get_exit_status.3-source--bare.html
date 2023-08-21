@@ -1,0 +1,13 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_channel_get_exit_status - get the remote exit code </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&nbsp;
+int
+libssh2_channel_get_exit_status(LIBSSH2_CHANNEL* channel)
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="emphasis">channel</span> - Closed channel stream to retrieve exit status from. </p>
+<p class="level0">Returns the exit code raised by the process running on the remote host at the other end of the named channel. Note that the exit status may not be available if the remote end has not yet set its status to closed. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns 0 on failure, otherwise the <span Class="emphasis">Exit Status</span> reported by remote host </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

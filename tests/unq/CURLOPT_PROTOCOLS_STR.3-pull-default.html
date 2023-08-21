@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_PROTOCOLS_STR man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_PROTOCOLS_STR - allowed protocols </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_PROTOCOLS_STR, char *spec);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to a string that holds a comma-separated list of case insensitive protocol names (URL schemes) to allow in the transfer. This option allows applications to use libcurl built to support a wide range of protocols but still limit specific transfers to only be allowed to use a subset of them. By default, libcurl accepts all protocols it was built with support for. See also <span Class="emphasis">CURLOPT_REDIR_PROTOCOLS_STR(3)</span>. </p>
+<p class="level0">If trying to set a non-existing protocol or if no matching protocol at all is set, it returns error. </p>
+<p class="level0">These are the available protocols: </p>
+<p class="level0">DICT, FILE, FTP, FTPS, GOPHER, GOPHERS, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS, MQTT, POP3, POP3S, RTMP, RTMPE, RTMPS, RTMPT, RTMPTE, RTMPTS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET, TFTP, WS, WSS </p>
+<p class="level0">You can set &quot;ALL&quot; as a short-cut to enable all protocols. Note that by setting all, you may enable protocols that were not supported the day you write this but are introduced in a future libcurl version. </p>
+<p class="level0"><span Class="emphasis">curl_version_info(3)</span> can be used to get a list of all supported protocols in the current libcurl. <span Class="emphasis">CURLINFO_SCHEME(3)</span> is the recommended way to figure out the protocol used in a previous transfer. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">All protocols built-in </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+curl = curl_easy_init();
+if(curl) {
+&nbsp; /* pass in the URL from an external source */
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, argv[1]);
+&nbsp;
+&nbsp; /* only allow HTTP, TFTP and SFTP */
+&nbsp; curl_easy_setopt(curl, CURLOPT_PROTOCOLS_STR, &quot;http,tftp,sftp&quot;);
+&nbsp;
+&nbsp; /* Perform the request */
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.85.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_UNKNOWN_OPTION if the option is not implemented, CURLE_UNSUPPORTED_PROTOCOL if a listed protocol is not supported or disabled, CURLE_BAD_FUNCTION_ARGUMENT if no protocol is listed else CURLE_OK. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_REDIR_PROTOCOLS_STR</span>(3), <span Class="bold">CURLOPT_URL</span>(3),  <span Class="bold">curl_version_info</span>(3), <span Class="bold">CURLINFO_SCHEME</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

@@ -1,0 +1,53 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_WILDCARDMATCH - directory wildcard transfers </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_WILDCARDMATCH, long onoff);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Set <span Class="emphasis">onoff</span> to 1 if you want to transfer multiple files according to a file name pattern. The pattern can be specified as part of the <span Class="emphasis">CURLOPT_URL(3)</span> option, using an <span Class="bold">fnmatch</span>-like pattern (Shell Pattern Matching) in the last part of URL (file name). </p>
+<p class="level0">By default, libcurl uses its internal wildcard matching implementation. You can provide your own matching function by the <span Class="emphasis">CURLOPT_FNMATCH_FUNCTION(3)</span> option. </p>
+<p class="level0">A brief introduction of its syntax follows: </p>
+<p class="level0"><a name=""></a><span class="nroffip">* - ASTERISK</span> </p><pre class="level1">
+&nbsp; ftp://example.com/some/path/*.txt
+</pre>
+
+<p class="level1">for all txt&#39;s from the root directory. Only two asterisks are allowed within the same pattern string. </p>
+<p class="level0"><a name=""></a><span class="nroffip">? - QUESTION MARK</span> </p>
+<p class="level1">Question mark matches any (exactly one) character. </p><pre class="level1">
+&nbsp; ftp://example.com/some/path/photo?.jpg
+</pre>
+
+<p class="level0"><a name=""></a><span class="nroffip">[ - BRACKET EXPRESSION</span> </p>
+<p class="level1">The left bracket opens a bracket expression. The question mark and asterisk have no special meaning in a bracket expression. Each bracket expression ends by the right bracket and matches exactly one character. Some examples follow: </p>
+<p class="level1"><span Class="bold">[a-zA-Z0-9]</span> or <span Class="bold">[f-gF-G]</span> - character interval </p>
+<p class="level1"><span Class="bold">[abc]</span> - character enumeration </p>
+<p class="level1"><span Class="bold">[^abc]</span> or <span Class="bold">[!abc]</span> - negation </p>
+<p class="level1"><span Class="bold">[[:name:]]</span> class expression. Supported classes are <span Class="bold">alnum</span>,<span Class="bold">lower</span>, <span Class="bold">space</span>, <span Class="bold">alpha</span>, <span Class="bold">digit</span>, <span Class="bold">print</span>, <span Class="bold">upper</span>, <span Class="bold">blank</span>, <span Class="bold">graph</span>, <span Class="bold">xdigit</span>. </p>
+<p class="level1"><span Class="bold">[][-!^]</span> - special case - matches only &#39;-&#39;, &#39;]&#39;, &#39;[&#39;, &#39;!&#39; or &#39;^&#39;. These characters have no special purpose. </p>
+<p class="level1"><span Class="bold">[&bsol;[&bsol;]&bsol;&bsol;]</span> - escape syntax. Matches &#39;[&#39;, &#39;]&#39; or &#39;&bsol;&#39;. </p>
+<p class="level1">Using the rules above, a file name pattern can be constructed: </p><pre class="level1">
+&nbsp; ftp://example.com/some/path/[a-z[:upper:]&bsol;&bsol;].jpg
+</pre>
+<a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">This feature is only supported for FTP download. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+/* initialization of easy handle */
+handle = curl_easy_init();
+&nbsp;
+/* turn on wildcard matching */
+curl_easy_setopt(handle, CURLOPT_WILDCARDMATCH, 1L);
+&nbsp;
+/* callback is called before download of concrete file started */
+curl_easy_setopt(handle, CURLOPT_CHUNK_BGN_FUNCTION, file_is_coming);
+&nbsp;
+/* callback is called after data from the file have been transferred */
+curl_easy_setopt(handle, CURLOPT_CHUNK_END_FUNCTION, file_is_downloaded);
+&nbsp;
+/* See more on https://curl.se/libcurl/c/ftp-wildcard.html */
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.21.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_FNMATCH_FUNCTION</span>(3), <span Class="bold">CURLOPT_URL</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

@@ -1,0 +1,31 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_CLOSESOCKETFUNCTION - callback to socket close replacement </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+int closesocket_callback(void *clientp, curl_socket_t item);
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_CLOSESOCKETFUNCTION,
+&nbsp;                         closesocket_callback);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to your callback function, which should match the prototype shown above. </p>
+<p class="level0">This callback function gets called by libcurl instead of the <span Class="emphasis">close(3)</span> or <span Class="emphasis">closesocket(3)</span> call when sockets are closed (not for any other file descriptors). This is pretty much the reverse to the <span Class="emphasis">CURLOPT_OPENSOCKETFUNCTION(3)</span> option. Return 0 to signal success and 1 if there was an error. </p>
+<p class="level0">The <span Class="emphasis">clientp</span> pointer is set with <span Class="emphasis">CURLOPT_CLOSESOCKETDATA(3)</span>. <span Class="emphasis">item</span> is the socket libcurl wants to be closed. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">By default libcurl uses the standard socket close function. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+static int closesocket(void *clientp, curl_socket_t item)
+{
+&nbsp; printf(&quot;libcurl wants to close %d now&bsol;n&quot;, (int)item);
+&nbsp; return 0;
+}
+&nbsp;
+/* call this function to close sockets */
+curl_easy_setopt(curl, CURLOPT_CLOSESOCKETFUNCTION, closesocket);
+curl_easy_setopt(curl, CURLOPT_CLOSESOCKETDATA, &amp;sockfd);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.21.7 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_CLOSESOCKETDATA</span>(3), <span Class="bold">CURLOPT_OPENSOCKETFUNCTION</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

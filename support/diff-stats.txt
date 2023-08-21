@@ -1,0 +1,12 @@
+<p>The files tested are the number of files that were used for test. These files at the very least will be doubled relative to files built.</p>
+<p><strong>Total Files Tested</strong>  - 705</p>
+<p><strong>Tested Files with Differences</strong> - 8</p>
+<p><h3 style="display:inline">File Difference Percentage</h3> - 1</p>  
+<hr>
+<p>The files built account for files tested (x1) for source and pull (x2) for options (xUsed).</p>
+<p><small>built = (optonCount x filesTested) * 2 (<em>source and pull repo)</em> ---
+So--- optonCount = 2 ; filesTested= 705;  repos = 2;</small></p>
+<p><strong>Total Files Built</strong>  - 2820</p>
+<p><strong>Total Files with Differences</strong> - 32</p>
+<p><h3 style="display:inline">Built Difference Percentage</h3> - 1</p>
+<hr>

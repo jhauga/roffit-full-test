@@ -1,0 +1,76 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_OPENSOCKETFUNCTION - callback for opening socket </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+typedef enum  {
+&nbsp; CURLSOCKTYPE_IPCXN,  /* socket created for a specific IP connection */
+} curlsocktype;
+&nbsp;
+struct curl_sockaddr {
+&nbsp; int family;
+&nbsp; int socktype;
+&nbsp; int protocol;
+&nbsp; unsigned int addrlen;
+&nbsp; struct sockaddr addr;
+};
+&nbsp;
+curl_socket_t opensocket_callback(void *clientp,
+&nbsp;                                 curlsocktype purpose,
+&nbsp;                                 struct curl_sockaddr *address);
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_OPENSOCKETFUNCTION, opensocket_callback);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to your callback function, which should match the prototype shown above. </p>
+<p class="level0">This callback function gets called by libcurl instead of the <span Class="emphasis">socket(2)</span> call. The callback&#39;s <span Class="emphasis">purpose</span> argument identifies the exact purpose for this particular socket. <span Class="emphasis">CURLSOCKTYPE_IPCXN</span> is for IP based connections and is the only purpose currently used in libcurl. Future versions of libcurl may support more purposes. </p>
+<p class="level0">The <span Class="emphasis">clientp</span> pointer contains whatever user-defined value set using the <span Class="emphasis">CURLOPT_OPENSOCKETDATA(3)</span> function. </p>
+<p class="level0">The callback gets the resolved peer address as the <span Class="emphasis">address</span> argument and is allowed to modify the address or refuse to connect completely. The callback function should return the newly created socket or <span Class="emphasis">CURL_SOCKET_BAD</span> in case no connection could be established or another error was detected. Any additional <span Class="emphasis">setsockopt(2)</span> calls can of course be done on the socket at the user&#39;s discretion.  A <span Class="emphasis">CURL_SOCKET_BAD</span> return value from the callback function will signal an unrecoverable error to libcurl and it will return <span Class="emphasis">CURLE_COULDNT_CONNECT</span> from the function that triggered this callback. This return code can be used for IP address block listing. </p>
+<p class="level0">If you want to pass in a socket with an already established connection, pass the socket back with this callback and then use <span Class="emphasis">CURLOPT_SOCKOPTFUNCTION(3)</span> to signal that it already is connected. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">The default behavior is the equivalent of this: </p><pre class="level0">
+&nbsp;  return socket(addr-&gt;family, addr-&gt;socktype, addr-&gt;protocol);
+</pre>
+<a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+/* make libcurl use the already established socket &#39;sockfd&#39; */
+&nbsp;
+static curl_socket_t opensocket(void *clientp,
+&nbsp;                               curlsocktype purpose,
+&nbsp;                               struct curl_sockaddr *address)
+{
+&nbsp; curl_socket_t sockfd;
+&nbsp; sockfd = *(curl_socket_t *)clientp;
+&nbsp; /* the actual externally set socket is passed in via the OPENSOCKETDATA
+&nbsp;    option */
+&nbsp; return sockfd;
+}
+&nbsp;
+static int sockopt_callback(void *clientp, curl_socket_t curlfd,
+&nbsp;                           curlsocktype purpose)
+{
+&nbsp; /* This return code was added in libcurl 7.21.5 */
+&nbsp; return CURL_SOCKOPT_ALREADY_CONNECTED;
+}
+&nbsp;
+curl = curl_easy_init();
+if(curl) {
+&nbsp; /* libcurl will internally think that you connect to the host
+&nbsp;  * and port that you specify in the URL option. */
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;http://99.99.99.99:9999&quot;);
+&nbsp; /* call this function to get a socket */
+&nbsp; curl_easy_setopt(curl, CURLOPT_OPENSOCKETFUNCTION, opensocket);
+&nbsp; curl_easy_setopt(curl, CURLOPT_OPENSOCKETDATA, &amp;sockfd);
+&nbsp;
+&nbsp; /* call this function to set options for the socket */
+&nbsp; curl_easy_setopt(curl, CURLOPT_SOCKOPTFUNCTION, sockopt_callback);
+&nbsp;
+&nbsp; res = curl_easy_perform(curl);
+&nbsp;
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.17.1. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_OPENSOCKETDATA</span>(3), <span Class="bold">CURLOPT_SOCKOPTFUNCTION</span>(3),  <span Class="bold">CURLOPT_CLOSESOCKETFUNCTION</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

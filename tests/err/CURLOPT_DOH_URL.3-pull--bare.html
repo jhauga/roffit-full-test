@@ -1,0 +1,32 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_DOH_URL - provide the DNS-over-HTTPS URL </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_DOH_URL, char *URL);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass in a pointer to a <span Class="emphasis">URL</span> for the DoH server to use for name resolving. The parameter should be a char * to a null-terminated string which must be URL-encoded in the following format: &quot;<a href="https://host:port/path">https://host:port/path</a>&quot;. It MUST specify an HTTPS URL. </p>
+<p class="level0">libcurl does not validate the syntax or use this variable until the transfer is issued. Even if you set a crazy value here, <span Class="emphasis">curl_easy_setopt(3)</span> will still return <span Class="emphasis">CURLE_OK</span>. </p>
+<p class="level0">curl sends POST requests to the given DNS-over-HTTPS URL. </p>
+<p class="level0">To find the DoH server itself, which might be specified using a name, libcurl will use the default name lookup function. You can bootstrap that by providing the address for the DoH server with <span Class="emphasis">CURLOPT_RESOLVE(3)</span>. </p>
+<p class="level0">Disable DoH use again by setting this option to NULL. </p><a name="INHERIT"></a><h2 class="nroffsh">Inherit options</h2>
+<p class="level0">DoH lookups use SSL and some SSL settings from your transfer are inherited, like <span Class="emphasis">CURLOPT_SSL_CTX_FUNCTION(3)</span>. </p>
+<p class="level0">The hostname and peer certificate verification settings are not inherited but can be controlled separately via <span Class="emphasis">CURLOPT_DOH_SSL_VERIFYHOST(3)</span> and <span Class="emphasis">CURLOPT_DOH_SSL_VERIFYPEER(3)</span>. </p>
+<p class="level0">A set <span Class="emphasis">CURLOPT_OPENSOCKETFUNCTION(3)</span> callback is not inherited. </p><a name="KNOWN"></a><h2 class="nroffsh">Known bugs</h2>
+<p class="level0">Even when DoH is set to be used with this option, there are still some name resolves that are performed without it, using the default name resolver mechanism. This includes name resolves done for <span Class="emphasis">CURLOPT_INTERFACE(3)</span>, <span Class="emphasis">CURLOPT_FTPPORT(3)</span>, a proxy type set to <span Class="bold">CURLPROXY_SOCKS4</span> or <span Class="bold">CURLPROXY_SOCKS5</span> and probably some more. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL - there is no default DoH URL. If this option is not set, libcurl will use the default name resolver. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_DOH_URL, &quot;https://dns.example.com&quot;);
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.62.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK on success or CURLE_OUT_OF_MEMORY if there was insufficient heap space. </p>
+<p class="level0">Note that <span Class="emphasis">curl_easy_setopt(3)</span> will not immediately parse the given string so when given a bad DoH URL, libcurl might not detect the problem until it later tries to resolve a name with it. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_VERBOSE</span>(3), <span Class="bold">CURLOPT_RESOLVE</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_HTTPPOST man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_HTTPPOST - multipart formpost content </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_HTTPPOST,
+&nbsp;                         struct curl_httppost *formpost);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="bold">This option is deprecated.</span> Use <span Class="emphasis">CURLOPT_MIMEPOST(3)</span> instead. </p>
+<p class="level0">Tells libcurl you want a <span Class="bold">multipart/formdata</span> HTTP POST to be made and you instruct what data to pass on to the server in the <span Class="emphasis">formpost</span> argument. Pass a pointer to a linked list of <span Class="emphasis">curl_httppost</span> structs as parameter. The easiest way to create such a list, is to use <span Class="emphasis">curl_formadd(3)</span> as documented. The data in this list must remain intact as long as the curl transfer is alive and is using it. </p>
+<p class="level0">Using POST with HTTP 1.1 implies the use of a &quot;Expect: 100-continue&quot; header. You can disable this header with <span Class="emphasis">CURLOPT_HTTPHEADER(3)</span>. </p>
+<p class="level0">When setting <span Class="emphasis">CURLOPT_HTTPPOST(3)</span>, it will automatically set <span Class="emphasis">CURLOPT_NOBODY(3)</span> to 0. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+/* Fill in the file upload field. This makes libcurl load data from
+&nbsp;  the given file name when curl_easy_perform() is called. */
+curl_formadd(&amp;formpost,
+&nbsp;            &amp;lastptr,
+&nbsp;            CURLFORM_COPYNAME, &quot;sendfile&quot;,
+&nbsp;            CURLFORM_FILE, &quot;postit2.c&quot;,
+&nbsp;            CURLFORM_END);
+&nbsp;
+/* Fill in the filename field */
+curl_formadd(&amp;formpost,
+&nbsp;            &amp;lastptr,
+&nbsp;            CURLFORM_COPYNAME, &quot;filename&quot;,
+&nbsp;            CURLFORM_COPYCONTENTS, &quot;postit2.c&quot;,
+&nbsp;            CURLFORM_END);
+&nbsp;
+/* Fill in the submit field too, even if this is rarely needed */
+curl_formadd(&amp;formpost,
+&nbsp;            &amp;lastptr,
+&nbsp;            CURLFORM_COPYNAME, &quot;submit&quot;,
+&nbsp;            CURLFORM_COPYCONTENTS, &quot;send&quot;,
+&nbsp;            CURLFORM_END);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">As long as HTTP is enabled. Deprecated in 7.56.0. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if HTTP is enabled, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_POSTFIELDS</span>(3), <span Class="bold">CURLOPT_POST</span>(3), <span Class="bold">CURLOPT_MIMEPOST</span>(3), <span Class="bold">curl_formadd</span>(3), <span Class="bold">curl_formfree</span>(3), <span Class="bold">curl_mime_init</span>(3) </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

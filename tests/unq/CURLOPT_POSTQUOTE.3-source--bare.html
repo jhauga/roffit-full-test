@@ -1,0 +1,34 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_POSTQUOTE - (S)FTP commands to run after the transfer </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_POSTQUOTE,
+&nbsp;                         struct curl_slist *cmds);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to a linked list of FTP or SFTP commands to pass to the server after your FTP transfer request. The commands will only be run if no error occurred. The linked list should be a fully valid list of struct curl_slist structs properly filled in as described for <span Class="emphasis">CURLOPT_QUOTE(3)</span>. </p>
+<p class="level0">Disable this operation again by setting a NULL to this option. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">SFTP and FTP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+struct curl_slist *cmdlist = NULL;
+cmdlist = curl_slist_append(cmdlist, &quot;RNFR source-name&quot;);
+cmdlist = curl_slist_append(cmdlist, &quot;RNTO new-name&quot;);
+&nbsp;
+curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;ftp://example.com/foo.bin&quot;);
+&nbsp;
+&nbsp; /* pass in the FTP commands to run after the transfer */
+&nbsp; curl_easy_setopt(curl, CURLOPT_POSTQUOTE, cmdlist);
+&nbsp;
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp;
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">If support for the protocols are built-in. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_QUOTE</span>(3), <span Class="bold">CURLOPT_PREQUOTE</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

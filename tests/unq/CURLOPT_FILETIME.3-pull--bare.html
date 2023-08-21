@@ -1,0 +1,33 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_FILETIME - get the modification time of the remote resource </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_FILETIME, long gettime);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a long. If it is 1, libcurl will attempt to get the modification time of the remote document in this operation. This requires that the remote server sends the time or replies to a time querying command. The <span Class="emphasis">curl_easy_getinfo(3)</span> function with the <span Class="emphasis">CURLINFO_FILETIME(3)</span> argument can be used after a transfer to extract the received time (if any). </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">0 </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP(S), FTP(S), SFTP, FILE, SMB(S) </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, url);
+&nbsp; /* Ask for filetime */
+&nbsp; curl_easy_setopt(curl, CURLOPT_FILETIME, 1L);
+&nbsp; res = curl_easy_perform(curl);
+&nbsp; if(CURLE_OK == res) {
+&nbsp;   res = curl_easy_getinfo(curl, CURLINFO_FILETIME, &amp;filetime);
+&nbsp;   if((CURLE_OK == res) &amp;&amp; (filetime &gt;= 0)) {
+&nbsp;     time_t file_time = (time_t)filetime;
+&nbsp;     printf(&quot;filetime %s: %s&quot;, filename, ctime(&amp;file_time));
+&nbsp;   }
+&nbsp; }
+&nbsp; /* always cleanup */
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Always, for SFTP since 7.49.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_easy_getinfo</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

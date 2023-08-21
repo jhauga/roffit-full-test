@@ -1,0 +1,22 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLMOPT_CHUNK_LENGTH_PENALTY_SIZE - chunk length threshold for pipelining </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLMcode curl_multi_setopt(CURLM *handle, CURLMOPT_CHUNK_LENGTH_PENALTY_SIZE,
+&nbsp;                           long size);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">No function since pipelining was removed in 7.62.0. </p>
+<p class="level0">Pass a long with a <span Class="bold">size</span> in bytes. If a transfer in a pipeline is currently processing a chunked (Transfer-encoding: chunked) request with a current chunk length larger than <span Class="emphasis">CURLMOPT_CHUNK_LENGTH_PENALTY_SIZE(3)</span>, that pipeline will not be considered for additional requests, even if it is shorter than <span Class="emphasis">CURLMOPT_MAX_PIPELINE_LENGTH(3)</span>. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">The default value is 0, which means that the penalization is inactive. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP(S) </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURLM *m = curl_multi_init();
+long maxchunk = 10000;
+curl_multi_setopt(m, CURLMOPT_CHUNK_LENGTH_PENALTY_SIZE, maxchunk);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.30.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLM_OK if the option is supported, and CURLM_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLMOPT_PIPELINING</span>(3), <span Class="bold">CURLMOPT_CONTENT_LENGTH_PENALTY_SIZE</span>(3),  <span Class="bold">CURLMOPT_MAX_PIPELINE_LENGTH</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

@@ -1,0 +1,51 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_IOCTLFUNCTION - callback for I/O operations </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+typedef enum {
+&nbsp; CURLIOE_OK,            /* I/O operation successful */
+&nbsp; CURLIOE_UNKNOWNCMD,    /* command was unknown to callback */
+&nbsp; CURLIOE_FAILRESTART,   /* failed to restart the read */
+&nbsp; CURLIOE_LAST           /* never use */
+} curlioerr;
+&nbsp;
+typedef enum  {
+&nbsp; CURLIOCMD_NOP,         /* no operation */
+&nbsp; CURLIOCMD_RESTARTREAD, /* restart the read stream from start */
+&nbsp; CURLIOCMD_LAST         /* never use */
+} curliocmd;
+&nbsp;
+curlioerr ioctl_callback(CURL *handle, int cmd, void *clientp);
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_IOCTLFUNCTION, ioctl_callback);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to your callback function, which should match the prototype shown above. </p>
+<p class="level0">This callback function gets called by libcurl when something special I/O-related needs to be done that the library cannot do by itself. For now, rewinding the read data stream is the only action it can request. The rewinding of the read data stream may be necessary when doing an HTTP PUT or POST with a multi-pass authentication method. </p>
+<p class="level0">The callback MUST return <span Class="emphasis">CURLIOE_UNKNOWNCMD</span> if the input <span Class="emphasis">cmd</span> is not <span Class="emphasis">CURLIOCMD_RESTARTREAD</span>. </p>
+<p class="level0">The <span Class="emphasis">clientp</span> argument to the callback is set with the <span Class="emphasis">CURLOPT_IOCTLDATA(3)</span> option. </p>
+<p class="level0">This option is deprecated! Do not use it. Use <span Class="emphasis">CURLOPT_SEEKFUNCTION(3)</span> instead to provide seeking! If <span Class="emphasis">CURLOPT_SEEKFUNCTION(3)</span> is set, this parameter will be ignored when seeking. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">By default, this parameter is set to NULL. Not used. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">Used with HTTP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+static curlioerr ioctl_callback(CURL *handle, int cmd, void *clientp)
+{
+&nbsp; struct data *io = (struct data *)clientp;
+&nbsp; if(cmd == CURLIOCMD_RESTARTREAD) {
+&nbsp;   lseek(fd, 0, SEEK_SET);
+&nbsp;   current_offset = 0;
+&nbsp;   return CURLIOE_OK;
+&nbsp; }
+&nbsp; return CURLIOE_UNKNOWNCMD;
+}
+{
+&nbsp; struct data ioctl_data;
+&nbsp; curl_easy_setopt(curl, CURLOPT_IOCTLFUNCTION, ioctl_callback);
+&nbsp; curl_easy_setopt(curl, CURLOPT_IOCTLDATA, &amp;ioctl_data);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.12.3. Deprecated since 7.18.0. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_IOCTLDATA</span>(3), <span Class="bold">CURLOPT_SEEKFUNCTION</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

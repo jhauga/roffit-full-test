@@ -1,0 +1,21 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_channel_get_exit_signal - get the remote exit signal </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&nbsp;
+int
+libssh2_channel_get_exit_signal(LIBSSH2_CHANNEL *channel,
+&nbsp;                               char **exitsignal, size_t *exitsignal_len,
+&nbsp;                               char **errmsg, size_t *errmsg_len,
+&nbsp;                               char **langtag, size_t *langtag_len);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="emphasis">channel</span> - Closed channel stream to retrieve exit signal from. </p>
+<p class="level0"><span Class="emphasis">exitsignal</span> - If not NULL, is populated by reference with the exit signal (without leading &quot;SIG&quot;). Note that the string is stored in a newly allocated buffer. If the remote program exited cleanly, the referenced string pointer will be set to NULL. </p>
+<p class="level0"><span Class="emphasis">exitsignal_len</span> - If not NULL, is populated by reference with the length of exitsignal. </p>
+<p class="level0"><span Class="emphasis">errmsg</span> - If not NULL, is populated by reference with the error message (if provided by remote server, if not it will be set to NULL). Note that the string is stored in a newly allocated buffer. </p>
+<p class="level0"><span Class="emphasis">errmsg_len</span> - If not NULL, is populated by reference with the length of errmsg. </p>
+<p class="level0"><span Class="emphasis">langtag</span> - If not NULL, is populated by reference with the language tag (if provided by remote server, if not it will be set to NULL). Note that the string is stored in a newly allocated buffer. </p>
+<p class="level0"><span Class="emphasis">langtag_len</span> - If not NULL, is populated by reference with the length of langtag. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Numeric error code corresponding to the the Error Code constants. </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

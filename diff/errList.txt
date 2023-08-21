@@ -1,0 +1,16 @@
+diff/err/CURLOPT_DOH_URL.3--bare.txt
+diff/err/CURLOPT_DOH_URL.3-default.txt
+diff/err/CURLOPT_PROXY.3--bare.txt
+diff/err/CURLOPT_PROXY.3-default.txt
+diff/err/CURLOPT_TRAILERFUNCTION.3--bare.txt
+diff/err/CURLOPT_TRAILERFUNCTION.3-default.txt
+diff/err/CURLOPT_URL.3--bare.txt
+diff/err/CURLOPT_URL.3-default.txt
+diff/err/libcurl-env.3--bare.txt
+diff/err/libcurl-env.3-default.txt
+diff/err/libcurl-security.3--bare.txt
+diff/err/libcurl-security.3-default.txt
+diff/err/libcurl-url.3--bare.txt
+diff/err/libcurl-url.3-default.txt
+diff/err/nmap-fr.1--bare.txt
+diff/err/nmap-fr.1-default.txt

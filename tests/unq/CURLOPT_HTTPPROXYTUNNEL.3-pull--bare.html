@@ -1,0 +1,27 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_HTTPPROXYTUNNEL - tunnel through HTTP proxy </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_HTTPPROXYTUNNEL, long tunnel);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Set the <span Class="bold">tunnel</span> parameter to 1L to make libcurl tunnel all operations through the HTTP proxy (set with <span Class="emphasis">CURLOPT_PROXY(3)</span>). There is a big difference between using a proxy and to tunnel through it. </p>
+<p class="level0">Tunneling means that an HTTP CONNECT request is sent to the proxy, asking it to connect to a remote host on a specific port number and then the traffic is just passed through the proxy. Proxies tend to white-list specific port numbers it allows CONNECT requests to and often only port 80 and 443 are allowed. </p>
+<p class="level0">To suppress proxy CONNECT response headers from user callbacks use <span Class="emphasis">CURLOPT_SUPPRESS_CONNECT_HEADERS(3)</span>. </p>
+<p class="level0">HTTP proxies can generally only speak HTTP (for obvious reasons), which makes libcurl convert non-HTTP requests to HTTP when using an HTTP proxy without this tunnel option set. For example, asking for an FTP URL and specifying an HTTP proxy will make libcurl send an FTP URL in an HTTP GET request to the proxy. By instead tunneling through the proxy, you avoid that conversion (that rarely works through the proxy anyway). </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">0 </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All network protocols </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;ftp://example.com/file.txt&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_PROXY, &quot;http://127.0.0.1:80&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_HTTPPROXYTUNNEL, 1L);
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Always </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_PROXY</span>(3), <span Class="bold">CURLOPT_PROXYTYPE</span>(3), <span Class="bold">CURLOPT_PROXYPORT</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

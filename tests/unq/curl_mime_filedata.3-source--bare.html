@@ -1,0 +1,36 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_mime_filedata - set a mime part&#39;s body data from a file contents </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_mime_filedata(curl_mimepart *part,
+&nbsp;                           const char *filename);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="emphasis">curl_mime_filedata(3)</span> sets a mime part&#39;s body content from the named file&#39;s contents. This is an alternative to <span Class="emphasis">curl_mime_data(3)</span> for setting data to a mime part. </p>
+<p class="level0"><span Class="emphasis">part</span> is the part&#39;s to assign contents to. </p>
+<p class="level0"><span Class="emphasis">filename</span> points to the null-terminated file&#39;s path name. The pointer can be NULL to detach the previous part contents settings. Filename storage can be safely be reused after this call. </p>
+<p class="level0">As a side effect, the part&#39;s remote file name is set to the base name of the given <span Class="emphasis">filename</span> if it is a valid named file. This can be undone or overridden by a subsequent call to <span Class="emphasis">curl_mime_filename(3)</span>. </p>
+<p class="level0">The contents of the file is read during the file transfer in a streaming manner to allow huge files to get transferred without using much memory. It therefore requires that the file is kept intact during the entire request. </p>
+<p class="level0">If the file size cannot be determined before actually reading it (such as for a device or named pipe), the whole mime structure containing the part will be transferred as chunks by HTTP and rejected by IMAP. </p>
+<p class="level0">Setting a part&#39;s contents multiple times is valid: only the value set by the last call is retained. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&nbsp;curl_mime *mime;
+&nbsp;curl_mimepart *part;
+&nbsp;
+&nbsp;/* create a mime handle */
+&nbsp;mime = curl_mime_init(easy);
+&nbsp;
+&nbsp;/* add a part */
+&nbsp;part = curl_mime_addpart(mime);
+&nbsp;
+&nbsp;/* send data from this file */
+&nbsp;curl_mime_filedata(part, &quot;image.png&quot;);
+&nbsp;
+&nbsp;/* set name */
+&nbsp;curl_mime_name(part, &quot;data&quot;);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">As long as at least one of HTTP, SMTP or IMAP is enabled. Added in 7.56.0. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">CURLE_OK or a CURL error code upon failure. CURLE_READ_ERROR is only an indication that the file is not yet readable: it can be safely ignored at this time, but the file must be made readable before the pertaining easy handle is performed. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_mime_addpart</span>(3), <span Class="bold">curl_mime_data</span>(3), <span Class="bold">curl_mime_filename</span>(3), <span Class="bold">curl_mime_name</span>(3) </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

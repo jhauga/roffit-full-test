@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_COOKIE man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_COOKIE - HTTP Cookie header </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_COOKIE, char *cookie);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to a null-terminated string as parameter. It will be used to set a cookie in the HTTP request. The format of the string should be NAME=CONTENTS, where NAME is the cookie name and CONTENTS is what the cookie should contain. </p>
+<p class="level0">If you need to set multiple cookies, set them all using a single option concatenated like this: &quot;name1=content1; name2=content2;&quot; etc. </p>
+<p class="level0">This option sets the cookie header explicitly in the outgoing request(s). If multiple requests are done due to authentication, followed redirections or similar, they will all get this cookie passed on. </p>
+<p class="level0">The cookies set by this option are separate from the internal cookie storage held by the cookie engine and will not be modified by it. If you enable the cookie engine and either you have imported a cookie of the same name (e.g. &#39;foo&#39;) or the server has set one, it will have no effect on the cookies you set here. A request to the server will send both the &#39;foo&#39; held by the cookie engine and the &#39;foo&#39; held by this option. To set a cookie that is instead held by the cookie engine and can be modified by the server use <span Class="emphasis">CURLOPT_COOKIELIST(3)</span>. </p>
+<p class="level0">Using this option multiple times will only make the latest string override the previous ones. </p>
+<p class="level0">This option will not enable the cookie engine. Use <span Class="emphasis">CURLOPT_COOKIEFILE(3)</span> or <span Class="emphasis">CURLOPT_COOKIEJAR(3)</span> to enable parsing and sending cookies automatically. </p>
+<p class="level0">The application does not have to keep the string around after setting this option. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL, no cookies </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp;
+&nbsp; curl_easy_setopt(curl, CURLOPT_COOKIE, &quot;tool=curl; fun=yes;&quot;);
+&nbsp;
+&nbsp; curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">If HTTP is enabled </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if HTTP is enabled, CURLE_UNKNOWN_OPTION if not, or CURLE_OUT_OF_MEMORY if there was insufficient heap space. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_COOKIEFILE</span>(3), <span Class="bold">CURLOPT_COOKIEJAR</span>(3), <span Class="bold">CURLOPT_COOKIELIST</span>(3),  <span Class="bold">CURLOPT_HTTPHEADER</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

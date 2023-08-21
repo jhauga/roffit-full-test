@@ -1,0 +1,35 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_CA_CACHE_TIMEOUT - life-time for cached certificate stores </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_CA_CACHE_TIMEOUT, long age);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a long, this sets the timeout in seconds. This tells libcurl the maximum time any cached certificate store it has in memory may be kept and reused for new connections. Once the timeout has expired, a subsequent fetch requiring a certificate store will have to build a new one. </p>
+<p class="level0">Building a certificate store from a <span Class="emphasis">CURLOPT_CAINFO</span> file is a slow operation so curl may cache the generated certificate store internally to speed up future connections. </p>
+<p class="level0">Set to zero to completely disable caching, or set to -1 to retain the cached store remain forever. By default, libcurl caches this info for 24 hours. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">86400 (24 hours) </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com/foo.bin&quot;);
+&nbsp;
+&nbsp; /* only reuse certificate stores for a short time */
+&nbsp; curl_easy_setopt(curl, CURLOPT_CA_CACHE_TIMEOUT, 60L);
+&nbsp;
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp;
+&nbsp; /* in this second request, the cache will not be used if more than
+&nbsp;    sixty seconds have passed since the previous connection */
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp;
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">This option was added in curl 7.87.0. </p>
+<p class="level0">Currently the only SSL backend to implement this certificate store caching functionality is the OpenSSL (and forks) backend. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_CAINFO</span>(3),  <span Class="bold">CURLOPT_CAINFO_BLOB</span>(3), <span Class="bold">CURLOPT_CAPATH</span>(3),  <span Class="bold">CURLOPT_SSL_VERIFYPEER</span>(3), <span Class="bold">CURLOPT_SSL_VERIFYHOST</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

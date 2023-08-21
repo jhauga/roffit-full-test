@@ -1,0 +1,30 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_WS_OPTIONS - WebSocket behavior options </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_WS_OPTIONS, long bitmask);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a long with a bitmask to tell libcurl about specific WebSocket behaviors. </p>
+<p class="level0">To detach a WebSocket connection and use the <span Class="emphasis">curl_ws_send(3)</span> and <span Class="emphasis">curl_ws_recv(3)</span> functions after the HTTP upgrade procedure, set the <span Class="emphasis">CURLOPT_CONNECT_ONLY(3)</span> option to 2L. </p>
+<p class="level0">Available bits in the bitmask </p>
+<p class="level0"><a name="CURLWSRAWMODE"></a><span class="nroffip">CURLWS_RAW_MODE (1)</span> </p>
+<p class="level1">Deliver &quot;raw&quot; WebSocket traffic to the <span Class="emphasis">CURLOPT_WRITEFUNCTION(3)</span> callback. </p>
+<p class="level1">In raw mode, libcurl does not handle pings or any other frame for the application. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">0 </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">WebSocket </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;ws://example.com/&quot;);
+&nbsp; /* tell curl we deal with all the WebSocket magic ourselves */
+&nbsp; curl_easy_setopt(curl, CURLOPT_WS_OPTIONS, (long)CURLWS_RAW_MODE);
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.86.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_ws_recv</span>(3), <span Class="bold">curl_ws_send</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

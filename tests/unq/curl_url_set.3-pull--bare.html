@@ -1,0 +1,85 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_url_set - set a URL part </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLUcode curl_url_set(CURLU *url,
+&nbsp;                      CURLUPart part,
+&nbsp;                      const char *content,
+&nbsp;                      unsigned int flags)
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Given the <span Class="emphasis">url</span> handle of an already parsed URL, this function lets the user set/update individual pieces of it. </p>
+<p class="level0">The <span Class="emphasis">part</span> argument should identify the particular URL part (see list below) to set or change, with <span Class="emphasis">content</span> pointing to a null-terminated string with the new contents for that URL part. The contents should be in the form and encoding they&#39;d use in a URL: URL encoded. </p>
+<p class="level0">The application does not have to keep <span Class="emphasis">content</span> around after a successful call. </p>
+<p class="level0">Setting a part to a NULL pointer will effectively remove that part&#39;s contents from the <span Class="emphasis">CURLU</span> handle. </p>
+<p class="level0">By default, this API only accepts URLs using schemes for protocols that are supported built-in. To make libcurl parse URLs generically even for schemes it does not know about, the <a class="bold" href="#CURLUNONSUPPORTSCHEME">CURLU_NON_SUPPORT_SCHEME</a> flags bit must be set. Otherwise, this function returns <span Class="emphasis">CURLUE_UNSUPPORTED_SCHEME</span> on URL schemes it does not recognize. </p>
+<p class="level0">This function call has no particular maximum length for any provided input string. In the real world, excessively long field in URLs will cause problems even if this API accepts them. </p>
+<p class="level0">When setting or updating contents of individual URL parts, this API might accept data that would not be otherwise possible to set in the string when it gets populated as a result of a full URL parse. Beware. If done so, extracting a full URL later on from such components might render an invalid URL. </p>
+<p class="level0">The <span Class="emphasis">flags</span> argument is a bitmask with independent features. </p><a name="PARTS"></a><h2 class="nroffsh">Parts</h2>
+<p class="level0"><a name="CURLUPARTURL"></a><span class="nroffip">CURLUPART_URL</span> </p>
+<p class="level1">Allows the full URL of the handle to be replaced. If the handle already is populated with a URL, the new URL can be relative to the previous. </p>
+<p class="level1">When successfully setting a new URL, relative or absolute, the handle contents will be replaced with the information of the newly set URL. </p>
+<p class="level1">Pass a pointer to a null-terminated string to the <span Class="emphasis">url</span> parameter. The string must point to a correctly formatted &quot;<a href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>+&quot; URL or be a NULL pointer. </p>
+<p class="level1">Unless <a class="emphasis" href="#CURLUNOAUTHORITY">CURLU_NO_AUTHORITY</a> is set, a blank host name is not allowed in the URL. </p>
+<p class="level0"><a name="CURLUPARTSCHEME"></a><span class="nroffip">CURLUPART_SCHEME</span> </p>
+<p class="level1">Scheme cannot be URL decoded on set. libcurl only accepts setting schemes up to 40 bytes long. </p>
+<p class="level0"><a name="CURLUPARTUSER"></a><span class="nroffip">CURLUPART_USER</span> </p>
+<p class="level0"><a name="CURLUPARTPASSWORD"></a><span class="nroffip">CURLUPART_PASSWORD</span> </p>
+<p class="level0"><a name="CURLUPARTOPTIONS"></a><span class="nroffip">CURLUPART_OPTIONS</span> </p>
+<p class="level1">The options field is an optional field that might follow the password in the userinfo part. It is only recognized/used when parsing URLs for the following schemes: pop3, smtp and imap. This function however allows users to independently set this field at will. </p>
+<p class="level0"><a name="CURLUPARTHOST"></a><span class="nroffip">CURLUPART_HOST</span> </p>
+<p class="level1">The host name. If it is IDNA the string must then be encoded as your locale says or UTF-8 (when WinIDN is used). If it is a bracketed IPv6 numeric address it may contain a zone id (or you can use CURLUPART_ZONEID). </p>
+<p class="level1">Unless <a class="emphasis" href="#CURLUNOAUTHORITY">CURLU_NO_AUTHORITY</a> is set, a blank host name is not allowed to set. </p>
+<p class="level0"><a name="CURLUPARTZONEID"></a><span class="nroffip">CURLUPART_ZONEID</span> </p>
+<p class="level1">If the host name is a numeric IPv6 address, this field can also be set. </p>
+<p class="level0"><a name="CURLUPARTPORT"></a><span class="nroffip">CURLUPART_PORT</span> </p>
+<p class="level1">Port cannot be URL encoded on set. The given port number is provided as a string and the decimal number must be between 1 and 65535. Anything else will return an error. </p>
+<p class="level0"><a name="CURLUPARTPATH"></a><span class="nroffip">CURLUPART_PATH</span> </p>
+<p class="level1">If a path is set in the URL without a leading slash, a slash will be prepended automatically. </p>
+<p class="level0"><a name="CURLUPARTQUERY"></a><span class="nroffip">CURLUPART_QUERY</span> </p>
+<p class="level1">The query part will also get spaces converted to pluses when asked to URL encode on set with the <a class="emphasis" href="#CURLUURLENCODE">CURLU_URLENCODE</a> bit. </p>
+<p class="level1">If used together with the <a class="emphasis" href="#CURLUAPPENDQUERY">CURLU_APPENDQUERY</a> bit, the provided part is appended on the end of the existing query. </p>
+<p class="level1">The question mark in the URL is not part of the actual query contents. </p>
+<p class="level0"><a name="CURLUPARTFRAGMENT"></a><span class="nroffip">CURLUPART_FRAGMENT</span> </p>
+<p class="level1">The hash sign in the URL is not part of the actual fragment contents. </p><a name="FLAGS"></a><h2 class="nroffsh">Flags</h2>
+<p class="level0">The flags argument is zero, one or more bits set in a bitmask. </p>
+<p class="level0"><a name="CURLUAPPENDQUERY"></a><span class="nroffip">CURLU_APPENDQUERY</span> </p>
+<p class="level1">Can be used when setting the <a class="emphasis" href="#CURLUPARTQUERY">CURLUPART_QUERY</a> component. The provided new part will then instead be appended at the end of the existing query - and if the previous part did not end with an ampersand (&amp;), an ampersand gets inserted before the new appended part. </p>
+<p class="level1">When <a class="emphasis" href="#CURLUAPPENDQUERY">CURLU_APPENDQUERY</a> is used together with <a class="emphasis" href="#CURLUURLENCODE">CURLU_URLENCODE</a>, the first &#39;=&#39; symbol will not be URL encoded. </p>
+<p class="level0"><a name="CURLUNONSUPPORTSCHEME"></a><span class="nroffip">CURLU_NON_SUPPORT_SCHEME</span> </p>
+<p class="level1">If set, allows <span Class="emphasis">curl_url_set(3)</span> to set a non-supported scheme. </p>
+<p class="level0"><a name="CURLUURLENCODE"></a><span class="nroffip">CURLU_URLENCODE</span> </p>
+<p class="level1">When set, <span Class="emphasis">curl_url_set(3)</span> URL encodes the part on entry, except for scheme, port and URL. </p>
+<p class="level1">When setting the path component with URL encoding enabled, the slash character will be skipped. </p>
+<p class="level1">The query part gets space-to-plus conversion before the URL conversion. </p>
+<p class="level1">This URL encoding is charset unaware and will convert the input on a byte-by-byte manner. </p>
+<p class="level0"><a name="CURLUDEFAULTSCHEME"></a><span class="nroffip">CURLU_DEFAULT_SCHEME</span> </p>
+<p class="level1">If set, will make libcurl allow the URL to be set without a scheme and then sets that to the default scheme: HTTPS. Overrides the <a class="emphasis" href="#CURLUGUESSSCHEME">CURLU_GUESS_SCHEME</a> option if both are set. </p>
+<p class="level0"><a name="CURLUGUESSSCHEME"></a><span class="nroffip">CURLU_GUESS_SCHEME</span> </p>
+<p class="level1">If set, will make libcurl allow the URL to be set without a scheme and it instead &quot;guesses&quot; which scheme that was intended based on the host name. If the outermost sub-domain name matches DICT, FTP, IMAP, LDAP, POP3 or SMTP then that scheme will be used, otherwise it picks HTTP. Conflicts with the <a class="emphasis" href="#CURLUDEFAULTSCHEME">CURLU_DEFAULT_SCHEME</a> option which takes precedence if both are set. </p>
+<p class="level0"><a name="CURLUNOAUTHORITY"></a><span class="nroffip">CURLU_NO_AUTHORITY</span> </p>
+<p class="level1">If set, skips authority checks. The RFC allows individual schemes to omit the host part (normally the only mandatory part of the authority), but libcurl cannot know whether this is permitted for custom schemes. Specifying the flag permits empty authority sections, similar to how file scheme is handled. </p>
+<p class="level0"><a name="CURLUPATHASIS"></a><span class="nroffip">CURLU_PATH_AS_IS</span> </p>
+<p class="level1">When set for <a class="bold" href="#CURLUPARTURL">CURLUPART_URL</a>, this makes libcurl skip the normalization of the path. That is the procedure where curl otherwise removes sequences of dot-slash and dot-dot etc. The same option used for transfers is called <span Class="emphasis">CURLOPT_PATH_AS_IS(3)</span>. </p>
+<p class="level0"><a name="CURLUALLOWSPACE"></a><span class="nroffip">CURLU_ALLOW_SPACE</span> </p>
+<p class="level1">If set, the URL parser allows space (ASCII 32) where possible. The URL syntax does normally not allow spaces anywhere, but they should be encoded as %20 or &#39;+&#39;. When spaces are allowed, they are still not allowed in the scheme. When space is used and allowed in a URL, it will be stored as-is unless <a class="emphasis" href="#CURLUURLENCODE">CURLU_URLENCODE</a> is also set, which then makes libcurl URL-encode the space before stored. This affects how the URL will be constructed when <span Class="emphasis">curl_url_get(3)</span> is subsequently used to extract the full URL or individual parts. (Added in 7.78.0) </p>
+<p class="level0"><a name="CURLUDISALLOWUSER"></a><span class="nroffip">CURLU_DISALLOW_USER</span> </p>
+<p class="level1">If set, the URL parser will not accept embedded credentials for the <a class="bold" href="#CURLUPARTURL">CURLUPART_URL</a>, and will instead return <span Class="bold">CURLUE_USER_NOT_ALLOWED</span> for such URLs. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&nbsp; CURLUcode rc;
+&nbsp; CURLU *url = curl_url();
+&nbsp; rc = curl_url_set(url, CURLUPART_URL, &quot;https://example.com&quot;, 0);
+&nbsp; if(!rc) {
+&nbsp;   char *scheme;
+&nbsp;   /* change it to an FTP URL */
+&nbsp;   rc = curl_url_set(url, CURLUPART_SCHEME, &quot;ftp&quot;, 0);
+&nbsp; }
+&nbsp; curl_url_cleanup(url);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.62.0. CURLUPART_ZONEID was added in 7.65.0. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns a <span Class="emphasis">CURLUcode</span> error value, which is CURLUE_OK (0) if everything went fine. See the <span Class="emphasis">libcurl-errors(3)</span> man page for the full list with descriptions. </p>
+<p class="level0">The input string passed to <span Class="emphasis">curl_url_set(3)</span> must be shorter than eight million bytes. Otherwise this function returns <span Class="bold">CURLUE_MALFORMED_INPUT</span>. </p>
+<p class="level0">If this function returns an error, no URL part is set. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_url_cleanup</span>(3), <span Class="bold">curl_url</span>(3), <span Class="bold">curl_url_get</span>(3),  <span Class="bold">curl_url_dup</span>(3), <span Class="bold">curl_url_strerror</span>(3), <span Class="bold">CURLOPT_CURLU</span>(3) </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

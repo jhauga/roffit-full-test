@@ -1,0 +1,18 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_knownhost_readline - read a known host line </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&nbsp;
+int
+libssh2_knownhost_readline(LIBSSH2_KNOWNHOSTS *hosts,
+&nbsp;                          const char *line, size_t len, int type):
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Tell libssh2 to read a buffer as it if is a line from a known hosts file. </p>
+<p class="level0"><span Class="emphasis">line</span> points to the start of the line </p>
+<p class="level0"><span Class="emphasis">len</span> is the length of the line in bytes </p>
+<p class="level0"><span Class="emphasis">type</span> specifies what file type it is, and <span Class="emphasis">LIBSSH2_KNOWNHOST_FILE_OPENSSH</span> is the only currently supported format. This file is normally found named ~/.ssh/known_hosts </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns a regular libssh2 error code, where negative values are error codes and 0 indicates success. </p><a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in libssh2 1.2 </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">libssh2_knownhost_get(3)</span> <span Class="bold">libssh2_knownhost_writeline(3)</span> <span Class="bold">libssh2_knownhost_readfile(3)</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

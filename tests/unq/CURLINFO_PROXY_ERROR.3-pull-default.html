@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLINFO_PROXY_ERROR man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLINFO_PROXY_ERROR - get the detailed (SOCKS) proxy error </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+typedef enum {
+&nbsp; CURLPX_OK,
+&nbsp; CURLPX_BAD_ADDRESS_TYPE,
+&nbsp; CURLPX_BAD_VERSION,
+&nbsp; CURLPX_CLOSED,
+&nbsp; CURLPX_GSSAPI,
+&nbsp; CURLPX_GSSAPI_PERMSG,
+&nbsp; CURLPX_GSSAPI_PROTECTION,
+&nbsp; CURLPX_IDENTD,
+&nbsp; CURLPX_IDENTD_DIFFER,
+&nbsp; CURLPX_LONG_HOSTNAME,
+&nbsp; CURLPX_LONG_PASSWD,
+&nbsp; CURLPX_LONG_USER,
+&nbsp; CURLPX_NO_AUTH,
+&nbsp; CURLPX_RECV_ADDRESS,
+&nbsp; CURLPX_RECV_AUTH,
+&nbsp; CURLPX_RECV_CONNECT,
+&nbsp; CURLPX_RECV_REQACK,
+&nbsp; CURLPX_REPLY_ADDRESS_TYPE_NOT_SUPPORTED,
+&nbsp; CURLPX_REPLY_COMMAND_NOT_SUPPORTED,
+&nbsp; CURLPX_REPLY_CONNECTION_REFUSED,
+&nbsp; CURLPX_REPLY_GENERAL_SERVER_FAILURE,
+&nbsp; CURLPX_REPLY_HOST_UNREACHABLE,
+&nbsp; CURLPX_REPLY_NETWORK_UNREACHABLE,
+&nbsp; CURLPX_REPLY_NOT_ALLOWED,
+&nbsp; CURLPX_REPLY_TTL_EXPIRED,
+&nbsp; CURLPX_REPLY_UNASSIGNED,
+&nbsp; CURLPX_REQUEST_FAILED,
+&nbsp; CURLPX_RESOLVE_HOST,
+&nbsp; CURLPX_SEND_AUTH,
+&nbsp; CURLPX_SEND_CONNECT,
+&nbsp; CURLPX_SEND_REQUEST,
+&nbsp; CURLPX_UNKNOWN_FAIL,
+&nbsp; CURLPX_UNKNOWN_MODE,
+&nbsp; CURLPX_USER_REJECTED,
+&nbsp; CURLPX_LAST /* never use */
+} CURLproxycode;
+&nbsp;
+CURLcode curl_easy_getinfo(CURL *handle, CURLINFO_PROXY_ERROR, long *detail);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to a long to receive a detailed error code when the most recent transfer returned a <span Class="bold">CURLE_PROXY</span> error. That error code will match the <span Class="bold">CURLproxycode</span> set. </p>
+<p class="level0">The error code will be zero (<span Class="bold">CURLPX_OK</span>) if no response code was available. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All that can be done over SOCKS </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; CURLcode res;
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp;
+&nbsp; curl_easy_setopt(curl, CURLOPT_PROXY, &quot;socks5://127.0.0.1&quot;);
+&nbsp; res = curl_easy_perform(curl);
+&nbsp; if(res == CURLE_PROXY) {
+&nbsp;   long proxycode;
+&nbsp;   res = curl_easy_getinfo(curl, CURLINFO_PROXY_ERROR, &amp;proxycode);
+&nbsp;   if(!res &amp;&amp; proxycode)
+&nbsp;     printf(&quot;The detailed proxy error: %ld&bsol;n&quot;, proxycode);
+&nbsp; }
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.73.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLINFO_RESPONSE_CODE</span>(3), <span Class="bold">libcurl-errors</span>(3),  <span Class="bold">curl_easy_getinfo</span>(3), <span Class="bold">curl_easy_setopt</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

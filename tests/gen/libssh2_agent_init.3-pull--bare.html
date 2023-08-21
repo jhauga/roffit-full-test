@@ -1,0 +1,15 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_agent_init - init an ssh-agent handle </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&nbsp;
+LIBSSH2_AGENT *
+libssh2_agent_init(LIBSSH2_SESSION *session);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Init an ssh-agent handle. Returns the handle to an internal representation of an ssh-agent connection.  After the successful initialization, an application can call <span Class="bold">libssh2_agent_connect(3)</span> to connect to a running ssh-agent. </p>
+<p class="level0">Call <span Class="bold">libssh2_agent_free(3)</span> to free the handle again after you are doing using it. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns a handle pointer or NULL if something went wrong. The returned handle is used as input to all other ssh-agent related functions libssh2 provides. </p><a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in libssh2 1.2 </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">libssh2_agent_connect(3)</span> <span Class="bold">libssh2_agent_free(3)</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

@@ -1,0 +1,28 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_MAXFILESIZE_LARGE - maximum file size allowed to download </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_MAXFILESIZE_LARGE,
+&nbsp;                         curl_off_t size);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a curl_off_t as parameter. This allows you to specify the maximum <span Class="emphasis">size</span> (in bytes) of a file to download. If the file requested is found larger than this value, the transfer will not start and <span Class="emphasis">CURLE_FILESIZE_EXCEEDED</span> will be returned. </p>
+<p class="level0">The file size is not always known prior to download, and for such files this option has no effect even if the file transfer ends up being larger than this given limit. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">None </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">FTP, HTTP and MQTT </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; CURLcode ret;
+&nbsp; curl_off_t ridiculous = 1 &lt;&lt; 48;
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com/&quot;);
+&nbsp; /* refuse to download if larger than ridiculous */
+&nbsp; curl_easy_setopt(curl, CURLOPT_MAXFILESIZE_LARGE, ridiculous);
+&nbsp; ret = curl_easy_perform(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.11.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_MAXFILESIZE</span>(3), <span Class="bold">CURLOPT_MAX_RECV_SPEED_LARGE</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

@@ -1,0 +1,42 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_sftp_stat_ex - get status about an SFTP file </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&#35;include &lt;libssh2_sftp.h&gt;
+&nbsp;
+int
+libssh2_sftp_stat_ex(LIBSSH2_SFTP *sftp, const char *path,
+&nbsp;                    unsigned int path_len, int stat_type,
+&nbsp;                    LIBSSH2_SFTP_ATTRIBUTES *attrs);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="emphasis">sftp</span> - SFTP instance as returned by <span Class="bold">libssh2_sftp_init(3)</span> </p>
+<p class="level0"><span Class="emphasis">path</span> - Remote filesystem object to stat/lstat/setstat. </p>
+<p class="level0"><span Class="emphasis">path_len</span> - Length of the name of the remote filesystem object to stat/lstat/setstat. </p>
+<p class="level0"><span Class="emphasis">stat_type</span> - One of the three constants specifying the type of stat operation to perform: </p>
+<p class="level0"><br><span Class="bold">LIBSSH2_SFTP_STAT</span>: performs stat(2) operation <br><span Class="bold">LIBSSH2_SFTP_LSTAT</span>: performs lstat(2) operation <br><span Class="bold">LIBSSH2_SFTP_SETSTAT</span>: performs operation to set stat info on file </p>
+<p class="level0"><span Class="emphasis">attrs</span> - Pointer to a <span Class="bold">LIBSSH2_SFTP_ATTRIBUTES</span> structure to set file metadata from or into depending on the value of stat_type. </p>
+<p class="level0">Get or Set statbuf type data on a remote filesystem object. When getting statbuf data, <span Class="bold">libssh2_sftp_stat(3)</span> will follow all symlinks, while <span Class="bold">libssh2_sftp_lstat(3)</span> will return data about the object encountered, even if that object happens to be a symlink. </p>
+<p class="level0">The LIBSSH2_SFTP_ATTRIBUTES struct looks like this: </p><pre class="level0">
+struct LIBSSH2_SFTP_ATTRIBUTES {
+&nbsp;   /* If flags &amp; ATTR_* bit is set, then the value in this struct will be
+&nbsp;    * meaningful Otherwise it should be ignored
+&nbsp;    */
+&nbsp;   unsigned long flags;
+&nbsp;
+&nbsp;   libssh2_uint64_t filesize;
+&nbsp;   unsigned long uid;
+&nbsp;   unsigned long gid;
+&nbsp;   unsigned long permissions;
+&nbsp;   unsigned long atime;
+&nbsp;   unsigned long mtime;
+};
+</pre>
+<a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns 0 on success or negative on failure.  It returns LIBSSH2_ERROR_EAGAIN when it would otherwise block. While LIBSSH2_ERROR_EAGAIN is a negative number, it is not really a failure per se. </p><a name="ERRORS"></a><h2 class="nroffsh">Errors</h2>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_ALLOC</span> -  An internal memory allocation call failed. </p>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_SOCKET_SEND</span> - Unable to send data on socket. </p>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_SOCKET_TIMEOUT</span> - </p>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_SFTP_PROTOCOL</span> - An invalid SFTP protocol response was received on the socket, or an SFTP operation caused an errorcode to be returned by the server. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">libssh2_sftp_init(3)</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

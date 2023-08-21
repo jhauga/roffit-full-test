@@ -1,0 +1,4 @@
+24c24
+< <p class="level0">CURL *curl = curl_easy_init(); if(curl) { &nbsp; /* Set the URL of the request */ &nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;<a href="https://example.com/&quot;);">https://example.com/&quot;);</a> &nbsp; /* Now set it as a put */ &nbsp; curl_easy_setopt(curl, CURLOPT_PUT, 1L); </p>
+---
+> <p class="level0">CURL *curl = curl_easy_init(); if(curl) { &nbsp; /* Set the URL of the request */ &nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;<a href="https://example.com/">https://example.com/</a>&quot;); &nbsp; /* Now set it as a put */ &nbsp; curl_easy_setopt(curl, CURLOPT_PUT, 1L); </p>

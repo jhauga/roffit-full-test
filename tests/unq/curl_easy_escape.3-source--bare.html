@@ -1,0 +1,29 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_easy_escape - URL encodes the given string </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+char *curl_easy_escape(CURL *curl, const char *string, int length);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">This function converts the given input <span Class="emphasis">string</span> to a URL encoded string and returns that as a new allocated string. All input characters that are not a-z, A-Z, 0-9, &#39;-&#39;, &#39;.&#39;, &#39;_&#39; or &#39;~&#39; are converted to their &quot;URL escaped&quot; version (<span Class="bold">%NN</span> where <span Class="bold">NN</span> is a two-digit hexadecimal number). </p>
+<p class="level0">If <span Class="emphasis">length</span> is set to 0 (zero), <span Class="emphasis">curl_easy_escape(3)</span> uses strlen() on the input <span Class="emphasis">string</span> to find out the size. This function does not accept input strings longer than <span Class="bold">CURL_MAX_INPUT_LENGTH</span> (8 MB). </p>
+<p class="level0">Since 7.82.0, the <span Class="bold">curl</span> parameter is ignored. Prior to that there was per-handle character conversion support for some very old operating systems such as TPF, but it was otherwise ignored. </p>
+<p class="level0">You must <span Class="emphasis">curl_free(3)</span> the returned string when you are done with it. </p><a name="ENCODING"></a><h2 class="nroffsh">Encoding</h2>
+<p class="level0">libcurl is typically not aware of, nor does it care about, character encodings. <span Class="emphasis">curl_easy_escape(3)</span> encodes the data byte-by-byte into the URL encoded version without knowledge or care for what particular character encoding the application or the receiving server may assume that the data uses. </p>
+<p class="level0">The caller of <span Class="emphasis">curl_easy_escape(3)</span> must make sure that the data passed in to the function is encoded correctly. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; char *output = curl_easy_escape(curl, &quot;data to convert&quot;, 15);
+&nbsp; if(output) {
+&nbsp;   printf(&quot;Encoded: %s&bsol;n&quot;, output);
+&nbsp;   curl_free(output);
+&nbsp; }
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.15.4 and replaces the old <span Class="emphasis">curl_escape(3)</span> function. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">A pointer to a null-terminated string or NULL if it failed. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_easy_unescape</span>(3), <span Class="bold">curl_free</span>(3), <span Class="bold">RFC</span>3986 </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

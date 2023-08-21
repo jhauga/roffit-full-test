@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_UPKEEP_INTERVAL_MS man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_UPKEEP_INTERVAL_MS - connection upkeep interval </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_UPKEEP_INTERVAL_MS,
+&nbsp;                         long upkeep_interval_ms);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Some protocols have &quot;connection upkeep&quot; mechanisms. These mechanisms usually send some traffic on existing connections in order to keep them alive; this can prevent connections from being closed due to overzealous firewalls, for example. </p>
+<p class="level0">The user needs to explicitly call <span Class="emphasis">curl_easy_upkeep(3)</span> in order to perform the upkeep work. </p>
+<p class="level0">Currently the only protocol with a connection upkeep mechanism is HTTP/2: when the connection upkeep interval is exceeded and <span Class="emphasis">curl_easy_upkeep(3)</span> is called, an HTTP/2 PING frame is sent on the connection. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">CURL_UPKEEP_INTERVAL_DEFAULT (currently defined as 60000L, which is 60 seconds) </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; /* Make a connection to an HTTP/2 server. */
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com&quot;);
+&nbsp;
+&nbsp; /* Set the interval to 30000ms / 30s */
+&nbsp; curl_easy_setopt(curl, CURLOPT_UPKEEP_INTERVAL_MS, 30000L);
+&nbsp;
+&nbsp; curl_easy_perform(curl);
+&nbsp;
+&nbsp; /* Perform more work here. */
+&nbsp;
+&nbsp; /* While the connection is being held open, curl_easy_upkeep() can be
+&nbsp;    called. If curl_easy_upkeep() is called and the time since the last
+&nbsp;    upkeep exceeds the interval, then an HTTP/2 PING is sent. */
+&nbsp; curl_easy_upkeep(curl);
+&nbsp;
+&nbsp; /* Perform more work here. */
+&nbsp;
+&nbsp; /* always cleanup */
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.62.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_TCP_KEEPALIVE</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

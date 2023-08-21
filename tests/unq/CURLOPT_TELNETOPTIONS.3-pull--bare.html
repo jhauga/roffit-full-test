@@ -1,0 +1,29 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_TELNETOPTIONS - set of telnet options </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_TELNETOPTIONS,
+&nbsp;                         struct curl_slist *cmds);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Provide a pointer to a curl_slist with variables to pass to the telnet negotiations. The variables should be in the format &lt;option=value&gt;. libcurl supports the options <span Class="bold">TTYPE</span>, <span Class="bold">XDISPLOC</span> and <span Class="bold">NEW_ENV</span>. See the TELNET standard for details. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">TELNET </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; struct curl_slist *options;
+&nbsp; options = curl_slist_append(NULL, &quot;TTTYPE=vt100&quot;);
+&nbsp; options = curl_slist_append(options, &quot;USER=foobar&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;telnet://example.com/&quot;);
+&nbsp; curl_easy_setopt(curl, CURLOPT_TELNETOPTIONS, options);
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp; curl_easy_cleanup(curl);
+&nbsp; curl_slist_free_all(options);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Along with TELNET </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if TELNET is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_HTTPHEADER</span>(3), <span Class="bold">CURLOPT_QUOTE</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

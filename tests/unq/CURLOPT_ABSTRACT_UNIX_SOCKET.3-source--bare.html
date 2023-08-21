@@ -1,0 +1,22 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_ABSTRACT_UNIX_SOCKET - abstract Unix domain socket </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_ABSTRACT_UNIX_SOCKET,
+&nbsp;                         char *path);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Enables the use of an abstract Unix domain socket instead of establishing a TCP connection to a host. The parameter should be a char * to a null-terminated string holding the path of the socket. The path will be set to <span Class="emphasis">path</span> prefixed by a NULL byte (this is the convention for abstract sockets, however it should be stressed that the path passed to this function should not contain a leading NULL). </p>
+<p class="level0">On non-supporting platforms, the abstract address will be interpreted as an empty string and fail gracefully, generating a runtime error. </p>
+<p class="level0">This option shares the same semantics as <span Class="emphasis">CURLOPT_UNIX_SOCKET_PATH(3)</span> in which documentation more details can be found. Internally, these two options share the same storage and therefore only one of them can be set per handle. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">Default is NULL. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&nbsp; curl_easy_setopt(curl_handle, CURLOPT_ABSTRACT_UNIX_SOCKET, &quot;/tmp/foo.sock&quot;);
+&nbsp; curl_easy_setopt(curl_handle, CURLOPT_URL, &quot;http://localhost/&quot;);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.53.0. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_UNIX_SOCKET_PATH</span>(3), <span Class="bold">unix</span>(7),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

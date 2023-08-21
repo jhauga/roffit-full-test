@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_SEEKFUNCTION man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_SEEKFUNCTION - user callback for seeking in input stream </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+/* These are the return codes for the seek callbacks */
+&#35;define CURL_SEEKFUNC_OK       0
+&#35;define CURL_SEEKFUNC_FAIL     1 /* fail the entire transfer */
+&#35;define CURL_SEEKFUNC_CANTSEEK 2 /* tell libcurl seeking cannot be done, so
+&nbsp;                                   libcurl might try other means instead */
+&nbsp;
+int seek_callback(void *clientp, curl_off_t offset, int origin);
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_SEEKFUNCTION, seek_callback);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a pointer to your callback function, which should match the prototype shown above. </p>
+<p class="level0">This function gets called by libcurl to seek to a certain position in the input stream and can be used to fast forward a file in a resumed upload (instead of reading all uploaded bytes with the normal read function/callback). It is also called to rewind a stream when data has already been sent to the server and needs to be sent again. This may happen when doing an HTTP PUT or POST with a multi-pass authentication method, or when an existing HTTP connection is reused too late and the server closes the connection. The function shall work like fseek(3) or lseek(3) and it gets SEEK_SET, SEEK_CUR or SEEK_END as argument for <span Class="emphasis">origin</span>, although libcurl currently only passes SEEK_SET. </p>
+<p class="level0"><span Class="emphasis">clientp</span> is the pointer you set with <span Class="emphasis">CURLOPT_SEEKDATA(3)</span>. </p>
+<p class="level0">The callback function must return <span Class="emphasis">CURL_SEEKFUNC_OK</span> on success, <span Class="emphasis">CURL_SEEKFUNC_FAIL</span> to cause the upload operation to fail or <span Class="emphasis">CURL_SEEKFUNC_CANTSEEK</span> to indicate that while the seek failed, libcurl is free to work around the problem if possible. The latter can sometimes be done by instead reading from the input or similar. </p>
+<p class="level0">If you forward the input arguments directly to fseek(3) or lseek(3), note that the data type for <span Class="emphasis">offset</span> is not the same as defined for curl_off_t on many systems! </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">By default, this is NULL and unused. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">HTTP, FTP, SFTP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+static int seek_cb(void *clientp, curl_off_t offset, int origin)
+{
+&nbsp; struct data *d = (struct data *)clientp;
+&nbsp; lseek(our_fd, offset, origin);
+&nbsp; return CURL_SEEKFUNC_OK;
+}
+&nbsp;
+{
+&nbsp; struct data seek_data;
+&nbsp; curl_easy_setopt(CURL *handle, CURLOPT_SEEKFUNCTION, seek_cb);
+&nbsp; curl_easy_setopt(CURL *handle, CURLOPT_SEEKDATA, &amp;seek_data);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.18.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_SEEKDATA</span>(3), <span Class="bold">CURLOPT_IOCTLFUNCTION</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

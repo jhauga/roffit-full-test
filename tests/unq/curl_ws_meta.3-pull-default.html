@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>curl_ws_meta man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_ws_meta - meta data WebSocket information </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/easy.h&gt;
+&nbsp;
+struct curl_ws_frame {
+&nbsp; int age;              /* zero */
+&nbsp; int flags;            /* See the CURLWS_* defines */
+&nbsp; curl_off_t offset;    /* the offset of this data into the frame */
+&nbsp; curl_off_t bytesleft; /* number of pending bytes left of the payload */
+};
+&nbsp;
+const struct curl_ws_frame *curl_ws_meta(CURL *curl);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">This function call is EXPERIMENTAL. </p>
+<p class="level0">When the write callback (<span Class="emphasis">CURLOPT_WRITEFUNCTION(3)</span>) is invoked on received WebSocket traffic, <span Class="emphasis">curl_ws_meta(3)</span> can be called from within the callback to provide additional information about the current frame. </p>
+<p class="level0">This function only works from within the callback, and only when receiving WebSocket data. </p>
+<p class="level0">This function requires an easy handle as input argument for libcurl to know what transfer the question is about, but as there is no such pointer provided to the callback by libcurl itself, applications that want to use <span Class="emphasis">curl_ws_meta(3)</span> need to pass it on to the callback on its own. </p><a name="struct"></a><h2 class="nroffsh">Struct fields</h2>
+<p class="level0"><a name="age"></a><span class="nroffip">age</span> </p>
+<p class="level1">This field specify the age of this struct. It is always zero for now. </p>
+<p class="level0"><a name="flags"></a><span class="nroffip">flags</span> </p>
+<p class="level1">This is a bitmask with individual bits set that describes the WebSocket data. See the list below. </p>
+<p class="level0"><a name="offset"></a><span class="nroffip">offset</span> </p>
+<p class="level1">When this frame is a continuation of fragment data already delivered, this is the offset into the final fragment where this piece belongs. </p>
+<p class="level0"><a name="bytesleft"></a><span class="nroffip">bytesleft</span> </p>
+<p class="level1">If this is not a complete fragment, the <a class="emphasis" href="#bytesleft">bytesleft</a> field informs about how many additional bytes are expected to arrive before this fragment is complete. </p><a name="FLAGS"></a><h2 class="nroffsh">Flags</h2>
+<p class="level0"><a name="CURLWSTEXT"></a><span class="nroffip">CURLWS_TEXT</span> </p>
+<p class="level1">The buffer contains text data. Note that this makes a difference to WebSocket but libcurl itself will not make any verification of the content or precautions that you actually receive valid UTF-8 content. </p>
+<p class="level0"><a name="CURLWSBINARY"></a><span class="nroffip">CURLWS_BINARY</span> </p>
+<p class="level1">This is binary data. </p>
+<p class="level0"><a name="CURLWSCONT"></a><span class="nroffip">CURLWS_CONT</span> </p>
+<p class="level1">This is not the final fragment of the message, it implies that there will be another fragment coming as part of the same message. </p>
+<p class="level0"><a name="CURLWSCLOSE"></a><span class="nroffip">CURLWS_CLOSE</span> </p>
+<p class="level1">This transfer is now closed. </p>
+<p class="level0"><a name="CURLWSPING"></a><span class="nroffip">CURLWS_PING</span> </p>
+<p class="level1">This as an incoming ping message, that expects a pong response. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&nbsp;
+/* we pass a pointer to this struct to the callback */
+struct customdata {
+&nbsp; CURL *easy;
+&nbsp; void *ptr;
+};
+&nbsp;
+static size_t writecb(unsigned char *buffer,
+&nbsp;                     size_t size, size_t nitems, void *p)
+{
+&nbsp; struct customdata *c = (struct customdata *)p;
+&nbsp; const struct curl_ws_frame *m = curl_ws_meta(c-&gt;easy);
+&nbsp;
+&nbsp; /* m-&gt;flags tells us about the traffic */
+}
+&nbsp;
+{
+&nbsp; struct customdata custom;
+&nbsp; custom.easy = easy;
+&nbsp; custom.ptr = NULL;
+&nbsp; curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writecb);
+&nbsp; curl_easy_setopt(curl, CURLOPT_WRITEDATA, &amp;custom);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.86.0. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">This function returns a pointer to a <span Class="emphasis">curl_ws_frame</span> struct with read-only information that is valid for this specific callback invocation. If it cannot return this information, or if the function is called in the wrong context, it returns NULL. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_easy_setopt</span>(3), <span Class="bold">curl_easy_getinfo</span>(3),  <span Class="bold">curl_ws_send</span>(3), <span Class="bold">curl_ws_recv</span>(3), <span Class="bold">libcurl-ws</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

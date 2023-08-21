@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>mk-ca-bundle man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">mk-ca-bundle - convert Mozilla&#39;s certificate bundle to PEM format </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2>
+<p class="level0">mk-ca-bundle [options] <span Class="emphasis">[outputfile]</span> </p><a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">The mk-ca-bundle tool downloads the <span Class="emphasis">certdata.txt</span> file from Mozilla&#39;s source tree over HTTPS, then parses <span Class="emphasis">certdata.txt</span> and extracts certificates into PEM format. By default, only CA root certificates trusted to issue SSL server authentication certificates are extracted. These are then processed with the OpenSSL command line tool to produce the final ca-bundle file. </p>
+<p class="level0">The default <span Class="emphasis">outputfile</span> name is <span Class="bold">ca-bundle.crt</span>. By setting it to &#39;-&#39; (a single dash) you will get the output sent to STDOUT instead of a file. </p>
+<p class="level0">The PEM format this scripts uses for output makes the result readily available for use by just about all OpenSSL or GnuTLS powered applications, such as curl and others. </p><a name="OPTIONS"></a><h2 class="nroffsh">Options</h2>
+<p class="level0">The following options are supported: </p>
+<p class="level0"><a name="-b"></a><span class="nroffip">-b</span> </p>
+<p class="level1">backup an existing version of <span Class="emphasis">outputfilename</span> </p>
+<p class="level0"><a name="-d"></a><span class="nroffip">-d [name]</span> </p>
+<p class="level1">specify which Mozilla tree to pull <span Class="emphasis">certdata.txt</span> from (or a custom URL). Valid names are: aurora, beta, central, Mozilla, nss, release (default). They are shortcuts for which source tree to get the certificates data from. </p>
+<p class="level0"><a name="-f"></a><span class="nroffip">-f</span> </p>
+<p class="level1">force rebuild even if <span Class="emphasis">certdata.txt</span> is current (Added in version 1.17) </p>
+<p class="level0"><a name="-i"></a><span class="nroffip">-i</span> </p>
+<p class="level1">print version info about used modules </p>
+<p class="level0"><a name="-k"></a><span class="nroffip">-k</span> </p>
+<p class="level1">Allow insecure data transfer. By default (since 1.27) this command will fail if the HTTPS transfer fails. This overrides that decision (and opens for man-in-the-middle attacks). </p>
+<p class="level0"><a name="-l"></a><span class="nroffip">-l</span> </p>
+<p class="level1">print license info about <span Class="emphasis">certdata.txt</span> </p>
+<p class="level0"><a name="-m"></a><span class="nroffip">-m</span> </p>
+<p class="level1">(Added in 1.26) Include meta data comments in the output. The meta data is specific information about each certificate that is stored in the original file as comments and using this option will make those comments get passed on to the output file. The meta data is not parsed in any way by mk-ca-bundle. </p>
+<p class="level0"><a name="-n"></a><span class="nroffip">-n</span> </p>
+<p class="level1">no download of <span Class="emphasis">certdata.txt</span> (to use existing) </p>
+<p class="level0"><a name="-p"></a><span class="nroffip">-p [purposes]:[levels]</span> </p>
+<p class="level1">list of Mozilla trust purposes and levels for certificates to include in output.  Takes the form of a comma separated list of purposes, a colon, and a comma separated list of levels. The default is to include all certificates trusted to issue SSL Server certificates (<span Class="emphasis">SERVER_AUTH:TRUSTED_DELEGATOR</span>). </p>
+<p class="level1">(Added in version 1.21, Perl only) </p>
+<p class="level1">Valid purposes are: </p>
+<p class="level2"><span Class="emphasis">ALL</span>, <span Class="emphasis">DIGITAL_SIGNATURE</span>, <span Class="emphasis">NON_REPUDIATION</span>, <span Class="emphasis">KEY_ENCIPHERMENT</span>, <span Class="emphasis">DATA_ENCIPHERMENT</span>, <span Class="emphasis">KEY_AGREEMENT</span>, <span Class="emphasis">KEY_CERT_SIGN</span>, <span Class="emphasis">CRL_SIGN</span>, <span Class="emphasis">SERVER_AUTH</span> (default), <span Class="emphasis">CLIENT_AUTH</span>, <span Class="emphasis">CODE_SIGNING</span>, <span Class="emphasis">EMAIL_PROTECTION</span>, <span Class="emphasis">IPSEC_END_SYSTEM</span>, <span Class="emphasis">IPSEC_TUNNEL</span>, <span Class="emphasis">IPSEC_USER</span>, <span Class="emphasis">TIME_STAMPING</span>, <span Class="emphasis">STEP_UP_APPROVED</span> </p>
+<p class="level0"><a name=""></a><span class="nroffip"></span> </p>
+<p class="level1">Valid trust levels are: </p>
+<p class="level2"><span Class="emphasis">ALL</span>, <span Class="emphasis">TRUSTED_DELEGATOR</span> (default), <span Class="emphasis">NOT_TRUSTED</span>, <span Class="emphasis">MUST_VERIFY_TRUST</span>, <span Class="emphasis">TRUSTED</span> </p>
+<p class="level0"><a name="-q"></a><span class="nroffip">-q</span> </p>
+<p class="level1">be really quiet (no progress output at all) </p>
+<p class="level0"><a name="-t"></a><span class="nroffip">-t</span> </p>
+<p class="level1">include plain text listing of certificates </p>
+<p class="level0"><a name="-s"></a><span class="nroffip">-s [algorithms]</span> </p>
+<p class="level1">comma separated list of signature algorithms with which to hash/fingerprint each certificate and output when run in plain text mode. </p>
+<p class="level1">(Added in version 1.21, Perl only) </p>
+<p class="level1">Valid algorithms are: </p>
+<p class="level2">ALL, NONE, MD5 (default), SHA1, SHA256, SHA384, SHA512 </p>
+<p class="level0"><a name="-u"></a><span class="nroffip">-u</span> </p>
+<p class="level1">unlink (remove) <span Class="emphasis">certdata.txt</span> after processing </p>
+<p class="level0"><a name="-v"></a><span class="nroffip">-v</span> </p>
+<p class="level1">be verbose and print out processed certificate authorities </p><a name="EXIT"></a><h2 class="nroffsh">Exit status</h2>
+<p class="level0">Returns 0 on success. Returns 1 if it fails to download data. </p><a name="FILE"></a><h2 class="nroffsh">File format</h2>
+<p class="level0">The file format used by Mozilla for this trust information is documented here: </p><pre class="level0">
+https://p11-glue.freedesktop.org/doc/storing-trust-policy/storing-trust-existing.html
+</pre>
+<a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl</span>(1) </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

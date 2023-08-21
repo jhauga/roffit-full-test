@@ -1,0 +1,24 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_url_dup - duplicate a URL handle </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLU *curl_url_dup(CURLU *inhandle);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Duplicates a given <span Class="emphasis">CURLU</span> <span Class="emphasis">inhandle</span> and all its contents and returns a pointer to a new <span Class="emphasis">CURLU</span> handle. The new handle also needs to be freed with <span Class="emphasis">curl_url_cleanup(3)</span>. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&nbsp; CURLUcode rc;
+&nbsp; CURLU *url = curl_url();
+&nbsp; CURLU *url2;
+&nbsp; rc = curl_url_set(url, CURLUPART_URL, &quot;https://example.com&quot;, 0);
+&nbsp; if(!rc) {
+&nbsp;   url2 = curl_url_dup(url); /* clone it! */
+&nbsp;   curl_url_cleanup(url2);
+&nbsp; }
+&nbsp; curl_url_cleanup(url);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.62.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns a new handle or NULL if out of memory. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_url_cleanup</span>(3), <span Class="bold">curl_url</span>(3), <span Class="bold">curl_url_set</span>(3),  <span Class="bold">curl_url_get</span>(3), <span Class="bold">CURLOPT_CURLU</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

@@ -1,0 +1,28 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_INTERLEAVEDATA - pointer passed to RTSP interleave callback </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_INTERLEAVEDATA, void *pointer);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">This is the userdata <span Class="emphasis">pointer</span> that will be passed to <span Class="emphasis">CURLOPT_INTERLEAVEFUNCTION(3)</span> when interleaved RTP data is received. If the interleave function callback is not set, this pointer is not used anywhere. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">NULL </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">RTSP </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+static size_t rtp_write(void *ptr, size_t size, size_t nmemb, void *user)
+{
+&nbsp; struct local *l = (struct local *)user;
+&nbsp; /* take care of the packet in &#39;ptr&#39;, then return... */
+&nbsp; return size * nmemb;
+}
+{
+&nbsp; struct local rtp_data;
+&nbsp; curl_easy_setopt(curl, CURLOPT_INTERLEAVEFUNCTION, rtp_write);
+&nbsp; curl_easy_setopt(curl, CURLOPT_INTERLEAVEDATA, &amp;rtp_data);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.20.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_INTERLEAVEFUNCTION</span>(3), <span Class="bold">CURLOPT_RTSP_REQUEST</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

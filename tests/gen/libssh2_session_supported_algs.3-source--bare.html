@@ -1,0 +1,49 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_session_supported_algs - get list of supported algorithms </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&nbsp;
+int
+libssh2_session_supported_algs(LIBSSH2_SESSION* session,
+&nbsp;                              int method_type,
+&nbsp;                              const char*** algs);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="emphasis">session</span> - An instance of initialized LIBSSH2_SESSION (the function will use its pointer to the memory allocation function).  <span Class="emphasis">method_type</span> - Method type. See <span Class="emphasis">libssh2_session_method_pref(3)</span>.  <span Class="emphasis">algs</span> - Address of a pointer that will point to an array of returned algorithms </p>
+<p class="level0">Get a list of supported algorithms for the given <span Class="emphasis">method_type</span>. The method_type parameter is equivalent to method_type in <span Class="emphasis">libssh2_session_method_pref(3)</span>. If successful, the function will allocate the appropriate amount of memory. When not needed anymore, it must be deallocated by calling <span Class="emphasis">libssh2_free(3)</span>. When this function is unsuccessful, this must not be done. </p>
+<p class="level0">In order to get a list of all supported compression algorithms, libssh2_session_flag(session, LIBSSH2_FLAG_COMPRESS, 1) must be called before calling this function, otherwise only &quot;none&quot; will be returned. </p>
+<p class="level0">If successful, the function will allocate and fill the array with supported algorithms (the same names as defined in <a href="http://www.ietf.org/rfc/rfc4253.txt">RFC 4253</a>).  The array is not NULL terminated. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&#35;include &quot;libssh2.h&quot;
+&nbsp;
+const char **algorithms;
+int rc, i;
+LIBSSH2_SESSION *session;
+&nbsp;
+/* initialize session */
+session = libssh2_session_init();
+rc = libssh2_session_supported_algs(session,
+&nbsp;                                   LIBSSH2_METHOD_CRYPT_CS,
+&nbsp;                                   &amp;algorithms);
+if(rc &gt; 0) {
+&nbsp;   /* the call succeeded, do sth. with the list of algorithms
+&nbsp;      (e.g. list them)... */
+&nbsp;   printf(&quot;Supported symmetric algorithms:&bsol;n&quot;);
+&nbsp;   for(i = 0; i &lt; rc; i++)
+&nbsp;       printf(&quot;&bsol;t%s&bsol;n&quot;, algorithms[i]);
+&nbsp;
+&nbsp;   /* ... and free the allocated memory when not needed anymore */
+&nbsp;   libssh2_free(session, algorithms);
+}
+else {
+&nbsp;   /* call failed, error handling */
+}
+</pre>
+<a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">On success, a number of returned algorithms (i.e a positive number will be returned).  In case of a failure, an error code (a negative number, see below) is returned.  0 should never be returned. </p><a name="ERRORS"></a><h2 class="nroffsh">Errors</h2>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_BAD_USE</span> - Invalid address of algs. </p>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_METHOD_NOT_SUPPORTED</span> -  Unknown method type. </p>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_INVAL</span> - Internal error (normally should not occur). </p>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_ALLOC</span> - Allocation of memory failed. </p><a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 1.4.0 </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">libssh2_session_methods(3),</span> <span Class="bold">libssh2_session_method_pref(3)</span> <span Class="bold">libssh2_free(3)</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

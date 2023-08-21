@@ -1,0 +1,43 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_sftp_open_ex_r - open filehandle for file on SFTP. </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&#35;include &lt;libssh2_sftp.h&gt;
+&nbsp;
+LIBSSH2_SFTP_HANDLE *
+libssh2_sftp_open_ex_r(LIBSSH2_SFTP *sftp, const char *filename,
+&nbsp;                      size_t filename_len,
+&nbsp;                      unsigned long flags,
+&nbsp;                      long mode,
+&nbsp;                      int open_type,
+&nbsp;                      LIBSSH2_SFTP_ATTRIBUTES *attrs);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="emphasis">sftp</span> - SFTP instance as returned by <span Class="emphasis">libssh2_sftp_init(3)</span> </p>
+<p class="level0"><span Class="emphasis">filename</span> - Remote file/directory resource to open </p>
+<p class="level0"><span Class="emphasis">filename_len</span> - Length of filename </p>
+<p class="level0"><span Class="emphasis">flags</span> - Any reasonable combination of the LIBSSH2_FXF_* constants: </p>
+<p class="level0"><a name="LIBSSH2FXFREAD"></a><span class="nroffip">LIBSSH2_FXF_READ</span> </p>
+<p class="level1">Open the file for reading. </p>
+<p class="level0"><a name="LIBSSH2FXFWRITE"></a><span class="nroffip">LIBSSH2_FXF_WRITE</span> </p>
+<p class="level1">Open the file for writing.  If both this and LIBSSH2_FXF_READ are specified, the file is opened for both reading and writing. </p>
+<p class="level0"><a name="LIBSSH2FXFAPPEND"></a><span class="nroffip">LIBSSH2_FXF_APPEND</span> </p>
+<p class="level1">Force all writes to append data at the end of the file. </p>
+<p class="level0"><a name="LIBSSH2FXFCREAT"></a><span class="nroffip">LIBSSH2_FXF_CREAT,</span> </p>
+<p class="level1">If this flag is specified, then a new file will be created if one does not already exist (if LIBSSH2_FXF_TRUNC is specified, the new file will be truncated to zero length if it previously exists) </p>
+<p class="level0"><a name="LIBSSH2FXFTRUNC"></a><span class="nroffip">LIBSSH2_FXF_TRUNC</span> </p>
+<p class="level1">Forces an existing file with the same name to be truncated to zero length when creating a file by specifying LIBSSH2_FXF_CREAT. LIBSSH2_FXF_CREAT MUST also be specified if this flag is used. </p>
+<p class="level0"><a name="LIBSSH2FXFEXCL"></a><span class="nroffip">LIBSSH2_FXF_EXCL</span> </p>
+<p class="level1">Causes the request to fail if the named file already exists. LIBSSH2_FXF_CREAT MUST also be specified if this flag is used. </p>
+<p class="level0"><span Class="emphasis">mode</span> - POSIX file permissions to assign if the file is being newly created. See the LIBSSH2_SFTP_S_* convenience defines in &lt;libssh2_sftp.h&gt; </p>
+<p class="level0"><span Class="emphasis">open_type</span> - Either of LIBSSH2_SFTP_OPENFILE (to open a file) or LIBSSH2_SFTP_OPENDIR (to open a directory). </p>
+<p class="level0"><span Class="emphasis">attrs</span> - Pointer to LIBSSH2_SFTP_ATTRIBUTES struct. See libssh2_sftp_fstat_ex for detailed usage. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">A pointer to the newly created LIBSSH2_SFTP_HANDLE instance or NULL on failure. </p><a name="ERRORS"></a><h2 class="nroffsh">Errors</h2>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_ALLOC</span> -  An internal memory allocation call failed. </p>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_SOCKET_SEND</span> - Unable to send data on socket. </p>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_SOCKET_TIMEOUT</span> - </p>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_SFTP_PROTOCOL</span> - An invalid SFTP protocol response was received on the socket, or an SFTP operation caused an errorcode to be returned by the server. </p>
+<p class="level0"><span Class="emphasis">LIBSSH2_ERROR_EAGAIN</span> - Marked for non-blocking I/O but the call would block. </p><a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in libssh2 1.11.0 </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">libssh2_sftp_close_handle(3)</span> <span Class="bold">libssh2_sftp_fstat_ex(3)</span> </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>CURLOPT_UPLOAD_BUFFERSIZE man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_UPLOAD_BUFFERSIZE - upload buffer size </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_UPLOAD_BUFFERSIZE, long size);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a long specifying your preferred <span Class="emphasis">size</span> (in bytes) for the upload buffer in libcurl. It makes libcurl uses a larger buffer that gets passed to the next layer in the stack to get sent off. In some setups and for some protocols, there&#39;s a huge performance benefit of having a larger upload buffer. </p>
+<p class="level0">This is just treated as a request, not an order. You cannot be guaranteed to actually get the given size. </p>
+<p class="level0">The upload buffer size is by default 64 kilobytes. The maximum buffer size allowed to be set is 2 megabytes. The minimum buffer size allowed to be set is 16 kilobytes. </p>
+<p class="level0">Since curl 7.61.1 the upload buffer is allocated on-demand - so if the handle is not used for upload, this buffer will not be allocated at all. </p>
+<p class="level0">DO NOT set this option on a handle that is currently used for an active transfer as that may lead to unintended consequences. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">65536 bytes </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+CURL *curl = curl_easy_init();
+if(curl) {
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;sftp://example.com/foo.bin&quot;);
+&nbsp;
+&nbsp; /* ask libcurl to allocate a larger upload buffer */
+&nbsp; curl_easy_setopt(curl, CURLOPT_UPLOAD_BUFFERSIZE, 120000L);
+&nbsp;
+&nbsp; ret = curl_easy_perform(curl);
+&nbsp;
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.62.0. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_BUFFERSIZE</span>(3), <span Class="bold">CURLOPT_READFUNCTION</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

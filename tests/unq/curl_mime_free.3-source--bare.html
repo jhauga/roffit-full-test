@@ -1,0 +1,25 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">curl_mime_free - free a previously built mime structure </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+void curl_mime_free(curl_mime *mime);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0"><span Class="emphasis">curl_mime_free(3)</span> is used to clean up data previously built/appended with <span Class="emphasis">curl_mime_addpart(3)</span> and other mime-handling functions. This must be called when the data has been used, which typically means after <span Class="emphasis">curl_easy_perform(3)</span> has been called. </p>
+<p class="level0">The handle to free is the one you passed to the <span Class="emphasis">CURLOPT_MIMEPOST(3)</span> option: attached sub part mime structures must not be explicitly freed as they are by the top structure freeing. </p>
+<p class="level0"><span Class="bold">mime</span> is the handle as returned from a previous call to <span Class="emphasis">curl_mime_init(3)</span> and may be NULL. </p>
+<p class="level0">Passing in a NULL pointer in <span Class="emphasis">mime</span> will make this function return immediately with no action. </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+&nbsp; /* Build the mime message. */
+&nbsp; mime = curl_mime_init(curl);
+&nbsp;
+&nbsp; /* ... */
+&nbsp;
+&nbsp; /* Free multipart message. */
+&nbsp; curl_mime_free(mime);
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">As long as at least one of HTTP, SMTP or IMAP is enabled. Added in 7.56.0. </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">None </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">curl_mime_init</span>(3) </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.

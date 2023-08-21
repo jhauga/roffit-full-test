@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>libssh2_base64_decode man page</title>
+<meta name="generator" content="roffit">
+<STYLE type="text/css">
+pre {
+  overflow: auto;
+  margin: 0;
+}
+
+P.level0, pre.level0 {
+ padding-left: 2em;
+}
+
+P.level1, pre.level1 {
+ padding-left: 4em;
+}
+
+P.level2, pre.level2 {
+ padding-left: 6em;
+}
+
+span.emphasis {
+ font-style: italic;
+}
+
+span.bold {
+ font-weight: bold;
+}
+
+span.manpage {
+ font-weight: bold;
+}
+
+h2.nroffsh {
+ background-color: #e0e0e0;
+}
+
+span.nroffip {
+ font-weight: bold;
+ font-size: 120%;
+ font-family: monospace;
+}
+
+p.roffit {
+ text-align: center;
+ font-size: 80%;
+}
+</STYLE>
+</head><body>
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">libssh2_base64_decode - decode a base64 encoded string </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;libssh2.h&gt;
+&nbsp;
+int
+libssh2_base64_decode(LIBSSH2_SESSION *session, char **dest,
+&nbsp;                     unsigned int *dest_len, const char *src,
+&nbsp;                     unsigned int src_len);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">This function is deemed DEPRECATED and will be removed from libssh2 in a future version. Do not use it! </p>
+<p class="level0">Decode a base64 chunk and store it into a newly allocated buffer. &#39;dest_len&#39; will be set to hold the length of the returned buffer that &#39;*dest&#39; will point to. </p>
+<p class="level0">The returned buffer is allocated by this function, but it is not clear how to free that memory! </p><a name="BUGS"></a><h2 class="nroffsh">Bugs</h2>
+<p class="level0">The memory that *dest points to is allocated by the malloc function libssh2 uses, but there is no way for an application to free this data in a safe and reliable way! </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">0 if successful, -1 if any error occurred. </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
+</body></html>

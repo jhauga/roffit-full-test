@@ -1,0 +1,39 @@
+<!-- generated with roffit -->
+<a name="NAME"></a><h2 class="nroffsh">Name</h2>
+<p class="level0">CURLOPT_SOCKOPTDATA - pointer to pass to sockopt callback </p><a name="SYNOPSIS"></a><h2 class="nroffsh">Synopsis</h2><pre class="level0">
+&#35;include &lt;curl/curl.h&gt;
+&nbsp;
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_SOCKOPTDATA, void *pointer);
+</pre>
+<a name="DESCRIPTION"></a><h2 class="nroffsh">Description</h2>
+<p class="level0">Pass a <span Class="emphasis">pointer</span> that will be untouched by libcurl and passed as the first argument in the sockopt callback set with <span Class="emphasis">CURLOPT_SOCKOPTFUNCTION(3)</span>. </p><a name="DEFAULT"></a><h2 class="nroffsh">Default</h2>
+<p class="level0">The default value of this parameter is NULL. </p><a name="PROTOCOLS"></a><h2 class="nroffsh">Protocols</h2>
+<p class="level0">All </p><a name="EXAMPLE"></a><h2 class="nroffsh">Example</h2><pre class="level0">
+static int sockopt_callback(void *clientp, curl_socket_t curlfd,
+&nbsp;                           curlsocktype purpose)
+{
+&nbsp; int val = *(int *)clientp;
+&nbsp; setsockopt(curldfd, SOL_SOCKET, SO_RCVBUF, (const char *)&amp;val, sizeof(val));
+&nbsp; return CURL_SOCKOPT_OK;
+}
+&nbsp;
+curl = curl_easy_init();
+if(curl) {
+&nbsp; int recvbuffersize = 256 * 1024;
+&nbsp;
+&nbsp; curl_easy_setopt(curl, CURLOPT_URL, &quot;https://example.com/&quot;);
+&nbsp;
+&nbsp; /* call this function to set options for the socket */
+&nbsp; curl_easy_setopt(curl, CURLOPT_SOCKOPTFUNCTION, sockopt_callback);
+&nbsp; curl_easy_setopt(curl, CURLOPT_SOCKOPTDATA, &amp;recvbuffersize);
+&nbsp;
+&nbsp; res = curl_easy_perform(curl);
+&nbsp;
+&nbsp; curl_easy_cleanup(curl);
+}
+</pre>
+<a name="AVAILABILITY"></a><h2 class="nroffsh">Availability</h2>
+<p class="level0">Added in 7.16.0 </p><a name="RETURN"></a><h2 class="nroffsh">Return value</h2>
+<p class="level0">Returns <span Class="emphasis">CURLE_OK</span> if the option is supported, and <span Class="emphasis">CURLE_UNKNOWN_OPTION</span> if not. </p><a name="SEE"></a><h2 class="nroffsh">See also</h2>
+<p class="level0"><span Class="bold">CURLOPT_SOCKOPTFUNCTION</span>(3), <span Class="bold">CURLOPT_OPENSOCKETFUNCTION</span>(3),  </p><p class="roffit">
+ This HTML page was made with <a href="http://daniel.haxx.se/projects/roffit/">roffit</a>.
