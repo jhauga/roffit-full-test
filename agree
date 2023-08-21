@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Output USER_AGREEMENT.md
+echo  >> USAGE_AGREEMENT.md && echo press "q" to exit document. >> USAGE_AGREEMENT.md && echo >> USAGE_AGREEMENT.md | less USAGE_AGREEMENT.md && sed -i ':a;N;$!ba;s/\n\npress q to exit document.\n//' USAGE_AGREEMENT.md
+
+# Prompt for agreement.
+echo 
+echo \*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*
+echo Do you agree to the terms specified in USAGE_AGREEMENT.md
+echo 
+echo YES or NO
+echo 
+echo \*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*
+read _doesUserAgree
+
+if [ "$_doesUserAgree" = "YES" ]; then
+	sed -i "s/_acknowledgeAndAgreeToUSAGE_AGREEMENT=0/_acknowledgeAndAgreeToUSAGE_AGREEMENT=1/" config-variables.sh
+	echo && echo You have agreed and can now use the tool. && echo 	
+	echo Press enter to exit, then re-run the make command. && echo 
+	read _waitOne
+	exit
+else
+	echo You have not agreed. You must agree before using the tool. Press enter exit.
+	read _waitOne
+	exit
+fi
+

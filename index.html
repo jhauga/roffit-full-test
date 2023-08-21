@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <title>Data Conversion Tool</title>
+ <style>
+  * {
+   box-sizing: border-box;
+   position: relative;
+  }
+  nav {
+   display: inline-block;
+   position: fixed;
+   top: 0px;
+   left: 0px;
+   width: 100%;
+   max-height: 60px;
+   padding: 0px 10px;
+   background: black;
+   color: white;
+   z-index: 1;
+  } 
+  nav div, nav ul, nav ul li {
+   display: inline-block;
+   position: relative;
+  } 
+  nav div.test-switches {
+   box-sizing: border-box;   
+   top: -1px;
+   height: 60px;
+   margin: 0px;
+   padding: 5px;
+   background: gray;
+  }
+  nav div.test-switches label {
+   display: inline-block;
+   position: relative;
+   top: -5px;   
+   height: 60px;
+   padding: 5% 25px;
+   background: gray;
+   cursor: pointer;
+  }
+  nav div.test-switches input {
+   display: none;
+  }
+  nav div.test-switches label[data-check^="1"], 
+  nav div.test-switches input[checked] + label {
+   background: white;
+   color: black;
+   font-weight: bold;
+   text-decoration: underline;
+  }
+  nav div.test-switches div.split-mark {
+   top: -24px;
+   height: 60px;
+   width: 2px;
+   border-right: 2px solid white;   
+   color: white;
+  }
+  nav ul li {
+   margin: 5px;
+  }
+
+  /* menu function */
+  [data-status^="0"] + div {
+   display: none;
+  }
+  [data-status^="1"] + div {
+   display: initial;
+  }
+  nav ul li span {
+   display: inline-block;
+   top: -1px;
+   margin-top: 0px;     
+   margin-left: 50px;
+   padding: 5px 15px;
+   cursor: pointer;      
+  }    
+  nav ul li span + div {
+   display: block;
+   margin-right: 20px
+  }  
+  nav ul li div.dropdown {
+   display: block;
+   position: absolute;
+   left: 40px;
+   width: auto;
+   margin-left:5px;
+   padding: 2px 10px;   
+	  padding-bottom: 15px;
+   background: gray;
+  }
+  nav ul li div.dropdown div span {
+   padding: 0px;
+   margin-left: 10px;
+  }
+  nav ul li span:hover {
+   text-decoration: underline;
+   font-weight: bold;
+   background: darkslategray;
+  }
+  nav ul li div.dropdown div span:hover {
+	  padding: 0px 5px;
+   background: gray;   
+  }
+  span.pageDrop + div.dropdown.nestedDropdown {	 
+	  position: relative;   
+	  width: 85%;
+   max-height: 500px;
+	  background: white;
+	  color: black;	  
+   overflow-y: scroll;   
+   z-index: 1;
+	}
+  span.pageDrop + div.dropdown.nestedDropdown ul {
+   width: 100%;
+   left: 0px;
+   margin: 0px;
+   padding: 0px;
+  }
+  span.pageDrop + div.dropdown.nestedDropdown ul li {
+   width: 110%;
+   left: -12%;
+   margin: 3px 0px;
+   padding: 0px 5px;
+  }
+  span.pageDrop[data-nest-check^="0"] + div.dropdown.nestedDropdown {
+   display: none;
+  }
+  div.dropdown.nestedDropdown.indicateSwitch {
+   margin-top: 10px;
+  }
+  span.pageDrop + div.dropdown.nestedDropdown ul li:hover {
+   background: lightgray;
+  }
+  /* Document styling */
+  body nav + * {
+   margin-top: 100px;
+   margin-left: 50px;
+  }
+  h1 {
+   margin-left: 50px;
+  }
+  div#diffFiles, div#diffStats, div#runTimes {
+   margin-left: 75px;
+  }
+ </style>
+</head>
+<body>
+  <nav>
+   <div class="test-switches">
+    <input checked name="command-used" type="radio" id="command-source">
+    <label id="source-label-html" for="command-source" data-check="1" data-source="source"
+     onClick="setSource(this, this.dataset.source)">Source CHANGE_COMMAND Output</label>
+
+    <div class="split-mark">|</div>
+
+    <input name="command-used" type="radio" id="command-pull">
+    <label id="pull-label-html" for="command-pull" data-check="0"  data-source="pull"
+     onClick="setSource(this, this.dataset.source)">Pull CHANGE_COMMAND Output</label>
+   </div>
+   <div style="display:inline; height: 40px; width:3px; top:15px; margin: 0px 0px 0px 25px; padding: 0px; background:white;"></div>
+   <ul id="navList">
+    <li id="unq">
+     <span onclick="
+      changeNextElementDisplay(this, this.nextElementSibling);
+      resetDropDowns(this, this.dataset.status);" data-status="0">Unique</span>
+     <div class="dropdown" style="display:none">
+     <!-- Options used in test -->
+
+     </div>
+    </li>
+    <li id="err">
+     <span onclick="
+      changeNextElementDisplay(this, this.nextElementSibling);
+      resetDropDowns(this, this.dataset.status);" data-status="0">Differences</span>
+     <div class="dropdown" style="display:none">
+     <!-- Options used in test -->
+
+     </div>
+    </li>
+    <li id="gen">
+     <span onclick="
+      changeNextElementDisplay(this, this.nextElementSibling);
+      resetDropDowns(this, this.dataset.status);" data-status="0">General</span>
+     <div class="dropdown" style="display:none">
+     <!-- Options used in test -->
+
+     </div>
+    </li>   
+   </ul>
+  </nav> 
+ 
+  <div id="dataConversionTestPageContent">
+  <!-- Overview of differne diles by the numbers.-->
+  <h1>Different File Statistics</h1><hr>
+  <div id="diffStats"></div>
+
+  <!-- Compare run times. -->
+  <h1>Source and Pull Run Times</h1><hr>
+  <div id="runTimes"></div>
+
+  <!-- Output diff with files with differences  -->
+  <h1>Different Files Compared</h1><hr>
+  <div id="diffFiles"></div>
+ </div> 
+ 
+ <script id="removedIfOnGitHub" src="https://cdn.jsdelivr.net/gh/jhauga/general/reusableJavascriptFunctions.js"></script>
+ <!-- Link to js tools -->
+ <script defer>
+  setTimeout(
+   function() {
+    if (location.href.indexOf("github.com") > -1) {
+     let removedIfOnGitHub = document.getElementById("removedIfOnGitHub");
+     removedIfOnGitHub.remove();
+     let linkcdn = document.createElement("script");
+     linkcdn.src = "https://cdn.jsdelivr.net/gh/jhauga/general/reusableJavascriptFunctions.js";
+     document.body.appendChild(linkcdn);    
+    }
+   }, 1000);	 
+ </script>
+ 
+ <!-- Page menu and repo scripts -->
+ <script>
+  // Changed with make tool
+  var cur_test_results = "https://github.com/CHANGE_USER/CHANGE_REPO/blob/main/";
+  
+  // Global elements.
+  var navList = document.getElementById("navList");
+  var navListATags = navList.getElementsByTagName("a");
+  var dataCheck = document.querySelectorAll("[data-check]");
+  var theDropDowns = document.querySelectorAll("[data-status]");  
+  var globalNestedDropdown = document.getElementsByClassName("nestedDropdown");
+  var dataConversionTestPageContent = document.getElementById("dataConversionTestPageContent");
+  var dataNestCheck;
+  
+  // Change the command name in toggle
+  var menuCommand, changeCurInnerHTML;
+  function changeToggleMenu(file, curMenu) {
+   let curToggleMenu = document.getElementById(curMenu);
+   let curInnerHTML = curToggleMenu.innerHTML;
+   if (menuCommand == undefined) {
+    var xhttpCommand = new XMLHttpRequest();
+    xhttpCommand.onreadystatechange = function() {
+     if (this.readyState == 4 && this.status == 200) {
+      menuCommand = this.responseText;     
+      changeCurInnerHTML = curInnerHTML.replace("CHANGE_COMMAND", menuCommand);
+      curToggleMenu.innerHTML = changeCurInnerHTML;
+     }
+    };
+    xhttpCommand.open("GET", file, true);
+    xhttpCommand.send();
+   } else {
+    curToggleMenu.innerHTML = changeCurInnerHTML;
+   }
+  }
+  changeToggleMenu("support/COMMAND-USED.txt", "source-label-html");
+  changeToggleMenu("support/COMMAND-USED.txt", "pull-label-html");
+  
+  // Toggle the repo used for html links.
+  var toggleDataCheck = function(ind) { 
+   if (typeof ind == "number") {
+    dataCheck[ind].dataset.check = "0"; 
+    dataCheck[ind].previousElementSibling.removeAttribute("checked"); 
+   } else {
+    if (ind == "a") {
+     dataNestCheck[1].dataset.nestCheck = "0";
+     dataNestCheck[1].dataset.showhide = "0";
+    } else {
+     dataNestCheck[0].dataset.nestCheck = "0";
+     dataNestCheck[0].dataset.showhide = "0";
+    }
+   }
+  };
+  // Subtle repo switch indicator.
+  var indicateSwitch = function() {
+   let ind = 0;
+   var runInd = function() {
+    for (let i = 0; i < globalNestedDropdown.length; i++) {
+     let indClass = globalNestedDropdown[i].className;
+     if (ind == 0 ) {
+      globalNestedDropdown[i].className += " indicateSwitch"; // stylel with css
+     } else {
+      globalNestedDropdown[i].className = indClass.replace(" indicateSwitch", "");
+     }
+    }
+   };
+   runInd(); ind = 1; setTimeout(runInd, 500);
+  };
+	 var sourceIsSet = 0;
+  // Set source repo to selected repo for pages in dropdown.
+  function setSource(cur, refSource) {
+   if (refSource == undefined) { refSource = "source"; }
+    let navListATagsLen = navListATags.length; let curHref;
+    if (cur != undefined) {
+     let checkStatus = cur.dataset.check;
+     if (cur.nextElementSibling == null) { toggleDataCheck(0); }
+     else { toggleDataCheck(1); }
+
+     if (checkStatus == "0") { 
+      cur.dataset.check = "1"; 
+      cur.previousElementSibling.setAttribute("checked", true);
+     } 
+      else { 
+       cur.dataset.check = "0";
+       cur.previousElementSibling.setAttribute("checked", true);
+      }
+    }
+    for (let i = 0; i < navListATagsLen; i++) {
+     curHref = navListATags[i].href;
+     if (sourceIsSet == 0) {
+      navListATags[i].href = curHref.replace("COMMAND_USED", refSource);
+     } else {
+      if (refSource == "pull") {
+       navListATags[i].href = curHref.replace("source", refSource);
+      } else {
+       navListATags[i].href = curHref.replace("pull", refSource);
+      }
+     }
+    }
+   if (sourceIsSet == 1) { indicateSwitch(); }
+   sourceIsSet = 1;
+  }
+	 
+  // Make dropdowns by command options.
+  function commandOptionDropdown(opts) {
+   let dropLi = navList.getElementsByTagName("li");
+   let dropLiLen = dropLi.length;
+   let optUsed, textToArr, textToArrLen;
+   let optHttp = new XMLHttpRequest();
+   optHttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+     optUsed = this.responseText;
+     textToArr = optUsed.split("\n");     
+     textToArrLen = textToArr.length;
+     for (i = 0; i < dropLiLen; i++) {
+      let dropDiv = dropLi[i].getElementsByTagName("div");
+      for (ii = 0; ii < textToArrLen; ii++) {
+       if (textToArr[ii] != "") {
+        dropDiv[0].innerHTML += '     <div>\n' +
+         '      <span class="pageDrop" data-nest-check="0" onclick="changeNextElementDisplay(this, this.nextElementSibling); resetDropDowns(this, this.dataset.nestCheck);">' +
+         textToArr[ii] + '</span>\n' +
+         '      <div class="dropdown nestedDropdown" style="display:none"></div>\n' +
+         '     </div>';
+        }
+      }
+     }     
+    }
+   };
+   optHttp.open("GET", opts, true);
+   optHttp.send();
+  } 
+  commandOptionDropdown("support/options-ran.txt");  
+  
+  // Show and hide nested dropdowns.
+  function resetDropDowns(cur, curStatus) {
+   let curnestedDropdown = cur.nextElementSibling;
+   let curData = cur.dataset;   
+   let theCurStatus = curStatus;
+      
+   let theDropDownsLen = theDropDowns.length;
+   // not a nested dropdown
+   if (curnestedDropdown.className.indexOf("nestedDropdown") == -1) {
+    dataNestCheck = document.querySelectorAll("[data-nest-check]");
+    let dataNestCheckLen = dataNestCheck.length;
+    for (let i = 0; i < dataNestCheckLen; i++) {
+     dataNestCheck[i].dataset.nestCheck = "0";
+    }
+    for (let i = 0; i < theDropDownsLen; i++) {
+     theDropDowns[i].dataset.status = 0;
+     theDropDowns[i].nextElementSibling.style.display = "none";     
+    }
+    if (theCurStatus == 0) {
+     cur.dataset.status = 1;
+     cur.nextElementSibling.style.display = "";
+    } else {
+     cur.dataset.status = 0;
+     cur.nextElementSibling.style.display = "none";
+    }   
+   } else { // is a nested dropdown
+    let theParent = cur.parentElement;
+    let theGrandparent = theParent.parentElement;
+    dataNestCheck = theGrandparent.querySelectorAll("[data-nest-check]");
+    if (theParent.nextElementSibling == null) {
+     toggleDataCheck("b");
+    } else {
+     toggleDataCheck("a");
+    }
+    // Show the nested dropdown clicked.
+    if (cur.dataset.showhide == "1") {
+     cur.dataset.nestCheck = "1";
+    } else {
+     cur.dataset.nestCheck = "0";
+    }
+   }
+  }
+	
+  // Output links in dropdowns from pages built with test.
+  function makeLinks(file) {
+   let curDropdown = document.getElementById(file);  
+   let nestedDropdown = curDropdown.getElementsByClassName("nestedDropdown");
+   let nestedDropdownLen = nestedDropdown.length;     
+   let nestDropArr = []; let nestDropOptions = [];  
+   var iMakeLinks = function() {
+    let xmlhttpsort = new XMLHttpRequest();
+    xmlhttpsort.onreadystatechange = function() {
+     if (this.readyState == 4 && this.status == 200) {
+      let curTxt = this.responseText;
+      let curItem = curTxt.split("\n");      
+      let i = 0;
+      while (i < nestedDropdownLen) {
+       let curInnerHTML = nestedDropdown[i].previousElementSibling.innerHTML;
+       nestDropOptions.push(curInnerHTML);
+       let nestDropArrs = [];
+       for (ii = 0; ii < curItem.length; ii++) {
+        if (curItem[ii].lastIndexOf(curInnerHTML+".html") > -1) {
+         nestDropArrs.push(curItem[ii]);
+        }
+       }
+       nestDropArr.push(nestDropArrs);
+       i++
+      }
+      i = 0;    
+      while (i < nestDropOptions.length) {
+       let curNestedDropdown = nestedDropdown[i];
+       curNestedDropdown.innerHTML = "<ul>";
+       for (ii = 0; ii < nestDropArr[i].length; ii++) {
+	       if (location.href.indexOf("https://jhauga.github.io/htmlpreview.github.com/?") > -1) {
+         curNestedDropdown.innerHTML += "<li><a target='_blank' href='" +
+	         "https://jhauga.github.io/htmlpreview.github.com/?" + cur_test_results +
+          nestDropArr[i][ii].replace("COMMAND_USED", "source") + "'>" +          
+          nestDropArr[i][ii].substring(nestDropArr[i][ii].lastIndexOf("/")+1, nestDropArr[i][ii].indexOf("-")) +
+          "</a></li><br>";
+	        } else {
+         curNestedDropdown.innerHTML += "<li><a target='_blank' href='" +
+          nestDropArr[i][ii].replace("COMMAND_USED", "source") + "'>" +          
+          nestDropArr[i][ii].substring(nestDropArr[i][ii].lastIndexOf("/")+1, nestDropArr[i][ii].indexOf("-")) +
+          "</a></li><br>";
+    	   }
+       }
+       curNestedDropdown.innerHTML += "</ul>";
+       i++;
+      }   
+     }
+    };
+    xmlhttpsort.open("GET", "support/menu-"+file+"-links.txt", true);
+    xmlhttpsort.send();
+   };
+   iMakeLinks();
+  }
+  
+  // Set html links in dropdown by test by created.
+  setTimeout(function() {makeLinks("unq");}, 400);
+	 setTimeout(function() {makeLinks("err");}, 450);
+  setTimeout(function() {makeLinks("gen");}, 500);
+  setTimeout(setSource(), 600);
+ 
+  // Hide dropdowns when click anywhere.
+  dataConversionTestPageContent.addEventListener("click", function() {  
+   for (let i = 0; i < theDropDowns.length; i++) {
+    let dropStatus = theDropDowns[i].dataset.status;
+    if (dropStatus == 1) {
+     theDropDowns[i].click();
+    }
+   }
+  });
+ </script>
+ 
+ <!-- Output files with diff at end -->
+ <script>
+  var diffFiles = document.getElementById("diffFiles");
+  var files, filesLen;
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function() {
+   if (this.readyState == 4 && this.status == 200) {
+   let errList = this.responseText;
+   let testreg = /tests/g;
+   let htmlreg = /html/g;
+   let commandreg = /COMMAND_USED/g;
+   let htmlltreg = /</g;
+   let htmlgtreg = />/g;
+   let openh3reg = /&lt;h3&gt;/g; let closeh3reg = /&lt;\/h3&gt;/g;
+   let linebrreg = /&lt;br&gt;&lt;hr&gt;&lt;br&gt;/g;
+   let errListTxt = errList.replace(testreg, "diff");
+   errListTxt = errListTxt.replace(htmlreg, "txt");
+   errListTxt = errListTxt.replace(commandreg, "");
+   errListTxt = errListTxt.replace(htmlltreg, "&lt;");
+   errListTxt = errListTxt.replace(htmlgtreg, "&gt;");
+   errListTxt = errListTxt.replace(openh3reg, "<h3>");
+   errListTxt = errListTxt.replace(closeh3reg, "</h3>");
+   errListTxt = errListTxt.replace(linebrreg, "<br><hr><br>");
+   files = errListTxt.split("\n");	 
+   filesLen = files.length;
+   for (i in files) {
+    diffFiles.innerHTML += files[i] + "<br>";; 
+   }
+   }
+  };
+  xmlhttp.open("GET", "diff/errs.txt", true);
+  xmlhttp.send();
+ 
+  // Output the stats for differnet files.
+  var diffStats = document.getElementById("diffStats");
+  xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function() {
+   if (this.readyState == 4 && this.status == 200) {
+    // let diffStatText = this.responseText;
+    diffStats.innerHTML = this.responseText;
+   }
+  };
+  xmlhttp.open("GET", "support/diff-stats.txt", true);
+  xmlhttp.send();
+	
+ var runTimes = document.getElementById("runTimes");
+ xmlhttp = new XMLHttpRequest();
+ xmlhttp.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+   //let runTimeText = this.responseText;
+   runTimes.innerHTML = this.responseText;
+  }
+ };
+ xmlhttp.open("GET", "support/run-times.txt", true);
+ xmlhttp.send();
+ 
+ // Lastely alert repo switch.
+ var alertText = "The top left menu buttons toggle the html\n" +
+                 "pages that were created with the repository\n" +
+                 "that is higlighted in the menu. Pages will open in\n" +
+                 "a new tab in browser.";
+ setTimeout(function() {alert(alertText);}, 1000);
+ </script>
+ 
+ <!-- debugging - for use to test link building -->
+ <script>
+  var testlinks = 1; // 1 is on
+  var linkCount = 0;
+	setTimeout(function() {
+   if (testlinks == 1) {
+    let testarr = [];
+    for (let i = 0; i < navListATags.length; i++) {
+     testarr.push(navListATags[i].href);		
+    }
+    
+    for (i = 0; i < testarr.length; i++) {
+     if (testarr[i].indexOf("COMMAND_USED") > -1) {
+      console.log("links failed");
+      break;
+     } else {
+      //console.log(linkCount + " links passed " + testarr[i]);
+      console.log("links passed");
+      linkCount++;     
+     }
+    }
+   }
+   console.log(linkCount);
+	}, 2000);
+ </script>
+
+</body>
+</html>

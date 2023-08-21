@@ -1,0 +1,330 @@
+#!/bin/bash
+# data-test
+# Test data conversion tool pull request file to ensure no new problems arise, and/or build is not slow or significantly slow down.
+
+##########################################################
+##################### DATA-TEST ########################
+### All files in this repositroy are public domain cc0 ###
+### Any files created by the test are subject to the   ###
+### license specified in that reposityor.              ###
+##########################################################
+
+# Set variables from config-variables.sh. 
+# IMPORTANT - these should have been changed after making repo from template.
+# IMPORTANT - you must agree to terms before use.
+source config-variables.sh
+check_if_user_agreed_exit_if_not # check if agreed to terms, exit if not
+_file="source" # DO NOT CHANGE - sets file name for test pages
+
+# The number of opttions that will run when testing.
+# Array _optionsToRun is from congig-variables.sh.
+_numberOfOptionsRan="${#_optionsToRun[@]}"
+
+# Incrementers to show error stats.
+_numberOfFilesTested=0
+_numberOfFilesBuilt=0
+_countNumberOfErrors=0
+_percentOfFilesWithError=0
+
+# Determine which test is run.
+if [ -z "$1" ]; then
+	_currentTest=quick-test
+else
+	_currentTest=full-test
+fi
+
+# Make and store lists with two types of files used:
+# 1. gen - general data files (using/not using command) with variety of elements.
+# 2. unq - unique case for test files
+ls -p1 data/"$_currentTest"/gen/ | grep -v '/$' > list-gen.txt
+ls -p1 data/"$_currentTest"/unq/ | grep -v '/$' > list-unq.txt
+
+# Make directories for results.
+mkdir -p diff commands support tests
+mkdir -p diff/unq diff/err diff/gen tests/unq tests/err tests/gen
+
+# Get source and pulled command file from github.
+function _git_clone_repo() {
+	_curGitHubUser="$1"
+	git clone https://github.com/$_curGitHubUser/$_repoName.git commands/"$_curGitHubUser"-"$_COMMAND_TEST"/
+}
+# Make the dir to compare source and pull command.
+_git_clone_repo "$_sourceUserName" && _git_clone_repo "$_pullUserName"
+
+# Define timing arrays.
+declare -a _runTimes && declare -a _sourceRuns && declare -a _pullRuns
+
+# Function to make html with option and no option call.
+# Then make corresponding files in diff folder
+# to test the differnences to ensure nothing new
+# was broken as a result of pull request.
+function run_test() {	
+	# set list to use
+	_curList="$1" && _curData="$2" && _curDir="$_currentTest"/"$_curData"
+	# set which coomand to use; source or pull
+	if [ "$_useSource" = 1 ]; then
+		_file="source"
+		# copy to root of testing repo
+		cp commands/"$_sourceUserName"-"$_COMMAND_TEST"/"$_COMMAND_TEST" "$_COMMAND_TEST"
+	else
+		_file="pull"
+		# copy to root of testing repo
+		cp commands/"$_pullUserName"-"$_COMMAND_TEST"/"$_COMMAND_TEST" "$_COMMAND_TEST"
+	fi
+	# repetitive function to get time for each build
+	calc_build() {
+		# set starting point before making file
+		if [ "$1" = 1 ]; then
+			start_one_run="$(date +%s.%N)" # set start time mark
+		elif [ "$1" = 2 ]; then
+			# set end time mark
+			end_one_run="$(date +%s.%N)"
+			# get time difference
+			_oneRun=$(echo "$end_one_run - $start_one_run" | bc)
+			# append to correct array by either source or pull command
+			# that is specified in config variab le "_useSource" at top
+			if [ "$_file" = "source" ]; then
+				_sourceRuns+=("$_oneRun")
+			else
+				_pullRuns+=("$_oneRun")
+			fi
+		fi
+	}
+	# repetitive function to make files
+	run_command() {
+		# loop through options specified to run command with
+		for opts in "${_optionsToRun[@]}"; do			
+			if [ "$opts" == "" ]; then
+				_nameOpt="-default"
+			else
+				_nameOpt="$opts"
+			fi
+			if [ "$_targetFileExtension" == ".html" ]; then
+				# start start time, run build command, and calculate run time storing it in array
+				calc_build "1" && _commandSyntax "$opts" data/"$_curDir"/"$line" tests/"$_curData"/"$line"-"$1""$_nameOpt".html && calc_build "2"
+			else
+				echo "<!DOCTYPE HTML><html><body><pre>" > tests/"$_curData"/"$line"-"$1""$_nameOpt".html # make html opening elements
+				# start start time, run build command, and calculate run time storing it in array
+				calc_build "1" && _commandSyntax "$opts" data/"$_curDir"/"$line" tests/"$_curData"/"$line"-"$1""$_nameOpt".html && calc_build "2"
+				echo "</pre></body></html>" >> tests/"$_curData"/"$line"-"$1""$_nameOpt".html # make html closing elements
+			fi
+			# increase the number of files built
+			(( _numberOfFilesBuilt++ ))
+		done
+		# loop through options that created files and check for differences in 
+		# source and pull differences in created files
+		for opts in "${_optionsToRun[@]}"; do
+			if [ "$opts" = "" ]; then
+					opts="-default"
+			fi
+			if [ "$1" = "source" ]; then
+				# condition that creates comparable files depending on whichever command
+				# is used first
+				if [ -e "tests/$_curData/$line-pull$opts.html" ]; then
+					# pull command used before source
+					diff tests/"$_curData"/"$line"-pull"$opts".html tests/"$_curData"/"$line"-source"$opts".html > diff/"$_curData"/"$line""$opts".txt
+				else
+					# source command before pull command
+					cp tests/"$_curData"/"$line"-source"$opts".html tests/"$_curData"/"$line"-pull"$opts".html
+				fi
+			else
+				if [ -e "tests/$_curData/$line-source$opts.html" ]; then
+					# source command used before pull command
+					diff tests/"$_curData"/"$line"-source"$opts".html tests/"$_curData"/"$line"-pull"$opts".html > diff/"$_curData"/"$line""$opts".txt
+				else
+					# pull command used before source command
+					cp tests/"$_curData"/"$line"-pull"$opts".html tests/"$_curData"/"$line"-source"$opts".html
+				fi
+			fi
+		done
+	}
+	# make html files by command being used using repetitive functions above
+	# file naming will be [file_name]-[source|pull]-[""|"${opt[x]}"].html
+	while read -r line; do
+		# increase count of files that were tested (files in data/[full|quick]-test folder(s)
+		(( _numberOfFilesTested++ ))
+		if [ "$_useSource" = 1 ]; then
+			# run using source command
+			run_command "source"
+		else
+			# run using pull command
+			run_command "pull"
+		fi
+		  # loop through files listed in list-[gen|unq].txt file
+	done < "$_curList"
+
+	# move files with differences to errors
+	while read -r line; do
+		# for all options check files created by command
+		for opts in "${_optionsToRun[@]}"; do
+			# account for no option
+			if [ "$opts" = "" ]; then
+				opts="-default"
+			fi
+			# check for differnces if by seeing if file is NOT empty
+			if [ -s diff/"$_curData"/"$line""$opts".txt ]; then
+				mv diff/"$_curData"/"$line""$opts".txt diff/err/"$line""$opts".txt 2>/dev/null
+				mv tests/"$_curData"/"$line"*"$opts".html tests/err/ 2>/dev/null
+				# increase the number of errors
+				(( _countNumberOfErrors++ ))
+			fi
+		done
+		  # loop through files listed in list-[gen|unq].txt file
+	done < "$_curList"
+}
+
+# Run test with initial set source.
+run_test "list-gen.txt" "gen" && run_test "list-unq.txt" "unq"
+
+# Use command in pull request and redefine:
+# source file, and files tested as to not divide total later.
+_numberOfFilesTested=0
+
+# Redefine source command to use based on config from top (default is _useSource=1).
+if [ "$_useSource" = 1 ]; then  _useSource=0; else  _useSource=1; fi
+
+# Run test with invert of initial set source.
+run_test "list-gen.txt" "gen" && run_test "list-unq.txt" "unq"
+
+# Make support files for html links.
+ls -1 tests/unq/*-source* > support/menu-unq-links.txt && ls -1 tests/err/*-source* > support/menu-err-links.txt && ls -1 tests/gen/*-source* > support/menu-gen-links.txt
+# Replace the temporary filler text to fit test outputs.
+sed -i "s/source/COMMAND_USED/g" support/menu-unq-links.txt && sed -i "s/source/COMMAND_USED/g" support/menu-err-links.txt && sed -i "s/source/COMMAND_USED/g" support/menu-gen-links.txt
+
+# Create a text file with contents of all diff files. 
+ls -p1 diff/err/* | grep -v '/$' > diff/errList.txt && touch diff/errs.txt
+
+# Loop through diff file and output files' terminal output to html and count number built.
+_builtFilesWithDifferences=0
+while read -r line; do
+	# header for file name
+	echo "<h3>${line##*/}</h3>" >> diff/errs.txt
+	# file contents
+	cat "$line" >> diff/errs.txt
+	# add space and separation marker
+	echo "<br><hr><br>" >> diff/errs.txt
+	# increment built files with differences
+	(( _builtFilesWithDifferences++ ))
+done < diff/errList.txt
+# Account for source and pull
+(( _builtFilesWithDifferences*=2 ))
+
+# Make statistic html section.
+touch support/diff-stats.txt
+#################################################################################
+
+# Calculate the percent of files with error/differences
+_percentOfFilesWithError=$(( ( (_countNumberOfErrors/2) * 100) / _numberOfFilesTested ))
+_percentOfBuiltFilesWithError=$(( (_builtFilesWithDifferences * 100) / _numberOfFilesBuilt ))
+
+# Output html elements to support file parsed into index.html
+echo "<p>The files tested are the number of files that were used for test. These files at the very least will be doubled relative to files built.</p>" > support/diff-stats.txt
+echo "<p><strong>Total Files Tested</strong>  - $_numberOfFilesTested</p>" >> support/diff-stats.txt
+echo "<p><strong>Tested Files with Differences</strong> - $((_countNumberOfErrors / 2))</p>" >> support/diff-stats.txt
+echo "<p><h3 style=\"display:inline\">File Difference Percentage</h3> - $_percentOfFilesWithError</p>  " >> support/diff-stats.txt
+echo "<hr>" >> support/diff-stats.txt
+echo "<p>The files built account for files tested (x1) for source and pull (x2) for options (xUsed).</p>" >> support/diff-stats.txt
+echo "<p><small>built = (optonCount x filesTested) * 2 (<em>source and pull repo)</em> ---" >> support/diff-stats.txt
+echo "So--- optonCount = $_numberOfOptionsRan ; filesTested= $_numberOfFilesTested;  repos = 2;</small></p>" >> support/diff-stats.txt
+echo "<p><strong>Total Files Built</strong>  - $_numberOfFilesBuilt</p>" >> support/diff-stats.txt
+echo "<p><strong>Total Files with Differences</strong> - $_builtFilesWithDifferences</p>" >> support/diff-stats.txt
+echo "<p><h3 style=\"display:inline\">Built Difference Percentage</h3> - $_percentOfBuiltFilesWithError</p>" >> support/diff-stats.txt
+echo "<hr>" >> support/diff-stats.txt
+
+# Make run time html section.
+touch support/run-times.txt
+#################################################################################
+
+# Function to calculate basic run time stats.
+calc_run_average() {
+	cur_arr=("$@")           # array as parameter
+	cur_sum=0                # start count at 0
+	cur_len=${#cur_arr[@]}   # array length
+	for num in "${cur_arr[@]}"; do
+		# sum up all the time amounts to build file
+		cur_sum=$(echo "scale=6; $cur_sum + $num" | bc)
+	done
+	# get average of summed build times
+	cur_average=$(echo "scale=6; $cur_sum / $cur_len" | bc)
+	# append array witb source and pull command's sums respectively
+	_sumRuns+=("$cur_sum")
+	# append array with source and pull command's averages respectively
+	_averageRunTimes+=("$cur_average")
+}
+
+# Calculate individual run time stats. Declare arrays to be used.
+declare -a _averageRunTimes && declare -a _sumRuns
+
+# Calculate stats by source then pull repo command.
+calc_run_average "${_sourceRuns[@]}" && calc_run_average "${_pullRuns[@]}"
+
+# Calculate stats from function result. Source and pull sum and averages respectively.
+_sourceSumRuns="${_sumRuns[0]}" && _pullSumRuns="${_sumRuns[1]}"
+_sourceAvgRuns="${_averageRunTimes[0]}" && _pullAvgRuns="${_averageRunTimes[1]}"
+
+# Calculate the differences from the time amounts of pull and source repo command.
+_allFastOrSlow=$(echo "$_pullSumRuns - $_sourceSumRuns" | bc)
+_avgFastOrSlow=$(echo "$_pullAvgRuns - $_sourceAvgRuns" | bc)
+
+# Function to make repeating text.
+repetitive_diff() {
+	# template text
+	_thanSource="than source to build $1"
+	# calculation displayed
+	_theCurrentTimeDifference="$2"
+	# used to run condition to check if calculation is less or more time
+	_forCondition="$(echo "$_theCurrentTimeDifference >= 0" | bc -l)"
+	if [ "$_forCondition" = 1 ]; then
+		# pull command is slower
+		_fastOrSlow="pull was <strong>$_theCurrentTimeDifference seconds</strong> slower $_thanSource."
+	else
+		# source command is slower
+		_negateTime=$(echo "$_theCurrentTimeDifference * -1" | bc) # make positive number
+		_fastOrSlow="pull was <strong>$_negateTime</strong> faster $_thanSource."
+	fi	
+}
+
+# Output html elements to support file parsed into index.html
+echo "<p>The individual run times are the individual build times for each fie. Each " > support/run-times.txt
+echo "item in the array is added up so that total can be compared with sum. The " >> support/run-times.txt
+echo "average build time is also included along with a comparison of the average " >> support/run-times.txt
+echo "build for source and pull command.</p>" >> support/run-times.txt
+# Start stats.
+echo "<p><strong>Summed Source Builds</strong> - $_sourceSumRuns</p>" >> support/run-times.txt
+echo "<p><strong>Summed Pull Builds</strong> - $_pullSumRuns</p>" >> support/run-times.txt
+repetitive_diff "$_numberOfFilesBuilt files" "$_allFastOrSlow" # sum of all builds compared
+echo "<p><h3 style=\"display:inline\">Sum Difference</h3> - $_fastOrSlow</p>" >> support/run-times.txt
+echo "<hr>" >> support/run-times.txt
+echo "<p><strong>Average Source Build</strong> - $_sourceAvgRuns</p>" >> support/run-times.txt
+echo "<p><strong>Average Pull Builds</strong> - $_pullAvgRuns</p>" >> support/run-times.txt
+repetitive_diff "1 file on average" "$_avgFastOrSlow" # average of all builds compared
+echo "<p><h3 style=\"display:inline\">Average Difference</h3> - $_fastOrSlow</p>" >> support/run-times.txt
+echo "<hr>" >> support/run-times.txt
+
+# Make drop items and menu text by commands used.
+#################################################################################
+touch support/options-ran.txt
+for opts in "${_optionsToRun[@]}"; do
+	if [ "$opts" = "" ]; then
+		echo "default" >> support/options-ran.txt
+	else
+		echo "$opts" >> support/options-ran.txt
+	fi
+done
+echo "${_COMMAND_TEST^}" > support/COMMAND-USED.txt
+
+# Change link in README.md
+sed -i "s/CHANGE_USER/$_pullUserName/" README.md
+sed -i "s/CHANGE_REPO/$_testResultRepo/" README.md
+
+# Change  user and repo in index.html
+sed -i "s|var cur_test_results = \"https://github.com/CHANGE_USER/CHANGE_REPO/blob/main/\";|var cur_test_results = \"https://github.com/$_pullUserName/$_testResultRepo/blob/main/\";|" index.html
+
+# remove option call signs
+sed -i -E 's/([-]+)(.*)/\2/g' support/options-ran.txt
+
+# Clean up folder.
+rm list-gen.txt list-unq.txt
+
+# Remove command as no longer needed.
+rm -rf commands "$_COMMAND_TEST"
