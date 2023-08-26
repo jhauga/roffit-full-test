@@ -1,17 +1,13 @@
 #!/bin/bash
-# data-test
-# Test data conversion tool pull request file to ensure no new problems arise, and/or build is not slow or significantly slow down.
+# roffit-full-test
+# Test results for roffit pull request using selected repos to test build.
 
-##########################################################
-##################### DATA-TEST ########################
-### All files in this repositroy are public domain cc0 ###
-### Any files created by the test are subject to the   ###
-### license specified in that reposityor.              ###
-##########################################################
 
-# Set variables from config-variables.sh. 
-# IMPORTANT - these should have been changed after making repo from template.
-# IMPORTANT - you must agree to terms before use.
+## 1 START*********************************************************************************
+## 1 - Set configuration and ready test elements.
+## 1 
+#####################################################################################################
+
 source config-variables.sh
 check_if_user_agreed_exit_if_not # check if agreed to terms, exit if not
 _file="source" # DO NOT CHANGE - sets file name for test pages
@@ -43,6 +39,21 @@ ls -p1 data/"$_currentTest"/unq/ | grep -v '/$' > list-unq.txt
 mkdir -p diff commands support tests
 mkdir -p diff/unq diff/err diff/gen tests/unq tests/err tests/gen
 
+# Define timing arrays.
+declare -a _runTimes && declare -a _sourceRuns && declare -a _pullRuns
+
+#####################################################################################################
+#####################################################################################################
+## 1
+## 1 - Set configuration and ready test elements.
+## 1 END*********************************************************************************
+
+
+## 2 START*********************************************************************************
+## 2 - Clone source (*bagder*) and pull (*jhauga*) roffit repo.
+## 2
+#####################################################################################################
+
 # Get source and pulled command file from github.
 function _git_clone_repo() {
 	_curGitHubUser="$1"
@@ -51,14 +62,24 @@ function _git_clone_repo() {
 # Make the dir to compare source and pull command.
 _git_clone_repo "$_sourceUserName" && _git_clone_repo "$_pullUserName"
 
-# Define timing arrays.
-declare -a _runTimes && declare -a _sourceRuns && declare -a _pullRuns
+#####################################################################################################
+#####################################################################################################
+## 2
+## 2 - Clone source (*bagder*) and pull (*jhauga*) roffit repo.
+## 2 END *********************************************************************************
+
 
 # Function to make html with option and no option call.
 # Then make corresponding files in diff folder
 # to test the differnences to ensure nothing new
 # was broken as a result of pull request.
 function run_test() {	
+
+## 3 START*********************************************************************************
+## 3 - Start test function configurring function for source or pull.
+## 3
+#####################################################################################################
+
 	# set list to use
 	_curList="$1" && _curData="$2" && _curDir="$_currentTest"/"$_curData"
 	# set which coomand to use; source or pull
@@ -71,6 +92,19 @@ function run_test() {
 		# copy to root of testing repo
 		cp commands/"$_pullUserName"-"$_COMMAND_TEST"/"$_COMMAND_TEST" "$_COMMAND_TEST"
 	fi
+
+#####################################################################################################
+#####################################################################################################
+## 3
+## 3 - Start test function configurring function for source or pull.	
+## 3 END*********************************************************************************
+
+
+## 4 START*********************************************************************************
+## 4 - Set a start and end time for each build with roffit, pushing start and end to two separate arrays.
+## 4	
+#####################################################################################################
+
 	# repetitive function to get time for each build
 	calc_build() {
 		# set starting point before making file
@@ -90,8 +124,22 @@ function run_test() {
 			fi
 		fi
 	}
+
+#####################################################################################################
+#####################################################################################################	
+## 4	
+## 4 - Set a start and end time for each build with roffit, pushing start and end to two separate arrays.
+## 4 END*********************************************************************************	
+
+
 	# repetitive function to make files
 	run_command() {
+	
+## 5 START*********************************************************************************
+## 5 - In ` run_command() ` sub-function call roffit first utilizing prior configurations to build using source or pull roffit and calculate build time(s).
+## 5	
+#####################################################################################################
+
 		# loop through options specified to run command with
 		for opts in "${_optionsToRun[@]}"; do			
 			if [ "$opts" == "" ]; then
@@ -99,6 +147,9 @@ function run_test() {
 			else
 				_nameOpt="$opts"
 			fi
+  ### HERE ###  HERE ###  HERE ###  HERE ###  HERE ###  HERE ### ### HERE ###  HERE ###  HERE ###  HERE ###  HERE ###  HERE ### HERE ###  HERE ###  HERE ###
+  ### HERE ###  HERE ###  HERE ###  HERE ###  HERE ###  HERE ### ### HERE ###  HERE ###  HERE ###  HERE ###  HERE ###  HERE ### HERE ###  HERE ###  HERE ###
+                                                       ### start time --- call roffit --- end time ###
 			if [ "$_targetFileExtension" == ".html" ]; then
 				# start start time, run build command, and calculate run time storing it in array
 				calc_build "1" && _commandSyntax "$opts" data/"$_curDir"/"$line" tests/"$_curData"/"$line"-"$1""$_nameOpt".html && calc_build "2"
@@ -108,9 +159,26 @@ function run_test() {
 				calc_build "1" && _commandSyntax "$opts" data/"$_curDir"/"$line" tests/"$_curData"/"$line"-"$1""$_nameOpt".html && calc_build "2"
 				echo "</pre></body></html>" >> tests/"$_curData"/"$line"-"$1""$_nameOpt".html # make html closing elements
 			fi
+                                                       ### start time --- call roffit --- end time ###			
+  ### HERE ###  HERE ###  HERE ###  HERE ###  HERE ###  HERE ### ### HERE ###  HERE ###  HERE ###  HERE ###  HERE ###  HERE ### HERE ###  HERE ###  HERE ###
+  ### HERE ###  HERE ###  HERE ###  HERE ###  HERE ###  HERE ### ### HERE ###  HERE ###  HERE ###  HERE ###  HERE ###  HERE ### HERE ###  HERE ###  HERE ###
+  
 			# increase the number of files built
 			(( _numberOfFilesBuilt++ ))
 		done
+		
+#####################################################################################################
+#####################################################################################################
+## 5			
+## 5 - In ` run_command() ` sub-function call roffit first utilizing prior configurations to build using source or pull roffit and calculate build time(s).
+## 5 END*********************************************************************************
+
+
+## 6 START*********************************************************************************
+## 6 - Determnin differernec after all files built second in `runc_command() sub-function.
+## 6	
+#####################################################################################################
+		
 		# loop through options that created files and check for differences in 
 		# source and pull differences in created files
 		for opts in "${_optionsToRun[@]}"; do
@@ -137,7 +205,21 @@ function run_test() {
 				fi
 			fi
 		done
+		
+#####################################################################################################
+#####################################################################################################
+## 6			
+## 6 - Determnin differernec after all files built second in `runc_command() sub-function.
+## 6 END*********************************************************************************
+
+	
 	}
+	
+## 7 START*********************************************************************************
+## 7 - Call ` run_command() ` sub-function.
+## 7			
+#####################################################################################################
+
 	# make html files by command being used using repetitive functions above
 	# file naming will be [file_name]-[source|pull]-[""|"${opt[x]}"].html
 	while read -r line; do
@@ -152,6 +234,18 @@ function run_test() {
 		fi
 		  # loop through files listed in list-[gen|unq].txt file
 	done < "$_curList"
+
+#####################################################################################################
+#####################################################################################################
+## 7				
+## 7 - Call ` run_command() ` sub-function.
+## 7 END*********************************************************************************
+
+
+## 8 START*********************************************************************************
+## 8 - Determine if there is a difference, checking empty files and count number of differences.
+## 8			
+#####################################################################################################
 
 	# move files with differences to errors
 	while read -r line; do
@@ -171,7 +265,20 @@ function run_test() {
 		done
 		  # loop through files listed in list-[gen|unq].txt file
 	done < "$_curList"
+	
+#####################################################################################################
+#####################################################################################################	
+## 8			
+## 8 - Determine if there is a difference, checking empty files and count number of differences.
+## 8 END*********************************************************************************
+
+	
 }
+
+## 9 START*********************************************************************************
+## 9 - Call ` run_test() ` function with source or pull, reconfigure and call ` run_test() ` again.
+## 9	
+#####################################################################################################		
 
 # Run test with initial set source.
 run_test "list-gen.txt" "gen" && run_test "list-unq.txt" "unq"
@@ -186,8 +293,21 @@ if [ "$_useSource" = 1 ]; then  _useSource=0; else  _useSource=1; fi
 # Run test with invert of initial set source.
 run_test "list-gen.txt" "gen" && run_test "list-unq.txt" "unq"
 
+#####################################################################################################
+#####################################################################################################
+## 9			
+## 9 - Call ` run_test() ` function with source or pull, reconfigure and call ` run_test() ` again.
+## 9 END*********************************************************************************
+
+
+## 10 START*********************************************************************************
+## 10 - Make support html elements for difference output and dropdown menus.
+## 10
+#####################################################################################################			
+
 # Make support files for html links.
 ls -1 tests/unq/*-source* > support/menu-unq-links.txt && ls -1 tests/err/*-source* > support/menu-err-links.txt && ls -1 tests/gen/*-source* > support/menu-gen-links.txt
+
 # Replace the temporary filler text to fit test outputs.
 sed -i "s/source/COMMAND_USED/g" support/menu-unq-links.txt && sed -i "s/source/COMMAND_USED/g" support/menu-err-links.txt && sed -i "s/source/COMMAND_USED/g" support/menu-gen-links.txt
 
@@ -209,9 +329,20 @@ done < diff/errList.txt
 # Account for source and pull
 (( _builtFilesWithDifferences*=2 ))
 
+#####################################################################################################
+#####################################################################################################
+## 10			
+## 10 - Make support html elements for difference output and dropdown menus.
+## 10 END*********************************************************************************
+
+
+## 11 START*********************************************************************************
+## 11 - Compare total fies built to files with differences, outputting results to supporting text file.
+## 11	
+#####################################################################################################	
+
 # Make statistic html section.
 touch support/diff-stats.txt
-#################################################################################
 
 # Calculate the percent of files with error/differences
 _percentOfFilesWithError=$(( ( (_countNumberOfErrors/2) * 100) / _numberOfFilesTested ))
@@ -231,9 +362,20 @@ echo "<p><strong>Total Files with Differences</strong> - $_builtFilesWithDiffere
 echo "<p><h3 style=\"display:inline\">Built Difference Percentage</h3> - $_percentOfBuiltFilesWithError</p>" >> support/diff-stats.txt
 echo "<hr>" >> support/diff-stats.txt
 
+#####################################################################################################
+#####################################################################################################
+## 11	
+## 11 - Compare total fies built to files with differences, outputting results to supporting text file.
+## 11 END*********************************************************************************
+
+
+## 12 START*********************************************************************************
+## 12 - Calculate stats for build times, outputting results to supporting text file.
+## 12		
+#####################################################################################################
+
 # Make run time html section.
 touch support/run-times.txt
-#################################################################################
 
 # Function to calculate basic run time stats.
 calc_run_average() {
@@ -251,7 +393,6 @@ calc_run_average() {
 	# append array with source and pull command's averages respectively
 	_averageRunTimes+=("$cur_average")
 }
-
 # Calculate individual run time stats. Declare arrays to be used.
 declare -a _averageRunTimes && declare -a _sumRuns
 
@@ -283,7 +424,6 @@ repetitive_diff() {
 		_fastOrSlow="pull was <strong>$_negateTime</strong> faster $_thanSource."
 	fi	
 }
-
 # Output html elements to support file parsed into index.html
 echo "<p>The individual run times are the individual build times for each fie. Each " > support/run-times.txt
 echo "item in the array is added up so that total can be compared with sum. The " >> support/run-times.txt
@@ -301,8 +441,19 @@ repetitive_diff "1 file on average" "$_avgFastOrSlow" # average of all builds co
 echo "<p><h3 style=\"display:inline\">Average Difference</h3> - $_fastOrSlow</p>" >> support/run-times.txt
 echo "<hr>" >> support/run-times.txt
 
+#####################################################################################################
+#####################################################################################################
+## 12	
+## 12 - Calculate stats for build times, outputting results to supporting text file.
+## 12 END*********************************************************************************
+
+
+## 13 START*********************************************************************************
+## 13 - Make remaining support html elements and clean files and directories.
+## 13		
+#####################################################################################################
+
 # Make drop items and menu text by commands used.
-#################################################################################
 touch support/options-ran.txt
 for opts in "${_optionsToRun[@]}"; do
 	if [ "$opts" = "" ]; then
@@ -328,3 +479,9 @@ rm list-gen.txt list-unq.txt
 
 # Remove command as no longer needed.
 rm -rf commands "$_COMMAND_TEST"
+
+#####################################################################################################
+#####################################################################################################
+## 13		
+## 13 - Make remaining support html elements and clean files and directories.
+## 13 END*********************************************************************************
