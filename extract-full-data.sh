@@ -3,16 +3,12 @@
 # Clone repositories specified in "_fullTestRepos" by username and repositroy
 # to the full-test directory to test a data-conversion-tool pull request.
 
-##########################################################
-################## EXTRACT-FULL-DATA #####################
-### All files in this repositroy are public domain cc0 ###
-### Any files created by the test are subject to the   ###
-### license specified in that reposityor.              ###
-##########################################################
 
-# Set variables from config-variables.sh. 
-# IMPORTANT - these should have been changed after making repo from template.
-# IMPORTANT - you must agree to terms before use.
+## 1 START*********************************************************************************
+## 1 - Set configuration and ready data to be extracted.
+## 1		
+#####################################################################################################
+
 source config-variables.sh
 check_if_user_agreed_exit_if_not # check if agreed to terms, exit if not
 
@@ -22,8 +18,21 @@ mkdir -p data/extract data/full-test
 # Directory where repos will be cloned, extracted, then deleted.
 _startingDir="data/extract" # clone and extract here
 
+#####################################################################################################
+#####################################################################################################
+## 1		
+## 1 - Set configuration and ready data to be extracted.
+## 1 END*********************************************************************************
+
+
 # Function to process directories recursively
 process_directory() {
+
+## 2 START*********************************************************************************
+## 2 - Determine, then clone repositories from configuration.
+## 2		
+#####################################################################################################
+
 	# clone to data/extract
     dir="$1"
 	# username where repo is hosted
@@ -43,6 +52,18 @@ process_directory() {
 		# clone to data/extract where it will be deleted after funciton run
 		git clone https://github.com/$_curUser/$_curRepo.git data/extract/$_curRepo
 	fi
+
+#####################################################################################################
+#####################################################################################################	
+## 2			
+## 2 - Determine, then clone repositories from configuration.
+## 2 END*********************************************************************************
+	
+	
+## 3 START*********************************************************************************
+## 3 - Extract files matching configured extensions in ` config-variables.sh ` to data/full-test directory.
+## 3		
+#####################################################################################################
 	
 	# loop and extract files matching extension or recurse
     for entry in "$dir"/*; do
@@ -61,7 +82,20 @@ process_directory() {
             process_directory "$entry" "0" "0"
         fi
     done
+
+#####################################################################################################
+#####################################################################################################
+## 3		
+## 3 - Extract files matching configured extensions in ` config-variables.sh ` to data/full-test directory.
+## 3 END*********************************************************************************
+
+	
 }
+
+## 4 START*********************************************************************************
+## 4 - Prompt to confirm then run function to extract data.
+## 4		
+#####################################################################################################
 
 # Alert on long script runtime.
 echo Script has begun recursing. 
@@ -92,3 +126,9 @@ fi
 
 # Clean after extraction
 rm -rf data/extract
+
+#####################################################################################################
+#####################################################################################################
+## 4		
+## 4 - Prompt to confirm then run function to extract data.
+## 4 END*********************************************************************************
